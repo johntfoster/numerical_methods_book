@@ -2,9 +2,9 @@ Place holder for documentes containing a book on Numerical Methods in the IPytho
 
 More content to come shortly...
 
-To clone
+To clone:
 
 ````
-git clone https://gith
+git clone git@github.com:johntfoster/numerical_methods_book.git
 ````
 
