@@ -1,4 +1,4 @@
-Place holder for documentes containing a book on Numerical Methods in the IPython notebook.
+Place holder for documents containing a book on Numerical Methods in the IPython notebook.
 
 More content to come shortly...
 
