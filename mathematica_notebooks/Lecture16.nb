@@ -1,0 +1,3423 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[    103291,       3414]
+NotebookOptionsPosition[     97971,       3244]
+NotebookOutlinePosition[     99446,       3288]
+CellTagsIndexPosition[     99367,       3283]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Boundary Value Problems", "Section",
+ CellChangeTimes->{{3.498263384090662*^9, 3.498263389204035*^9}}],
+
+Cell[TextData[{
+ "In all differential equations of order greater than 1, two or more values \
+must be known to evaluate the constants in the particular function that \
+satisfies the differential equation.  In the problems discussed previously, \
+these several values were all specified at the same value of the independent \
+variable, generally the start of ",
+ StyleBox["initial value",
+  FontSlant->"Italic"],
+ ".  For that reason, these problems are called ",
+ StyleBox["initial value problems.",
+  FontSlant->"Italic"],
+ "\n\nFor an important class of problems, the several values of the function \
+or its derivatives are not all known at the same point, but rather at two \
+different values of the independent variable.  Because these values of the \
+independent variable are usually the endpoints (or ",
+ StyleBox["boundaries",
+  FontSlant->"Italic"],
+ ") of some domain of interest, problems of this type are usually termed ",
+ StyleBox["boundary value problems.",
+  FontSlant->"Italic"],
+ "  Examples of these type of problems are: determining the deflections of a \
+simply supported beam were the deflections and slopes are given at the \
+supports and heat-flow problems where the temperatures and gradients may be \
+given at two different points."
+}], "Text",
+ CellChangeTimes->{{3.498265699779955*^9, 3.498266108861391*^9}, {
+  3.4984454753312798`*^9, 3.49844548275211*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Shooting Method", "Section",
+ CellChangeTimes->{{3.498266125396617*^9, 3.4982661279303207`*^9}}],
+
+Cell[TextData[{
+ "This method applies the techniques we previously learned for initial value \
+problems to boundary-value problems by assuming values needed to make it into \
+an initial value problem.  This involves a degree of trail and error.\n\n\
+Let's begin our discussion with an example illustrated in ",
+ StyleBox["Mathematica.  ",
+  FontSlant->"Italic"],
+ "The deflection equation of a simply supported beam of length ",
+ StyleBox["L",
+  FontSlant->"Italic"],
+ " with a load ",
+ StyleBox["P",
+  FontSlant->"Italic"],
+ " acting at the location ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"L", "/", "2"}], TraditionalForm]]],
+ " is as follows:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   StyleBox[
+    RowBox[{
+     RowBox[{
+      RowBox[{"EI", " ", 
+       RowBox[{"y", "''"}], 
+       RowBox[{"(", "x", ")"}]}], "=", 
+      RowBox[{"-", 
+       FractionBox["Px", "2"]}]}], ",", "  ", 
+     RowBox[{
+      RowBox[{"y", "(", "0", ")"}], "=", "0"}], ",", "  ", 
+     RowBox[{
+      RowBox[{"y", "(", "L", ")"}], "=", "0"}]}],
+    FontSlant->"Italic"], TraditionalForm]]],
+ "  (*)\n\t\nUsing the analytic differential equation solver in ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " we can see the solution to this boundary-value problem."
+}], "Text",
+ CellChangeTimes->{{3.4982661312909946`*^9, 3.498266202643694*^9}, {
+   3.498267226704364*^9, 3.498267285894779*^9}, {3.4982673285933533`*^9, 
+   3.498267467960684*^9}, {3.498267502156509*^9, 3.498267503425927*^9}, {
+   3.4982679427933064`*^9, 3.49826794531312*^9}, 3.4984454842533293`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DSolve", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"EI", " ", 
+        RowBox[{
+         RowBox[{"y", "''"}], "[", "x", "]"}]}], "\[Equal]", 
+       RowBox[{
+        RowBox[{"-", "P"}], " ", 
+        RowBox[{"x", "/", "2"}]}]}], ",", 
+      RowBox[{
+       RowBox[{"y", "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+      RowBox[{
+       RowBox[{"y", "[", "L", "]"}], "\[Equal]", "0"}]}], "}"}], ",", 
+    RowBox[{"y", "[", "x", "]"}], ",", "x"}], "]"}], "//", "First"}]], "Input",\
+
+ CellChangeTimes->{{3.498266217430209*^9, 3.498266329059986*^9}, {
+   3.498266431939166*^9, 3.498266446025128*^9}, {3.498266556860961*^9, 
+   3.4982665591175327`*^9}, {3.498266593300675*^9, 3.498266640165717*^9}, 
+   3.498266950098147*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+   FractionBox[
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["L", "2"], " ", "P", " ", "x"}], "-", 
+     RowBox[{"P", " ", 
+      SuperscriptBox["x", "3"]}]}], 
+    RowBox[{"12", " ", "EI"}]]}], "}"}]], "Output",
+ CellChangeTimes->{3.498266640757492*^9, 3.498267071622961*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Now let's instead convert (*) to an initial value problem by guessing a \
+slope ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"y", "'"}], 
+    RowBox[{"(", "0", ")"}]}], TraditionalForm]]],
+ " to be 0 and solve."
+}], "Text",
+ CellChangeTimes->{{3.498267479961591*^9, 3.498267560351994*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"G1", "=", "0"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"sol1", "=", 
+  RowBox[{
+   RowBox[{"DSolve", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"EI", " ", 
+         RowBox[{
+          RowBox[{"y", "''"}], "[", "x", "]"}]}], "\[Equal]", 
+        RowBox[{
+         RowBox[{"-", "P"}], " ", 
+         RowBox[{"x", "/", "2"}]}]}], ",", 
+       RowBox[{
+        RowBox[{"y", "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"y", "'"}], "[", "0", "]"}], "\[Equal]", "G1"}]}], "}"}], 
+     ",", 
+     RowBox[{"y", "[", "x", "]"}], ",", "x"}], "]"}], "//", 
+   "First"}]}]}], "Input",
+ CellChangeTimes->{{3.498266687491558*^9, 3.498266714004793*^9}, {
+  3.4982669214629*^9, 3.4982669524703083`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+   RowBox[{"-", 
+    FractionBox[
+     RowBox[{"P", " ", 
+      SuperscriptBox["x", "3"]}], 
+     RowBox[{"12", " ", "EI"}]]}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.498266694546417*^9, 3.4982667146047173`*^9}, 
+   3.498267071723433*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "If we evaluate the resulting solution at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", "L"}], TraditionalForm]]],
+ " we can see that we don't match the original boundary condition from (*), \
+therefore our guess wasn't very good."
+}], "Text",
+ CellChangeTimes->{{3.4982675752960176`*^9, 3.498267629217259*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"R1", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"y", "[", "x", "]"}], "/.", "sol1"}], "/.", 
+   RowBox[{"{", 
+    RowBox[{"x", "\[Rule]", "L"}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.49826669905754*^9, 3.498266709906979*^9}, {
+  3.498266749207415*^9, 3.498266761781169*^9}, {3.498266936870779*^9, 
+  3.4982669556144323`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"-", 
+  FractionBox[
+   RowBox[{
+    SuperscriptBox["L", "3"], " ", "P"}], 
+   RowBox[{"12", " ", "EI"}]]}]], "Output",
+ CellChangeTimes->{{3.4982667101805353`*^9, 3.498266717142959*^9}, {
+   3.4982667522447567`*^9, 3.498266762180244*^9}, 3.498266940385664*^9, 
+   3.498267071759706*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Let's try again.  This time let's guess a slope ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"y", "'"}], 
+     RowBox[{"(", "0", ")"}]}], "=", "1"}], TraditionalForm]]],
+ " and solve."
+}], "Text",
+ CellChangeTimes->{{3.498267641583584*^9, 3.498267681994533*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"G2", "=", "1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"sol2", "=", 
+  RowBox[{
+   RowBox[{"DSolve", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"EI", " ", 
+         RowBox[{
+          RowBox[{"y", "''"}], "[", "x", "]"}]}], "\[Equal]", 
+        RowBox[{
+         RowBox[{"-", "P"}], " ", 
+         RowBox[{"x", "/", "2"}]}]}], ",", 
+       RowBox[{
+        RowBox[{"y", "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"y", "'"}], "[", "0", "]"}], "\[Equal]", "G2"}]}], "}"}], 
+     ",", 
+     RowBox[{"y", "[", "x", "]"}], ",", "x"}], "]"}], "//", 
+   "First"}]}]}], "Input",
+ CellChangeTimes->{{3.498266800083199*^9, 3.498266813696542*^9}, {
+  3.498266958145277*^9, 3.4982669764480867`*^9}, {3.4982670295144672`*^9, 
+  3.498267033761649*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+   FractionBox[
+    RowBox[{
+     RowBox[{"12", " ", "EI", " ", "x"}], "-", 
+     RowBox[{"P", " ", 
+      SuperscriptBox["x", "3"]}]}], 
+    RowBox[{"12", " ", "EI"}]]}], "}"}]], "Output",
+ CellChangeTimes->{{3.498266800880047*^9, 3.498266814798966*^9}, 
+   3.4982670718286123`*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "If we again evaluate the resulting solution at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", "L"}], TraditionalForm]]],
+ " we still don't match the condition from (*), therefore our guess was wrong \
+again."
+}], "Text",
+ CellChangeTimes->{{3.498267699501481*^9, 3.49826773319563*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"R2", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"y", "[", "x", "]"}], "/.", "sol2"}], "/.", 
+   RowBox[{"{", 
+    RowBox[{"x", "\[Rule]", "L"}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.498267036344544*^9, 3.498267037944577*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{
+   RowBox[{"12", " ", "EI", " ", "L"}], "-", 
+   RowBox[{
+    SuperscriptBox["L", "3"], " ", "P"}]}], 
+  RowBox[{"12", " ", "EI"}]]], "Output",
+ CellChangeTimes->{3.498266821580912*^9, 3.498267071864769*^9}]
+}, Open  ]],
+
+Cell["\<\
+Thankfully, because our original boundary-value problem was linear we don't \
+need to make anymore guesses.  We can interpolate the guesses and results we \
+have already evaluated to find the correct guess of the initial slope.  (We \
+will discuss where this equation comes from momentarily).\
+\>", "Text",
+ CellChangeTimes->{{3.4982677397633343`*^9, 3.498267856302979*^9}, 
+   3.498269317878907*^9, {3.4984454879072113`*^9, 3.498445491514591*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"G3", "=", 
+  RowBox[{"G1", "+", 
+   RowBox[{
+    FractionBox[
+     RowBox[{"G2", "-", "G1"}], 
+     RowBox[{"R2", "-", "R1"}]], 
+    RowBox[{"(", 
+     RowBox[{"0", "-", "R1"}], ")"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.4982670426507607`*^9, 3.4982670694258947`*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{
+   SuperscriptBox["L", "3"], " ", "P"}], 
+  RowBox[{"12", " ", "EI", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["L", "3"], " ", "P"}], 
+      RowBox[{"12", " ", "EI"}]], "+", 
+     FractionBox[
+      RowBox[{
+       RowBox[{"12", " ", "EI", " ", "L"}], "-", 
+       RowBox[{
+        SuperscriptBox["L", "3"], " ", "P"}]}], 
+      RowBox[{"12", " ", "EI"}]]}], ")"}]}]]], "Output",
+ CellChangeTimes->{3.498267071909981*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Now if we use the new guess we get from interpolation as ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"y", "'"}], 
+    RowBox[{"(", "0", ")"}]}], TraditionalForm]]],
+ " and solve we can see that we recover the original and correct solution."
+}], "Text",
+ CellChangeTimes->{{3.498267862246807*^9, 3.498267895807412*^9}, 
+   3.498445497419869*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"sol3", "=", 
+  RowBox[{
+   RowBox[{"DSolve", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"EI", " ", 
+         RowBox[{
+          RowBox[{"y", "''"}], "[", "x", "]"}]}], "\[Equal]", 
+        RowBox[{
+         RowBox[{"-", "P"}], " ", 
+         RowBox[{"x", "/", "2"}]}]}], ",", 
+       RowBox[{
+        RowBox[{"y", "[", "0", "]"}], "\[Equal]", "0"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"y", "'"}], "[", "0", "]"}], "\[Equal]", "G3"}]}], "}"}], 
+     ",", 
+     RowBox[{"y", "[", "x", "]"}], ",", "x"}], "]"}], "//", 
+   "First"}]}]], "Input",
+ CellChangeTimes->{{3.498267091709544*^9, 3.498267100819275*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"y", "[", "x", "]"}], "\[Rule]", 
+   FractionBox[
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["L", "2"], " ", "P", " ", "x"}], "-", 
+     RowBox[{"P", " ", 
+      SuperscriptBox["x", "3"]}]}], 
+    RowBox[{"12", " ", "EI"}]]}], "}"}]], "Output",
+ CellChangeTimes->{{3.4982670929021683`*^9, 3.4982671014984713`*^9}}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Just to verify, we can evaluate the solution at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", "L"}], TraditionalForm]]],
+ " and see that the deflection in indeed 0."
+}], "Text",
+ CellChangeTimes->{{3.498267900344063*^9, 3.4982679550732117`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"R3", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"y", "[", "x", "]"}], "/.", "sol3"}], "/.", 
+   RowBox[{"{", 
+    RowBox[{"x", "\[Rule]", "L"}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.498267105908064*^9, 3.498267115130659*^9}}],
+
+Cell[BoxData["0"], "Output",
+ CellChangeTimes->{3.498267116482082*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Shooting Method (contd.)", "Section",
+ CellChangeTimes->{{3.498268050012917*^9, 3.498268057931016*^9}}],
+
+Cell[TextData[{
+ "How is it that this interpolation worked?  We can show that if there are \
+two different functions of ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ " that satisfy the differential equation (but agree with different boundary \
+conditions), then a linear combination of them is also a solution.\n\nSuppose \
+that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "1"], "(", "t", ")"}], TraditionalForm]]],
+ " satisfies ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"x", "''"}], "+", 
+     RowBox[{"F", " ", 
+      RowBox[{"x", "'"}]}], "+", 
+     RowBox[{"G", " ", "x"}]}], "=", "H"}], TraditionalForm]]],
+ ", where ",
+ StyleBox["F",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["G",
+  FontSlant->"Italic"],
+ ", and ",
+ StyleBox["H",
+  FontSlant->"Italic"],
+ " are functions of ",
+ StyleBox["t",
+  FontSlant->"Italic"],
+ " only (i.e., the equation is ",
+ StyleBox["linear",
+  FontSlant->"Italic"],
+ ").  Suppose also that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "2"], "(", "t", ")"}], TraditionalForm]]],
+ " is a solution.  Then\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"y", "=", 
+    FractionBox[
+     RowBox[{
+      RowBox[{
+       SubscriptBox["c", "1"], 
+       SubscriptBox["x", "1"]}], "+", 
+      RowBox[{
+       SubscriptBox["c", "2"], 
+       SubscriptBox["x", "2"]}]}], 
+     RowBox[{
+      SubscriptBox["c", "1"], "+", 
+      SubscriptBox["c", "2"]}]]}], TraditionalForm]]],
+ "\n\nwill be a solution.  We show that this will always be a solution in the \
+following manner, since ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "1"], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "2"], TraditionalForm]]],
+ " are solutions,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["x", "1", "''"], "+", 
+     RowBox[{"F", " ", 
+      SubsuperscriptBox["x", "1", "'"]}], "+", 
+     RowBox[{"G", " ", 
+      SubscriptBox["x", "1"]}]}], "=", "H"}], TraditionalForm]]],
+ "\n\t\nand\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["x", "2", "''"], "+", 
+     RowBox[{"F", " ", 
+      SubsuperscriptBox["x", "2", "'"]}], "+", 
+     RowBox[{"G", " ", 
+      SubscriptBox["x", "2"]}]}], "=", "H"}], TraditionalForm]]],
+ "\n\t\nSubstituting ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " into the differential equation, with\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"y", "'"}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        RowBox[{
+         SubscriptBox["c", "1"], 
+         SubsuperscriptBox["x", "1", "'"]}], "+", 
+        RowBox[{
+         SubscriptBox["c", "2"], 
+         SubsuperscriptBox["x", "2", "'"]}]}], 
+       RowBox[{
+        SubscriptBox["c", "1"], "+", 
+        SubscriptBox["c", "2"]}]], "                   ", 
+      RowBox[{"y", "''"}]}], "=", 
+     FractionBox[
+      RowBox[{
+       RowBox[{
+        SubscriptBox["c", "1"], 
+        SubsuperscriptBox["x", "1", "''"]}], "+", 
+       RowBox[{
+        SubscriptBox["c", "2"], 
+        SubsuperscriptBox["x", "2", "''"]}]}], 
+      RowBox[{
+       SubscriptBox["c", "1"], "+", 
+       SubscriptBox["c", "2"]}]]}]}], TraditionalForm]]],
+ "\n\t\nwe get\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      RowBox[{
+       SubscriptBox["c", "1"], 
+       SubsuperscriptBox["x", "1", "''"]}], "+", 
+      RowBox[{
+       SubscriptBox["c", "2"], 
+       SubsuperscriptBox["x", "2", "''"]}]}], 
+     RowBox[{
+      SubscriptBox["c", "1"], "+", 
+      SubscriptBox["c", "2"]}]], "+", 
+    RowBox[{"F", 
+     FractionBox[
+      RowBox[{
+       RowBox[{
+        SubscriptBox["c", "1"], 
+        SubsuperscriptBox["x", "1", "'"]}], "+", 
+       RowBox[{
+        SubscriptBox["c", "2"], 
+        SubsuperscriptBox["x", "2", "'"]}]}], 
+      RowBox[{
+       SubscriptBox["c", "1"], "+", 
+       SubscriptBox["c", "2"]}]]}], "+", 
+    RowBox[{"G", 
+     FractionBox[
+      RowBox[{
+       RowBox[{
+        SubscriptBox["c", "1"], 
+        SubscriptBox["x", "1"]}], "+", 
+       RowBox[{
+        SubscriptBox["c", "2"], 
+        SubscriptBox["x", "2"]}]}], 
+      RowBox[{
+       SubscriptBox["c", "1"], "+", 
+       SubscriptBox["c", "2"]}]]}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                          ", 
+    RowBox[{"=", 
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        RowBox[{
+         SubscriptBox["c", "1"], 
+         SubsuperscriptBox["x", "1", "''"]}], "+", 
+        RowBox[{
+         SubscriptBox["c", "1"], "F", " ", 
+         SubsuperscriptBox["x", "1", "'"]}], "+", 
+        RowBox[{
+         SubscriptBox["c", "1"], "G", " ", 
+         SubscriptBox["x", "1"]}]}], 
+       RowBox[{
+        SubscriptBox["c", "1"], "+", 
+        SubscriptBox["c", "2"]}]], "+", 
+      FractionBox[
+       RowBox[{
+        RowBox[{
+         SubscriptBox["c", "1"], 
+         SubsuperscriptBox["x", "2", "''"]}], "+", 
+        RowBox[{
+         SubscriptBox["c", "1"], "F", " ", 
+         SubsuperscriptBox["x", "2", "'"]}], "+", 
+        RowBox[{
+         SubscriptBox["c", "1"], "G", " ", 
+         SubscriptBox["x", "2"]}]}], 
+       RowBox[{
+        SubscriptBox["c", "1"], "+", 
+        SubscriptBox["c", "2"]}]]}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                         ", 
+    RowBox[{
+     RowBox[{"=", 
+      RowBox[{
+       FractionBox[
+        RowBox[{
+         SubscriptBox["c", "1"], "H"}], 
+        RowBox[{
+         SubscriptBox["c", "1"], "+", 
+         SubscriptBox["c", "2"]}]], "+", 
+       FractionBox[
+        RowBox[{
+         SubscriptBox["c", "2"], "H"}], 
+        RowBox[{
+         SubscriptBox["c", "1"], "+", 
+         SubscriptBox["c", "2"]}]]}]}], "=", "H"}]}], TraditionalForm]}]],
+ "\n\t\nNow we can make some definitions to show how we came up with \
+interpolated equation in our example earlier.\n\n\tLet G1 = first guess at \
+initial slope\n\tLet G2 = second guess at initial slope\n\tLet R1 = first \
+result at endpoint (using G1)\n\tLet R2 = second result at endpoint (using \
+G2)\n\tLet D = the desired value at the endpoint\n\t\nWe have,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+    "Extrapolated", " ", "estimate", " ", "for", " ", "initial", " ", 
+     "slope"}], " ", "=", " ", 
+    RowBox[{"G1", "+", 
+     RowBox[{
+      FractionBox[
+       RowBox[{"G2", "-", "G1"}], 
+       RowBox[{"R2", "-", "R1"}]], 
+      RowBox[{"(", 
+       RowBox[{
+        StyleBox["D",
+         FontSlant->"Plain"], "-", "R1"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\nA second-order linear boundary-value problem can always be solved by \
+doing two computations using two different guesses for the initial slope.  \
+Once the initial value problem has been identified, we can use any method \
+previously identified to solve the boundary-value problem over then entire \
+domain."
+}], "Text",
+ CellChangeTimes->{{3.498268075662472*^9, 3.498268263595049*^9}, {
+  3.4982683610705137`*^9, 3.498268702938623*^9}, {3.498268778823954*^9, 
+  3.498268925695157*^9}, {3.498269089527837*^9, 3.49826909717815*^9}, {
+  3.498269326834087*^9, 3.4982694790351954`*^9}, {3.498269543300353*^9, 
+  3.498269588649971*^9}, {3.498269769764336*^9, 3.4982698101012087`*^9}, {
+  3.4984455021656647`*^9, 3.49844550386535*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Psuedocode for Linear Shooting Method", "Section",
+ CellChangeTimes->{{3.4982702349370947`*^9, 3.498270239844564*^9}, {
+  3.498270366571539*^9, 3.4982703703711367`*^9}}],
+
+Cell[TextData[{
+ "To approximate the solution of the boundary-value problem\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"y", "''"}]}], "+", 
+      RowBox[{
+       RowBox[{"p", "(", "x", ")"}], " ", 
+       RowBox[{"y", "'"}]}], "+", 
+      RowBox[{"q", "(", "x", ")"}], "+", 
+      RowBox[{"r", "(", "x", ")"}]}], "=", "0"}], ",", "     ", 
+    RowBox[{"a", "\[LessEqual]", " ", "x", "\[LessEqual]", " ", "b"}], ",", 
+    "   ", 
+    RowBox[{
+     RowBox[{"y", "(", "a", ")"}], "=", "\[Alpha]"}], ",", "     ", 
+    RowBox[{
+     RowBox[{"y", "(", "b", ")"}], "=", "\[Beta]"}]}], TraditionalForm]]],
+ "\n\t\nStep 1.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"b", "-", "a"}], ")"}], "/", "N"}]}], TraditionalForm]]],
+ "\nStep 2.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", 
+     RowBox[{"1", ",", "0"}]], "=", "\[Alpha]"}], TraditionalForm]]],
+ "\nStep 3.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", 
+     RowBox[{"2", ",", "0"}]], "=", "0"}], TraditionalForm]]],
+ "\nStep 4.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", 
+     RowBox[{"1", ",", "0"}]], "=", "0"}], TraditionalForm]]],
+ "\nStep 5.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", 
+     RowBox[{"2", ",", "0"}]], "=", "1"}], TraditionalForm]]],
+ "\n\nStep 6.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "0"}], ",", "...", ",", 
+    RowBox[{"N", "-", "1"}]}], TraditionalForm]]],
+ " do Steps 7-27\n\t\t(R-K method for systems is used here, but could be any \
+method for initial-value problems)\n\n\tStep 7.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]],
+ "\n\t\n\tStep 8.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"1", ",", "1"}]], "=", 
+    RowBox[{"h", " ", 
+     SubscriptBox["u", 
+      RowBox[{"2", ",", "i"}]]}]}], TraditionalForm]]],
+ "\n\tStep 9.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"1", ",", "2"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", "x", ")"}], 
+       SubscriptBox["u", 
+        RowBox[{"2", ",", "i"}]]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", "x", ")"}], 
+       SubscriptBox["u", 
+        RowBox[{"1", ",", "i"}]]}], "+", 
+      RowBox[{"r", "(", "x", ")"}]}], "]"}]}], TraditionalForm]]],
+ "\n\tStep 10.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"2", ",", "1"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      SubscriptBox["u", 
+       RowBox[{"2", ",", "i"}]], "+", 
+      RowBox[{
+       FractionBox["1", "2"], 
+       SubscriptBox["k", 
+        RowBox[{"1", ",", "2"}]]}]}], "]"}]}], TraditionalForm]]],
+ "\n\tStep 11.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"2", ",", "2"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["u", 
+          RowBox[{"2", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubscriptBox["k", 
+           RowBox[{"1", ",", "2"}]]}]}], ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["u", 
+          RowBox[{"1", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubscriptBox["k", 
+           RowBox[{"1", ",", "1"}]]}]}], ")"}]}], "+", 
+      RowBox[{"r", "(", 
+       RowBox[{"x", "+", 
+        RowBox[{"h", "/", "2"}]}], ")"}]}], "]"}]}], TraditionalForm]]],
+ "\n\tStep 12.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"3", ",", "1"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      SubscriptBox["u", 
+       RowBox[{"2", ",", "i"}]], "+", 
+      RowBox[{
+       FractionBox["1", "2"], 
+       SubscriptBox["k", 
+        RowBox[{"2", ",", "2"}]]}]}], "]"}]}], TraditionalForm]]],
+ "\n            Step 13.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"3", ",", "2"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["u", 
+          RowBox[{"2", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubscriptBox["k", 
+           RowBox[{"2", ",", "2"}]]}]}], ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["u", 
+          RowBox[{"1", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubscriptBox["k", 
+           RowBox[{"2", ",", "1"}]]}]}], ")"}]}], "+", 
+      RowBox[{"r", "(", 
+       RowBox[{"x", "+", 
+        RowBox[{"h", "/", "2"}]}], ")"}]}], "]"}]}], TraditionalForm]]],
+ "\n            Step 14.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"4", ",", "1"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      SubscriptBox["u", 
+       RowBox[{"2", ",", "i"}]], "+", 
+      SubscriptBox["k", 
+       RowBox[{"3", ",", "2"}]]}], "]"}]}], TraditionalForm]]],
+ "\n            Step 15.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["k", 
+     RowBox[{"4", ",", "2"}]], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", 
+        RowBox[{"x", "+", "h"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["u", 
+          RowBox[{"2", ",", "i"}]], "+", 
+         SubscriptBox["k", 
+          RowBox[{"3", ",", "2"}]]}], ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", 
+        RowBox[{"x", "+", "h"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["u", 
+          RowBox[{"1", ",", "i"}]], "+", 
+         SubscriptBox["k", 
+          RowBox[{"3", ",", "1"}]]}], ")"}]}], "+", 
+      RowBox[{"r", "(", 
+       RowBox[{"x", "+", "h"}], ")"}]}], "]"}]}], TraditionalForm]]],
+ "\n            Step 16.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", 
+     RowBox[{"1", ",", 
+      RowBox[{"i", "+", "1"}]}]], "=", 
+    RowBox[{
+     SubscriptBox["u", 
+      RowBox[{"1", ",", "i"}]], "+", 
+     RowBox[{
+      FractionBox["1", "6"], "[", 
+      RowBox[{
+       SubscriptBox["k", 
+        RowBox[{"1", ",", "1"}]], "+", 
+       RowBox[{"2", 
+        SubscriptBox["k", 
+         RowBox[{"2", ",", "1"}]]}], "+", 
+       RowBox[{"2", 
+        SubscriptBox["k", 
+         RowBox[{"3", ",", "1"}]]}], "+", 
+       SubscriptBox["k", 
+        RowBox[{"4", ",", "1"}]]}], "]"}]}]}], TraditionalForm]]],
+ "\n            Step 17.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", 
+     RowBox[{"2", ",", 
+      RowBox[{"i", "+", "1"}]}]], "=", 
+    RowBox[{
+     SubscriptBox["u", 
+      RowBox[{"2", ",", "i"}]], "+", 
+     RowBox[{
+      FractionBox["1", "6"], "[", 
+      RowBox[{
+       SubscriptBox["k", 
+        RowBox[{"1", ",", "2"}]], "+", 
+       RowBox[{"2", 
+        SubscriptBox["k", 
+         RowBox[{"2", ",", "2"}]]}], "+", 
+       RowBox[{"2", 
+        SubscriptBox["k", 
+         RowBox[{"3", ",", "2"}]]}], "+", 
+       SubscriptBox["k", 
+        RowBox[{"4", ",", "2"}]]}], "]"}]}]}], TraditionalForm]]],
+ "\n            \n            Step 18.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"1", ",", "1"}], "'"], "=", 
+    RowBox[{"h", " ", 
+     SubscriptBox["v", 
+      RowBox[{"2", ",", "i"}]]}]}], TraditionalForm]]],
+ "\n\tStep 19.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"1", ",", "2"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", "x", ")"}], 
+       SubscriptBox["v", 
+        RowBox[{"2", ",", "i"}]]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", "x", ")"}], 
+       SubscriptBox["v", 
+        RowBox[{"1", ",", "i"}]]}]}], "]"}]}], TraditionalForm]]],
+ "\n\tStep 20.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"2", ",", "1"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      SubscriptBox["v", 
+       RowBox[{"2", ",", "i"}]], "+", 
+      RowBox[{
+       FractionBox["1", "2"], 
+       SubsuperscriptBox["k", 
+        RowBox[{"1", ",", "2"}], "'"]}]}], "]"}]}], TraditionalForm]]],
+ "\n\tStep 21.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"2", ",", "2"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["v", 
+          RowBox[{"2", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubsuperscriptBox["k", 
+           RowBox[{"1", ",", "2"}], "'"]}]}], ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["v", 
+          RowBox[{"1", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubsuperscriptBox["k", 
+           RowBox[{"1", ",", "1"}], "'"]}]}], ")"}]}]}], "]"}]}], 
+   TraditionalForm]]],
+ "\n\tStep 22.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"3", ",", "1"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      SubscriptBox["v", 
+       RowBox[{"2", ",", "i"}]], "+", 
+      RowBox[{
+       FractionBox["1", "2"], 
+       SubsuperscriptBox["k", 
+        RowBox[{"2", ",", "2"}], "'"]}]}], "]"}]}], TraditionalForm]]],
+ "\n            Step 23.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"3", ",", "2"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["v", 
+          RowBox[{"2", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubsuperscriptBox["k", 
+           RowBox[{"2", ",", "2"}], "'"]}]}], ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"h", "/", "2"}]}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["v", 
+          RowBox[{"1", ",", "i"}]], "+", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          SubsuperscriptBox["k", 
+           RowBox[{"2", ",", "1"}], "'"]}]}], ")"}]}]}], "]"}]}], 
+   TraditionalForm]]],
+ "\n            Step 24.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"4", ",", "1"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      SubscriptBox["v", 
+       RowBox[{"2", ",", "i"}]], "+", 
+      SubsuperscriptBox["k", 
+       RowBox[{"3", ",", "2"}], "'"]}], "]"}]}], TraditionalForm]]],
+ "\n            Step 25.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["k", 
+     RowBox[{"4", ",", "2"}], "'"], "=", 
+    RowBox[{"h", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", 
+        RowBox[{"x", "+", "h"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["v", 
+          RowBox[{"2", ",", "i"}]], "+", 
+         SubsuperscriptBox["k", 
+          RowBox[{"3", ",", "2"}], "'"]}], ")"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", 
+        RowBox[{"x", "+", "h"}], ")"}], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["v", 
+          RowBox[{"1", ",", "i"}]], "+", 
+         SubsuperscriptBox["k", 
+          RowBox[{"3", ",", "1"}], "'"]}], ")"}]}]}], "]"}]}], 
+   TraditionalForm]]],
+ "\n            Step 26.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", 
+     RowBox[{"1", ",", 
+      RowBox[{"i", "+", "1"}]}]], "=", 
+    RowBox[{
+     SubscriptBox["v", 
+      RowBox[{"1", ",", "i"}]], "+", 
+     RowBox[{
+      FractionBox["1", "6"], "[", 
+      RowBox[{
+       SubsuperscriptBox["k", 
+        RowBox[{"1", ",", "1"}], "'"], "+", 
+       RowBox[{"2", 
+        SubsuperscriptBox["k", 
+         RowBox[{"2", ",", "1"}], "'"]}], "+", 
+       RowBox[{"2", 
+        SubsuperscriptBox["k", 
+         RowBox[{"3", ",", "1"}], "'"]}], "+", 
+       SubsuperscriptBox["k", 
+        RowBox[{"4", ",", "1"}], "'"]}], "]"}]}]}], TraditionalForm]]],
+ "\n            Step 27.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", 
+     RowBox[{"2", ",", 
+      RowBox[{"i", "+", "1"}]}]], "=", 
+    RowBox[{
+     SubscriptBox["v", 
+      RowBox[{"2", ",", "i"}]], "+", 
+     RowBox[{
+      FractionBox["1", "6"], "[", 
+      RowBox[{
+       SubsuperscriptBox["k", 
+        RowBox[{"1", ",", "2"}], "'"], "+", 
+       RowBox[{"2", 
+        SubsuperscriptBox["k", 
+         RowBox[{"2", ",", "2"}], "'"]}], "+", 
+       RowBox[{"2", 
+        SubsuperscriptBox["k", 
+         RowBox[{"3", ",", "2"}], "'"]}], "+", 
+       SubsuperscriptBox["k", 
+        RowBox[{"4", ",", "2"}], "'"]}], "]"}]}]}], TraditionalForm]]],
+ "\n\nStep 28.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"1", ",", "0"}]], "=", "\[Alpha]"}], TraditionalForm]]],
+ "\nStep 29.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"2", ",", "0"}]], "=", 
+    FractionBox[
+     RowBox[{"\[Beta]", "-", 
+      SubscriptBox["u", 
+       RowBox[{"1", ",", "N"}]]}], 
+     SubscriptBox["v", 
+      RowBox[{"1", ",", "N"}]]]}], TraditionalForm]]],
+ "\n\nStep 30.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ",", "\[Ellipsis]", ",", "N"}], 
+   TraditionalForm]]],
+ "  do Steps 31-33\n\n\tStep 31.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"1", ",", "i"}]], "=", 
+    RowBox[{
+     SubscriptBox["u", 
+      RowBox[{"1", ",", "i"}]], "+", 
+     RowBox[{
+      SubscriptBox["w", 
+       RowBox[{"2", ",", "0"}]], 
+      SubscriptBox["v", 
+       RowBox[{"1", ",", "i"}]]}]}]}], TraditionalForm]]],
+ "\n\tStep 32.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"2", ",", "i"}]], "=", 
+    RowBox[{
+     SubscriptBox["u", 
+      RowBox[{"2", ",", "i"}]], "+", 
+     RowBox[{
+      SubscriptBox["w", 
+       RowBox[{"2", ",", "0"}]], 
+      SubscriptBox["v", 
+       RowBox[{"2", ",", "i"}]]}]}]}], TraditionalForm]]],
+ "\n\tStep 33.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.498270384227516*^9, 3.498270576638015*^9}, {
+  3.498270621702222*^9, 3.498270666821649*^9}, {3.498270712655384*^9, 
+  3.498271318478848*^9}, {3.498271375394684*^9, 3.498271933775732*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Finite Difference Methods", "Section",
+ CellChangeTimes->{{3.4984311852151747`*^9, 3.4984311903295717`*^9}}],
+
+Cell[TextData[{
+ "So far we've learned to approximate derivatives with either forward or \
+backward differences, these difference approximations have an error term that \
+is ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", "h", ")"}], TraditionalForm]]],
+ ".  Central-difference approximations to derivatives have an error term that \
+is ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["h", "3"], ")"}], TraditionalForm]]],
+ ", therefore slightly more accurate.  The central-differenceapproximations \
+to the first and second derivatives of ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ " with respect to ",
+ Cell[BoxData[
+  FormBox["t", TraditionalForm]]],
+ " is as follow:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"\[DifferentialD]", "x"}], 
+      RowBox[{"\[DifferentialD]", "t"}]], 
+     SubscriptBox["|", 
+      RowBox[{"t", "=", 
+       SubscriptBox["t", "i"]}]], 
+     RowBox[{"=", 
+      RowBox[{
+       FractionBox[
+        RowBox[{
+         SubscriptBox["x", 
+          RowBox[{"i", "+", "1"}]], "-", 
+         SubscriptBox["x", 
+          RowBox[{"i", "-", "1"}]]}], 
+        RowBox[{"2", "h"}]], "+", 
+       RowBox[{"O", "(", 
+        SuperscriptBox["h", "2"], ")"}]}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[DifferentialD]", "2"], "x"}], 
+     RowBox[{"\[DifferentialD]", 
+      SuperscriptBox["t", "2"]}]], 
+    SubscriptBox["|", 
+     RowBox[{"t", "=", 
+      SubscriptBox["t", "i"]}]], 
+    RowBox[{"=", 
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"i", "+", "1"}]], "-", 
+        RowBox[{"2", 
+         SubscriptBox["x", "i"]}], "+", 
+        SubscriptBox["x", 
+         RowBox[{"i", "-", "1"}]]}], 
+       SuperscriptBox["h", "2"]], "+", 
+      RowBox[{"O", "(", 
+       SuperscriptBox["h", "2"], ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t\nTo illustrate how we can use these central difference approximations \
+in the solution of problems, let us consider the following boundary-value \
+problem\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[DifferentialD]", "2"], "x"}], 
+       RowBox[{"\[DifferentialD]", 
+        SuperscriptBox["t", "2"]}]], "-", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         FractionBox["t", "5"]}], ")"}], "x"}]}], "=", "t"}], ",", "        ", 
+    RowBox[{
+     RowBox[{"x", "(", "1", ")"}], "=", "2"}], ",", "      ", 
+    RowBox[{
+     RowBox[{"x", "(", "3", ")"}], "=", 
+     RowBox[{"-", "1"}]}]}], TraditionalForm]]],
+ "\n\t\nIf we substitute the central-difference approximations into this \
+equation and rearrange we have:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"i", "+", "1"}]], "-", 
+        RowBox[{"2", " ", 
+         SubscriptBox["x", "i"]}], "+", 
+        SubscriptBox["x", 
+         RowBox[{"i", "-", "1"}]]}], 
+       SuperscriptBox["h", "2"]], "-", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         FractionBox[
+          SubscriptBox["t", "i"], "5"]}], ")"}], 
+       SubscriptBox["x", "i"]}]}], "=", 
+     SubscriptBox["t", "i"]}], ",", "\[IndentingNewLine]", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["x", 
+       RowBox[{"i", "-", "1"}]], "-", 
+      RowBox[{
+       RowBox[{"[", 
+        RowBox[{"2", "+", 
+         RowBox[{
+          SuperscriptBox["h", "2"], "(", 
+          RowBox[{"1", "-", 
+           FractionBox[
+            SubscriptBox["t", "i"], "5"]}], ")"}]}], "]"}], 
+       SubscriptBox["x", "i"]}], "+", 
+      SubscriptBox["x", 
+       RowBox[{"i", "+", "1"}]]}], "=", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      SubscriptBox["t", "i"]}]}]}], TraditionalForm]]],
+ "\n\t\nwhere ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " represents the constant difference in ",
+ Cell[BoxData[
+  FormBox["t", TraditionalForm]]],
+ "-values.  This equation represents an approximation to the original \
+equation on the interval ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", "1"}], TraditionalForm]]],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", "3"}], TraditionalForm]]],
+ ".  Let's subdivide the interval into a number of equal subintervals.  For \
+example, if ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    FractionBox["1", "2"]}], TraditionalForm]]],
+ ", the points\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["t", "1"], "=", "1"}], ",", "  ", 
+    RowBox[{
+     SubscriptBox["t", "2"], "=", "1.5"}], ",", "  ", 
+    RowBox[{
+     SubscriptBox["t", "3"], "=", "2"}], ",", "  ", 
+    RowBox[{
+     SubscriptBox["t", "4"], "=", "2.5"}], ",", " ", 
+    RowBox[{
+     RowBox[{"and", "  ", 
+      SubscriptBox["t", "5"]}], "=", "3"}]}], TraditionalForm]]],
+ "\n\t\nsubdivide the interval into four subintervals.  We write the \
+difference equation for each of these values of ",
+ Cell[BoxData[
+  FormBox["t", TraditionalForm]]],
+ " at which ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ " is unknown, giving\n\n\tat ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"t", "=", 
+     RowBox[{
+      SubscriptBox["t", "2"], "=", "1.5"}]}], ";", "             ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["x", "1"], "-", 
+      RowBox[{
+       RowBox[{"[", 
+        RowBox[{"2", "+", 
+         RowBox[{
+          RowBox[{"(", 
+           FractionBox["1", "2"], ")"}], 
+          RowBox[{"(", 
+           FractionBox["1", "2"], ")"}], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", 
+            FractionBox["1.5", "5"]}], ")"}]}]}], "]"}], 
+       SubscriptBox["x", "2"]}], "+", 
+      SubscriptBox["x", "3"]}], "=", 
+     RowBox[{
+      RowBox[{"(", 
+       FractionBox["1", "2"], ")"}], 
+      RowBox[{"(", 
+       FractionBox["1", "2"], ")"}], 
+      RowBox[{"(", "1.5", ")"}]}]}]}], TraditionalForm]]],
+ "\n\tat ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"t", "=", 
+     RowBox[{
+      SubscriptBox["t", "3"], "=", "2"}]}], ";", "                ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["x", "2"], "-", 
+      RowBox[{
+       RowBox[{"[", 
+        RowBox[{"2", "+", 
+         RowBox[{
+          RowBox[{"(", 
+           FractionBox["1", "2"], ")"}], 
+          RowBox[{"(", 
+           FractionBox["1", "2"], ")"}], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", 
+            FractionBox["2.0", "5"]}], ")"}]}]}], "]"}], 
+       SubscriptBox["x", "3"]}], "+", 
+      SubscriptBox["x", "4"]}], "=", 
+     RowBox[{
+      RowBox[{"(", 
+       FractionBox["1", "2"], ")"}], 
+      RowBox[{"(", 
+       FractionBox["1", "2"], ")"}], 
+      RowBox[{"(", "2.0", ")"}], "     "}]}]}], TraditionalForm]]],
+ "\n\tat ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"t", "=", 
+     RowBox[{
+      SubscriptBox["t", "4"], "=", "3"}]}], ";", "                ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["x", "3"], "-", 
+      RowBox[{
+       RowBox[{"[", 
+        RowBox[{"2", "+", 
+         RowBox[{
+          RowBox[{"(", 
+           FractionBox["1", "2"], ")"}], 
+          RowBox[{"(", 
+           FractionBox["1", "2"], ")"}], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", 
+            FractionBox["2.5", "5"]}], ")"}]}]}], "]"}], 
+       SubscriptBox["x", "5"]}], "+", 
+      SubscriptBox["x", "5"]}], "=", 
+     RowBox[{
+      RowBox[{"(", 
+       FractionBox["1", "2"], ")"}], 
+      RowBox[{"(", 
+       FractionBox["1", "2"], ")"}], 
+      RowBox[{"(", "2.5", ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\nwe know the values ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "1"], "=", "2"}], TraditionalForm]]],
+ ", and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "5"], "=", 
+    RowBox[{"-", "1"}]}], TraditionalForm]]],
+ " since they are the supplied boundary values.  If we insert them into the \
+equations above and simplify, we have the following matrix equation.\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", GridBox[{
+        {
+         RowBox[{"-", "2.175"}], "1", "0"},
+        {"1", 
+         RowBox[{"-", "2.150"}], "1"},
+        {"0", "1", 
+         RowBox[{"-", "2.125"}]}
+       }], ")"}], 
+     RowBox[{"(", GridBox[{
+        {
+         SubscriptBox["x", "2"]},
+        {
+         SubscriptBox["x", "3"]},
+        {
+         SubscriptBox["x", "4"]}
+       }], ")"}]}], "=", 
+    RowBox[{"(", GridBox[{
+       {
+        RowBox[{"-", "1.625"}]},
+       {"0.5"},
+       {"1.625"}
+      }], ")"}]}], TraditionalForm]]],
+ "\n\t\nwe can solve this equation with the Gaussian elimination as we have \
+previously learned.  This gives the following solution:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["x", "2"], "=", "0.552"}], ",", "         ", 
+    RowBox[{
+     SubscriptBox["x", "3"], "=", 
+     RowBox[{"-", "0.424"}]}], ",", "          ", 
+    RowBox[{
+     SubscriptBox["x", "4"], "=", 
+     RowBox[{"-", "0.964"}]}]}], TraditionalForm]]],
+ "\n\t\nThis is pretty close to the answer we would have gotten using the \
+shooting method.  Notice that the matrix is tridiagonal, this makes it very \
+computationally efficient to solve and memory efficient too, because it's \
+unnecessary to store all the zeros, we can devise a solving scheme that only \
+stores the three diagonals and solves the equations very quickly.  This is a \
+characteristic of finite-difference methods and one reason why one may prefer \
+them over the shooting method."
+}], "Text",
+ CellChangeTimes->{{3.498431233178108*^9, 3.498431535569923*^9}, {
+   3.498431737378364*^9, 3.498431778330084*^9}, {3.498431838669339*^9, 
+   3.498432061488593*^9}, {3.498432120939596*^9, 3.4984321474305687`*^9}, {
+   3.4984321860554523`*^9, 3.498432348579226*^9}, {3.49843239047852*^9, 
+   3.498432683110832*^9}, {3.498432713800499*^9, 3.498432920425475*^9}, {
+   3.498433385745089*^9, 3.4984334548376713`*^9}, {3.498433558528386*^9, 
+   3.498433559250042*^9}, {3.4984335925145407`*^9, 3.4984335953302507`*^9}, {
+   3.4984337504175863`*^9, 3.4984337537428303`*^9}, {3.4984337899232063`*^9, 
+   3.498433791407548*^9}, {3.4984338422268953`*^9, 3.498433852489161*^9}, 
+   3.498433918828311*^9, {3.49843395824424*^9, 3.4984339658205757`*^9}, {
+   3.498434082895372*^9, 3.4984341114619503`*^9}, {3.4984342710523033`*^9, 
+   3.498434292786914*^9}, {3.498434502945608*^9, 3.498434507599362*^9}, {
+   3.4984345672676687`*^9, 3.498434716731801*^9}, {3.498445506862487*^9, 
+   3.498445528336802*^9}, {3.498499254163022*^9, 3.49849925831649*^9}, {
+   3.4985041142654657`*^9, 3.4985041220706673`*^9}, {3.4985042961531763`*^9, 
+   3.498504298436235*^9}, {3.499385053311005*^9, 3.4993850566115522`*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Comments on step size and accuracy", "Section",
+ CellChangeTimes->{{3.498434760389472*^9, 3.498434769905916*^9}}],
+
+Cell[TextData[{
+ "We might anticipate that the error between the finite-difference \
+approximated solution and the exact solution would decrease proportionally to \
+",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["h", "2"], TraditionalForm]]],
+ "since the approximations to the derivatives are of error ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["h", "2"], ")"}], TraditionalForm]]],
+ ".  To observe how the errors decrease when ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " decreases, we look at another example, one where the exact solution is \
+known.  Consider,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[DifferentialD]", "2"], "y"}], 
+      RowBox[{"\[DifferentialD]", 
+       SuperscriptBox["x", "2"]}]], "=", "y"}], ",", "        ", 
+    RowBox[{
+     RowBox[{"y", "(", "1", ")"}], "=", "1.1752"}], ",", "          ", 
+    RowBox[{
+     RowBox[{"y", "(", "3", ")"}], "=", "10.0179"}]}], TraditionalForm]]],
+ "\n\t\nThis function has the analytic solution ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"y", "=", 
+    RowBox[{"sinh", "(", "x", ")"}]}], TraditionalForm]]],
+ ".\n\nWhile it is not strictly necessary, it is common to normalize the \
+function to the interval (0,1).  We do this for computational purposes to get \
+an idea of exactly what is \"large\" and \"small.\"  We do this by the change \
+of variable:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"b", "-", "a"}], ")"}], "t"}], "+", "a"}]}], TraditionalForm]]],
+ "\n\t\nwhere ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{"a", ",", "b"}], ")"}], TraditionalForm]]],
+ " is the original interval to be normalized.  Letting ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{
+     RowBox[{"2", " ", "t"}], "+", "1"}]}], TraditionalForm]]],
+ ", we write\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"\[DifferentialD]", "y"}], 
+      RowBox[{"\[DifferentialD]", "x"}]], "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{"\[DifferentialD]", "y"}], 
+        RowBox[{"\[DifferentialD]", "t"}]], 
+       FractionBox[
+        RowBox[{"\[DifferentialD]", "t"}], 
+        RowBox[{"\[DifferentialD]", "x"}]]}], "=", 
+      RowBox[{
+       FractionBox["1", "2"], 
+       FractionBox[
+        RowBox[{"\[DifferentialD]", "y"}], 
+        RowBox[{"\[DifferentialD]", "t"}]]}]}]}], ",", "\[IndentingNewLine]", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[DifferentialD]", "2"], "y"}], 
+      RowBox[{"\[DifferentialD]", 
+       SuperscriptBox["x", "2"]}]], "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        FractionBox["\[DifferentialD]", 
+         RowBox[{"\[DifferentialD]", "t"}]], 
+        RowBox[{"(", 
+         RowBox[{
+          FractionBox["1", "2"], 
+          FractionBox[
+           RowBox[{"\[DifferentialD]", "y"}], 
+           RowBox[{"\[DifferentialD]", "t"}]]}], ")"}]}], 
+       FractionBox[
+        RowBox[{"\[DifferentialD]", "t"}], 
+        RowBox[{"\[DifferentialD]", "x"}]]}], "=", 
+      RowBox[{
+       FractionBox["1", 
+        SuperscriptBox["2", "2"]], 
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["\[DifferentialD]", "2"], "y"}], 
+        RowBox[{"\[DifferentialD]", 
+         SuperscriptBox["t", "2"]}]]}]}]}], ","}], TraditionalForm]]],
+ "\n\t\nthen the problem becomes\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[DifferentialD]", "2"], "y"}], 
+      RowBox[{"\[DifferentialD]", 
+       SuperscriptBox["t", "2"]}]], "=", 
+     RowBox[{"4", "y"}]}], ",", "      ", 
+    RowBox[{
+     RowBox[{"y", "(", "0", ")"}], "=", "1.1752"}], ",", "      ", 
+    RowBox[{
+     RowBox[{"y", "(", "1", ")"}], "=", "10.0179"}]}], TraditionalForm]]],
+ "\n\t\nReplacing the second derivative by the centeral-difference \
+approximation, and thus converting the differential equation to a difference \
+equation, we have\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SubscriptBox["y", 
+        RowBox[{"i", "+", "1"}]], "-", 
+       RowBox[{"2", 
+        SubscriptBox["y", "i"]}], "+", 
+       SubscriptBox["y", 
+        RowBox[{"i", "-", "1"}]]}], 
+      SuperscriptBox["h", "2"]], "=", 
+     RowBox[{"4", " ", 
+      SubscriptBox["y", "i"]}]}], ",", "    ", 
+    RowBox[{"i", "=", "1"}], ",", "2", ",", "3", ",", "\[Ellipsis]", ",", 
+    "n"}], TraditionalForm]]],
+ "\n\t\nUsing ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", "0.25"}], TraditionalForm]]],
+ " and writing the difference equation at the three internal points where ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " is unknown, we have the set of equations\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", GridBox[{
+        {
+         RowBox[{"-", "2.25"}], "1", "0"},
+        {"1", 
+         RowBox[{"-", "2.25"}], "1"},
+        {"0", "1", 
+         RowBox[{"-", "2.25"}]}
+       }], ")"}], 
+     RowBox[{"(", GridBox[{
+        {
+         SubscriptBox["y", "2"]},
+        {
+         SubscriptBox["y", "3"]},
+        {
+         SubscriptBox["y", "4"]}
+       }], ")"}]}], "=", 
+    RowBox[{"(", GridBox[{
+       {
+        RowBox[{"-", "1.1752"}]},
+       {"0"},
+       {
+        RowBox[{"-", "10.0179"}]}
+      }], ")"}]}], TraditionalForm]]],
+ "\n\t\nLet's compare the solution to this system to the exact values and \
+look at the errors\n\n\t",
+ Cell[BoxData[
+  FormBox[GridBox[{
+     {"t", "x", 
+      RowBox[{"Calculated", " ", "y"}], 
+      RowBox[{"sinh", "(", "x", ")"}], "Error"},
+     {"0.25", "1.5", "2.1467", "2.1293", 
+      RowBox[{"-", "0.0174"}]},
+     {"0.50", "2.0", "3.6549", "3.6269", 
+      RowBox[{"-", "0.0280"}]},
+     {"0.75", "2.5", "6.0768", "6.0502", 
+      RowBox[{"-", "0.0266"}]}
+    }], TraditionalForm]]],
+ "\n\t\nIf we recalculate this problem using varying values of ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ ", we get the results shown below for ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", "2.0"}], TraditionalForm]]],
+ "\n\n\t",
+ Cell[BoxData[
+  FormBox[GridBox[{
+     {
+      RowBox[{
+       RowBox[{"No", ".", " ", "of"}], " ", "\[IndentingNewLine]", 
+       "equations"}], 
+      RowBox[{
+       RowBox[{"h", " ", "for", " ", "normalized"}], "\[IndentingNewLine]", 
+       "interval"}], "Result", "Error"},
+     {"1", "0.50", "3.7310", 
+      RowBox[{"-", "0.1041"}]},
+     {"3", "0.25", "3.6549", 
+      RowBox[{"-", "0.0280"}]},
+     {"7", "0.125", "3.6340", 
+      RowBox[{"-", "0.0071"}]}
+    }], TraditionalForm]],
+  TextAlignment->Center],
+ "\n\t\nWe observe an approximate fourfold decrease in the error when the \
+step size is halved, meaning an ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["h", "2"], ")"}], TraditionalForm]]],
+ " error does exist."
+}], "Text",
+ CellChangeTimes->{{3.4984348018280783`*^9, 3.498434851538269*^9}, {
+  3.498434888671287*^9, 3.4984349516140223`*^9}, {3.498435001673484*^9, 
+  3.4984351342405252`*^9}, {3.498435296574329*^9, 3.498435448656164*^9}, {
+  3.49843550632841*^9, 3.4984356968609257`*^9}, {3.4984358422103767`*^9, 
+  3.498435933845372*^9}, {3.498436117611085*^9, 3.498436362751889*^9}, {
+  3.49843640598731*^9, 3.498436474481092*^9}, {3.498436522395501*^9, 
+  3.4984365448951*^9}, {3.4984365940362263`*^9, 3.498436726496009*^9}, {
+  3.4984367660207453`*^9, 3.498436943826426*^9}, {3.49844552940552*^9, 
+  3.49844554556761*^9}, {3.4985046411624203`*^9, 3.498504670818169*^9}, {
+  3.500913880785968*^9, 3.500913886967532*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Non-linear difference equations", "Section",
+ CellChangeTimes->{{3.498437633741445*^9, 3.4984376427862177`*^9}}],
+
+Cell[TextData[{
+ "When the differential equation describing a boundary-value problem is \
+nonlinear, the method of finite-differences runs into a problem in that the \
+resulting system of equations is nonlinear.  Consider the following \
+non-linear equation:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[DifferentialD]", "2"], "x"}], 
+       RowBox[{"\[DifferentialD]", 
+        SuperscriptBox["t", "2"]}]], "-", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         FractionBox["t", "5"]}], ")"}], 
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{"\[DifferentialD]", "x"}], 
+         RowBox[{"\[DifferentialD]", "t"}]], ")"}], "x"}]}], "=", "t"}], ",", 
+    "    ", 
+    RowBox[{
+     RowBox[{"x", "(", "1", ")"}], "=", "2"}], ",", "   ", 
+    RowBox[{
+     RowBox[{"x", "(", "3", ")"}], "=", 
+     RowBox[{"-", "1"}]}]}], TraditionalForm]]],
+ "\n\t\nNow substituting in the central-differenceapproximations, we get the \
+equivalent difference equation:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["x", 
+       RowBox[{"i", "-", "1"}]], "-", 
+      RowBox[{
+       RowBox[{"[", 
+        RowBox[{"2", "+", 
+         RowBox[{
+          FractionBox["h", "2"], 
+          RowBox[{"(", 
+           RowBox[{"1", "-", 
+            FractionBox[
+             SubscriptBox["t", "i"], "5"]}], ")"}], 
+          RowBox[{"(", 
+           RowBox[{
+            SubscriptBox["x", 
+             RowBox[{"i", "+", "1"}]], "-", 
+            SubscriptBox["x", 
+             RowBox[{"i", "-", "1"}]]}], ")"}]}]}], "]"}], 
+       SubscriptBox["x", "i"]}], "+", 
+      SubscriptBox["x", 
+       RowBox[{"i", "+", "1"}]]}], "=", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      SubscriptBox["t", "i"]}]}], ",", "    ", 
+    RowBox[{"i", "=", "1"}], ",", "2", ",", "3", ",", "\[Ellipsis]", ",", 
+    "n"}], TraditionalForm]]],
+ "\n\t\nThis is a nonlinear equation and the standard elimination method \
+fails for these equations.  We need to use an iteration technique in these \
+cases.  If we obtain some estimate of the ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ "-vector, the solution to the equations.  We could use these values as a \
+means of approximation the coefficient of ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "i"], TraditionalForm]]],
+ " in the equation above.  When this is done, using ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", "0.2"}], TraditionalForm]]],
+ " and the initial ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "i"], TraditionalForm]]],
+ " values estimated from ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"3.5", "-", 
+     RowBox[{"1.5", " ", "t"}]}]}], TraditionalForm]]],
+ " (a linear relation between ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"x", "(", "1", ")"}], "=", 
+    RowBox[{
+     RowBox[{"2", "  ", "and", "  ", 
+      RowBox[{"x", "(", "3", ")"}]}], "=", 
+     RowBox[{"-", "1"}]}]}], TraditionalForm]]],
+ ", the following values result.\n\n\t",
+ Cell[BoxData[
+  FormBox[GridBox[{
+     {"t", 
+      RowBox[{"Inital", " ", "Estimate"}], 
+      RowBox[{"1", " ", "iteration"}], 
+      RowBox[{"2", " ", "iterations"}], 
+      RowBox[{"4", " ", "iterations"}], 
+      RowBox[{"8", " ", "iterations"}]},
+     {"1.0", "2.000", "-", "-", "-", "-"},
+     {"1.2", "1.700", "1.431", "1.601", "1.558", "1.552"},
+     {"1.4", "1.400", "0.845", "1.110", "1.048", "1.039"},
+     {"1.6", "1.100", "0.279", "0.583", "0.513", "0.503"},
+     {"1.8", "0.800", 
+      RowBox[{"-", "0.235"}], "0.077", "0.006", 
+      RowBox[{"-", "0.005"}]},
+     {"2.0", "0.500", 
+      RowBox[{"-", "0.668"}], 
+      RowBox[{"-", "0.362"}], 
+      RowBox[{"-", "0.430"}], 
+      RowBox[{"-", "0.440"}]},
+     {"2.2", "0.200", 
+      RowBox[{"-", "0.997"}], 
+      RowBox[{"-", "0.704"}], 
+      RowBox[{"-", "0.766"}], 
+      RowBox[{"-", "0.775"}]},
+     {"2.4", 
+      RowBox[{"-", "0.100"}], 
+      RowBox[{"-", "0.204"}], 
+      RowBox[{"-", "0.937"}], 
+      RowBox[{"-", "0.990"}], 
+      RowBox[{"-", "0.998"}]},
+     {"2.6", 
+      RowBox[{"-", "0.400"}], 
+      RowBox[{"-", "1.278"}], 
+      RowBox[{"-", "1.061"}], 
+      RowBox[{"-", "1.101"}], 
+      RowBox[{"-", "1.107"}]},
+     {"2.8", 
+      RowBox[{"-", "0.700"}], 
+      RowBox[{"-", "1.211"}], 
+      RowBox[{"-", "0.080"}], 
+      RowBox[{"-", "1.104"}], 
+      RowBox[{"-", "1.107"}]},
+     {"3.0", 
+      RowBox[{"-", "1.000"}], "-", "-", "-", "-"}
+    }], TraditionalForm]]],
+ "\n\t\nFurther iterations after the eighth did not change the answers.  If \
+you can find a good approximation to the solution vector than this method is \
+a decent technique to use for nonlinear equations however when a good \
+estimate is not available and the equations are strongly nonlinear (in the \
+equation above the nonlinearity is diluted by using a small step size and the \
+coefficient term will be dominated by the constant 2)  this technique may not \
+converge."
+}], "Text",
+ CellChangeTimes->{{3.49843829602409*^9, 3.498438723390068*^9}, {
+  3.498438758238578*^9, 3.498438761250354*^9}, {3.498439164911964*^9, 
+  3.498439448912016*^9}, {3.4984395018927193`*^9, 3.498439633858781*^9}, {
+  3.498439665865514*^9, 3.4984400538262243`*^9}, {3.498445546917746*^9, 
+  3.498445560793352*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Derivative Boundary Conditions", "Section",
+ CellChangeTimes->{{3.498440119575821*^9, 3.498440126269608*^9}}],
+
+Cell[TextData[{
+ "The conditions that the solution of a differential equation must satisfy \
+need not necessarily be just the value of the function.  In many applied \
+problems, some derivative of the function may be known at the boundaries of \
+an interval.  In the more general case a linear combination of the function \
+and its derivatives is specified.  The finite-difference procedure needs \
+modification for this type of boundary conditions.  We will illustrate by \
+example, using the problem from before, but this time with derivative \
+boundary conditions:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[DifferentialD]", "2"], "y"}], 
+      RowBox[{"\[DifferentialD]", 
+       SuperscriptBox["t", "2"]}]], "=", "y"}], ",", "      ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"y", "'"}], 
+      RowBox[{"(", "1", ")"}]}], "=", "1.1752"}], ",", "     ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"y", "'"}], 
+      RowBox[{"(", "3", ")"}]}], "=", "10.0179"}]}], TraditionalForm]]],
+ "\n\t\nThis function as the analytic solution ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"y", "=", 
+    RowBox[{"cosh", "(", "x", ")"}]}], TraditionalForm]]],
+ ".  We begin just as before.  We change variables to make the interval ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{"0", ",", "1"}], ")"}], TraditionalForm]]],
+ " by letting ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{
+     RowBox[{"2", "t"}], "+", "1"}]}], TraditionalForm]]],
+ ".\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[DifferentialD]", "2"], "y"}], 
+     RowBox[{"\[DifferentialD]", 
+      SuperscriptBox["t", "2"]}]], "=", 
+    RowBox[{"4", "y"}]}], TraditionalForm]]],
+ ",      y' (0) = 1.1752,     y' (1) = 10.0179\n\t\nWe now replace the \
+derivative by a central-difference approximation and write the difference \
+equation at each point where ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " is unknown.  With ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", "0.25"}], TraditionalForm]]],
+ ",\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"at", " ", "t"}], "=", "0"}], ";", "                 ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", "l"], "-", 
+      RowBox[{"2.25", 
+       SubscriptBox["y", "1"]}], "+", 
+      SubscriptBox["y", "2"]}], "=", "0"}], ";"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"at", " ", "t"}], "=", "0.25"}], ";", "          ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", "1"], "-", 
+      RowBox[{"2.25", 
+       SubscriptBox["y", "2"]}], "+", 
+      SubscriptBox["y", "3"]}], "=", "0"}], ";"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"at", " ", "t"}], "=", "0.50"}], ";", "          ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", "2"], "-", 
+      RowBox[{"2.25", 
+       SubscriptBox["y", "3"]}], "+", 
+      SubscriptBox["y", "4"]}], "=", "0"}], ";"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"at", " ", "t"}], "=", "0.75"}], ";", "          ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", "3"], "-", 
+      RowBox[{"2.25", 
+       SubscriptBox["y", "4"]}], "+", 
+      SubscriptBox["y", "5"]}], "=", "0"}], ";"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"at", " ", "t"}], "=", "1.00"}], ";", "          ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", "4"], "-", 
+      RowBox[{"2.25", 
+       SubscriptBox["y", "5"]}], "+", 
+      SubscriptBox["y", "r"]}], "=", "0"}], ";"}], TraditionalForm]}]],
+ "\n\t\nThere are two more equations than previously because ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " is unknown at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", "0"}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", "1"}], TraditionalForm]]],
+ " as well as the interior points.  These two additional equations involve \
+the values ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "l"], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "r"], TraditionalForm]]],
+ ", points one space to the left and to the right of the interval ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{"0", ",", "1"}], ")"}], TraditionalForm]]],
+ ".  We assume that the domain can be extended.  The 5 equations above \
+contain 7 unknowns therefore we cannot solve them until we apply the boundary \
+conditions.  Let us now express the boundary conditions using our \
+central-difference approximations:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{"\[DifferentialD]", "y"}], 
+        RowBox[{"\[DifferentialD]", "x"}]], 
+       SubscriptBox["|", 
+        RowBox[{"x", "=", "1"}]], 
+       RowBox[{"=", 
+        RowBox[{
+         RowBox[{
+          FractionBox[
+           RowBox[{"\[DifferentialD]", "y"}], 
+           RowBox[{"\[DifferentialD]", "t"}]], 
+          FractionBox[
+           RowBox[{"\[DifferentialD]", "t"}], 
+           RowBox[{"\[DifferentialD]", "x"}]]}], 
+         SubscriptBox["|", 
+          RowBox[{"t", "=", "0"}]], 
+         RowBox[{"=", 
+          RowBox[{
+           RowBox[{"(", 
+            FractionBox["1", "2"], ")"}], 
+           FractionBox[
+            RowBox[{
+             SubscriptBox["y", "2"], "-", 
+             SubscriptBox["y", "l"]}], 
+            RowBox[{"2", "h"}]]}]}]}]}]}], "=", "1.1752"}], ",", "       ", 
+     RowBox[{
+      SubscriptBox["y", "l"], "=", 
+      RowBox[{
+       SubscriptBox["y", "2"], "-", 
+       RowBox[{
+        RowBox[{"(", "4", ")"}], 
+        RowBox[{"(", "0.25", ")"}], 
+        RowBox[{"(", "1.1752", ")"}]}]}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"\[DifferentialD]", "y"}], 
+      RowBox[{"\[DifferentialD]", "x"}]], 
+     SubscriptBox["|", 
+      RowBox[{"x", "=", "3"}]], 
+     RowBox[{"=", 
+      RowBox[{
+       RowBox[{
+        FractionBox[
+         RowBox[{"\[DifferentialD]", "y"}], 
+         RowBox[{"\[DifferentialD]", "t"}]], 
+        FractionBox[
+         RowBox[{"\[DifferentialD]", "t"}], 
+         RowBox[{"\[DifferentialD]", "x"}]]}], 
+       SubscriptBox["|", 
+        RowBox[{"t", "=", "1"}]], 
+       RowBox[{"=", 
+        RowBox[{
+         RowBox[{"(", 
+          FractionBox["1", "2"], ")"}], 
+         FractionBox[
+          RowBox[{
+           SubscriptBox["y", "r"], "-", 
+           SubscriptBox["y", "4"]}], 
+          RowBox[{"2", " ", "h"}]]}]}]}]}]}], "=", 
+    RowBox[{
+     RowBox[{"10.0179", "      ", 
+      SubscriptBox["y", "r"]}], "=", 
+     RowBox[{
+      SubscriptBox["y", "4"], "+", 
+      RowBox[{
+       RowBox[{"(", "4", ")"}], 
+       RowBox[{"(", "0.25", ")"}], 
+       RowBox[{"(", "10.0179", ")"}]}]}]}]}], TraditionalForm]}]],
+ "\n\t\nThese two additional equations give us enough equations to solve for \
+the unknowns in  the system.  The solution is given below:\n\n\t",
+ Cell[BoxData[
+  FormBox[GridBox[{
+     {"t", "x", 
+      RowBox[{"Calculated", " ", "y"}], 
+      RowBox[{"cosh", "(", "x", ")"}], "Error"},
+     {"0", "1.0", "1.5522", "1.5431", 
+      RowBox[{"-", "0.0091"}]},
+     {"0.25", "1.5", "2.3338", "2.3524", 
+      RowBox[{"-", "0.0186"}]},
+     {"0.50", "2.0", "3.6989", "3.7622", "0.0633"},
+     {"0.75", "2.5", "5.9887", "6.1323", "0.1436"},
+     {"1.0", "3.0", "9.7757", "10.0677", "0.2920"}
+    }], TraditionalForm]]],
+ "\n\t\nObserve that the errors are quite a bit larger here than they were \
+when we knew the value of the function at the endpoints.  Our approximation \
+for the derivative is poor at large ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ "-values.  Repeating the calculations with ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " cut in half reduces the errors fourfold."
+}], "Text",
+ CellChangeTimes->{{3.4984401336136827`*^9, 3.498440706820197*^9}, {
+  3.498440742396223*^9, 3.49844095332444*^9}, {3.4984410323340693`*^9, 
+  3.498441367805661*^9}, {3.498441474668776*^9, 3.49844163465443*^9}, {
+  3.498441675052862*^9, 3.49844178960583*^9}, {3.498445574194427*^9, 
+  3.498445595902639*^9}, {3.498505154172268*^9, 3.4985051608035*^9}, {
+  3.5009160826038313`*^9, 3.500916109140409*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Pseudocode for Linear Finite Difference", "Section",
+ CellChangeTimes->{{3.498441969469146*^9, 3.498441984253986*^9}, {
+  3.498444031145357*^9, 3.498444032124433*^9}}],
+
+Cell[TextData[{
+ "To approximate the solution of the boundary-value problem\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"y", "''"}], "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"p", "(", "x", ")"}], 
+       RowBox[{"y", "'"}]}], "+", 
+      RowBox[{
+       RowBox[{"q", "(", "x", ")"}], "y"}], "+", 
+      RowBox[{"r", "(", "x", ")"}]}]}], ",", "     ", 
+    RowBox[{"a", "\[LessEqual]", " ", "x", "\[LessEqual]", " ", "b"}], ",", 
+    "   ", 
+    RowBox[{
+     RowBox[{"y", "(", "a", ")"}], "=", "\[Alpha]"}], ",", "   ", 
+    RowBox[{
+     RowBox[{"y", "(", "b", ")"}], "=", "\[Beta]"}]}], TraditionalForm]]],
+ "\n\t\nStep 1.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"b", "-", "a"}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"N", "+", "1"}], ")"}]}]}], TraditionalForm]]],
+ "\nStep 2.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", "h"}]}], TraditionalForm]]],
+ "\nStep 3.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "1"], "=", 
+    RowBox[{"2", "+", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      RowBox[{"q", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\nStep 4.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "1"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{"p", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\nStep 5.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "1"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", 
+       SuperscriptBox["h", "2"]}], 
+      RowBox[{"r", "(", "x", ")"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"h", "/", "2"}], ")"}], 
+         RowBox[{"p", "(", "x", ")"}]}]}], ")"}], "\[Alpha]"}]}]}], 
+   TraditionalForm]]],
+ "\n\nStep 6.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "2"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"N", "-", "1"}]}], TraditionalForm]]],
+ " do Steps 7-11\n\t\tStep 7.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]],
+ "\n\t\tStep 8.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "i"], "=", 
+    RowBox[{"2", "+", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      RowBox[{"q", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 9.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "i"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{"p", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 10.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["c", "i"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{"p", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 11.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "i"], "=", 
+    RowBox[{
+     RowBox[{"-", 
+      SuperscriptBox["h", "2"]}], 
+     RowBox[{"r", "(", "x", ")"}]}]}], TraditionalForm]]],
+ "\n\t\t\nStep 12.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"b", "-", "h"}]}], TraditionalForm]]],
+ "\nStep 13.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "N"], "=", 
+    RowBox[{"2", "+", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      RowBox[{"q", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\nStep 14.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["c", "N"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{"p", "(", "x", ")"}]}]}]}], TraditionalForm]]],
+ "\nStep 15.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "N"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", 
+       SuperscriptBox["h", "2"]}], 
+      RowBox[{"r", "(", "x", ")"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"h", "/", "2"}], ")"}], 
+         RowBox[{"p", "(", "x", ")"}]}]}], ")"}], "\[Beta]"}]}]}], 
+   TraditionalForm]]],
+ "\n\nStep 16.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["l", "1"], "=", 
+    SubscriptBox["a", "1"]}], TraditionalForm]]],
+ "\nStep 17.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", "1"], "=", 
+    RowBox[{
+     SubscriptBox["b", "1"], "/", 
+     SubscriptBox["a", "1"]}]}], TraditionalForm]]],
+ "\nStep 18.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "1"], "=", 
+    RowBox[{
+     SubscriptBox["d", "1"], "/", 
+     SubscriptBox["l", "1"]}]}], TraditionalForm]]],
+ "\n\nStep 19.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "2"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"N", "-", "1"}]}], TraditionalForm]]],
+ " do Steps 20-22\n\t\tStep 20.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["l", "i"], "=", 
+    RowBox[{
+     SubscriptBox["a", "i"], "-", 
+     RowBox[{
+      SubscriptBox["c", "i"], 
+      SubscriptBox["u", 
+       RowBox[{"i", "-", "1"}]]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 21.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", "i"], "=", 
+    RowBox[{
+     SubscriptBox["b", "i"], "/", 
+     SubscriptBox["l", "i"]}]}], TraditionalForm]]],
+ "\n\t\tStep 22.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "i"], "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["d", "i"], "-", 
+       RowBox[{
+        SubscriptBox["c", "i"], 
+        SubscriptBox["z", 
+         RowBox[{"i", "-", "1"}]]}]}], ")"}], "/", 
+     SubscriptBox["l", "i"]}]}], TraditionalForm]]],
+ "\n\t\t\nStep 23.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["l", "N"], "=", 
+    RowBox[{
+     SubscriptBox["a", "N"], "-", 
+     RowBox[{
+      SubscriptBox["c", "N"], 
+      SubscriptBox["u", 
+       RowBox[{"N", "-", "1"}]]}]}]}], TraditionalForm]]],
+ "\nStep 24.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "N"], "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["d", "N"], "-", 
+       RowBox[{
+        SubscriptBox["c", "N"], 
+        SubscriptBox["z", 
+         RowBox[{"N", "-", "1"}]]}]}], ")"}], "/", 
+     SubscriptBox["l", "N"]}]}], TraditionalForm]]],
+ "\n\nStep 25.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "0"], "=", "\[Alpha]"}], TraditionalForm]]],
+ "\nStep 26.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"N", "+", "1"}]], "=", "\[Beta]"}], TraditionalForm]]],
+ "\nStep 27.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "N"], "=", 
+    SubscriptBox["z", "N"]}], TraditionalForm]]],
+ "\n\nStep 28.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", 
+     RowBox[{"N", "-", "1"}]}], ",", "\[Ellipsis]", ",", "1"}], 
+   TraditionalForm]]],
+ "  do Step 29\n\t\tStep 29.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "i"], "=", 
+    RowBox[{
+     SubscriptBox["z", "i"], "-", 
+     RowBox[{
+      SubscriptBox["u", "i"], 
+      SubscriptBox["w", 
+       RowBox[{"i", "+", "1"}]]}]}]}], TraditionalForm]]],
+ "\n\nStep 30.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "0"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"N", "+", "1"}]}], TraditionalForm]]],
+ " do Step 31\n\t\tStep 31.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.498441990763492*^9, 3.498442870906719*^9}, {
+  3.5004166470609703`*^9, 3.500416647922222*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Pseudocode for Nonlinear Finite-Difference", "Section",
+ CellChangeTimes->{{3.4984440428785467`*^9, 3.498444057933103*^9}}],
+
+Cell[TextData[{
+ "To approximate the solution to the nonlinear boundary-value problem\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"y", "''"}], "=", 
+     RowBox[{"f", "(", 
+      RowBox[{"x", ",", "y", ",", 
+       RowBox[{"y", "'"}]}], ")"}]}], ",", "     ", 
+    RowBox[{"a", "\[LessEqual]", " ", "x", "\[LessEqual]", " ", "b"}], ",", 
+    "     ", 
+    RowBox[{
+     RowBox[{"y", "(", "a", ")"}], "=", "\[Alpha]"}], ",", "     ", 
+    RowBox[{
+     RowBox[{"y", "(", "b", ")"}], "=", "\[Beta]"}]}], TraditionalForm]]],
+ "\n\t\nStep 1.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"b", "-", "a"}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"N", "-", "1"}], ")"}]}]}], TraditionalForm]]],
+ "\nStep 2.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "0"], "=", "\[Alpha]"}], TraditionalForm]]],
+ "\nStep 3.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"N", "+", "1"}]], "=", "\[Beta]"}], TraditionalForm]]],
+ "\n\nStep 4.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ",", "\[Ellipsis]", ",", "N"}], 
+   TraditionalForm]]],
+ " do Step 5\n\t\tStep 5.  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "i"], "=", 
+    RowBox[{"\[Alpha]", "+", 
+     RowBox[{
+      RowBox[{"i", "(", 
+       FractionBox[
+        RowBox[{"\[Beta]", "-", "\[Alpha]"}], 
+        RowBox[{"b", "-", "a"}]], ")"}], "h"}]}]}], TraditionalForm]]],
+ "\n\t\t\nStep 6.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", "=", "1"}], TraditionalForm]]],
+ "\nStep 7.  While ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", "\[LessEqual]", " ", "M"}], TraditionalForm]]],
+ " do Steps 8-43\n\t\tStep 8.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", "h"}]}], TraditionalForm]]],
+ "\n\t\tStep 9.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["w", "2"], "-", "\[Alpha]"}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"2", "h"}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\tStep 10.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "1"], "=", 
+    RowBox[{"2", "+", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      RowBox[{
+       SubscriptBox["f", "y"], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "1"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 11.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "1"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{
+       SubscriptBox["f", 
+        RowBox[{"y", "'"}]], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "1"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 12.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "1"], "=", 
+    RowBox[{"-", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", 
+        SubscriptBox["w", "1"]}], "-", 
+       SubscriptBox["w", "2"], "-", "\[Alpha]", "+", 
+       RowBox[{
+        SuperscriptBox["h", "2"], 
+        RowBox[{"f", "(", 
+         RowBox[{"x", ",", 
+          SubscriptBox["w", "1"], ",", "t"}], ")"}]}]}], ")"}]}]}], 
+   TraditionalForm]]],
+ "\n\t\t\n\t\tStep 13.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "2"}], ",", "\[Ellipsis]", ",", " ", 
+    RowBox[{"N", "-", "1"}]}], TraditionalForm]]],
+ " do Steps 14-19\n\t\t\t\tStep 14.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 15.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["w", 
+        RowBox[{"i", "+", "1"}]], "-", 
+       SubscriptBox["w", 
+        RowBox[{"i", "-", "1"}]]}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"2", "h"}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 16.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "i"], "=", 
+    RowBox[{"2", "+", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      RowBox[{
+       SubscriptBox["f", "y"], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "i"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 17.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "i"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{
+       SubscriptBox["f", 
+        RowBox[{"y", "'"}]], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "i"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 18.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["c", "i"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{
+       SubscriptBox["f", 
+        RowBox[{"y", "'"}]], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "i"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 19.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "i"], "=", 
+    RowBox[{"-", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", " ", 
+        SubscriptBox["w", "i"]}], "-", 
+       SubscriptBox["w", 
+        RowBox[{"i", "+", "1"}]], "-", 
+       SubscriptBox["w", 
+        RowBox[{"i", "-", "1"}]], "+", 
+       RowBox[{
+        SuperscriptBox["h", "2"], 
+        RowBox[{"f", "(", 
+         RowBox[{"x", ",", 
+          SubscriptBox["w", "i"], ",", "t"}], ")"}]}]}], ")"}]}]}], 
+   TraditionalForm]]],
+ "\n\t\t\t\t\n\t\tStep 20.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"b", "-", "h"}]}], TraditionalForm]]],
+ "\n\t\tStep 21.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"\[Beta]", "-", 
+       SubscriptBox["w", 
+        RowBox[{"N", "-", "1"}]]}], ")"}], "/", 
+     RowBox[{"(", 
+      RowBox[{"2", "h"}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\tStep 22.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "N"], "=", 
+    RowBox[{"2", "+", 
+     RowBox[{
+      SuperscriptBox["h", "2"], 
+      RowBox[{
+       SubscriptBox["f", "y"], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "N"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 23.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["c", "N"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"h", "/", "2"}], ")"}], 
+      RowBox[{
+       SubscriptBox["f", 
+        RowBox[{"y", "'"}]], "(", 
+       RowBox[{"x", ",", 
+        SubscriptBox["w", "N"], ",", "t"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 24.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "N"], "=", 
+    RowBox[{"-", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"2", 
+        SubscriptBox["w", "N"]}], "-", 
+       SubscriptBox["w", 
+        RowBox[{"N", "-", "1"}]], "-", "\[Beta]", "+", 
+       RowBox[{
+        SuperscriptBox["h", "2"], 
+        RowBox[{"f", "(", 
+         RowBox[{"x", ",", 
+          SubscriptBox["w", "N"], ",", "t"}], ")"}]}]}], ")"}]}]}], 
+   TraditionalForm]]],
+ "\n\t\t\n\t \tStep 25.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["l", "1"], "=", 
+    SubscriptBox["a", "1"]}], TraditionalForm]]],
+ "\n\t \tStep 26.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox[
+     SubscriptBox["u", "1"], "`"], "=", 
+    RowBox[{
+     SubscriptBox["b", "1"], "/", 
+     SubscriptBox["a", "1"]}]}], TraditionalForm]]],
+ "\n\t\tStep 27.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "1"], "=", 
+    RowBox[{
+     SubscriptBox["d", "1"], "/", 
+     SubscriptBox["l", "1"]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 28.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "2"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"N", "-", "1"}]}], TraditionalForm]]],
+ "  do Steps 29-31\n\t\t\t\tStep 29.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["l", "i"], "=", 
+    RowBox[{
+     SubscriptBox["a", "i"], "-", 
+     RowBox[{
+      SubscriptBox["c", "i"], 
+      SubscriptBox["u", 
+       RowBox[{"i", "-", "1"}]]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 30.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", "i"], "=", 
+    RowBox[{
+     SubscriptBox["b", "i"], "/", 
+     SubscriptBox["l", "i"]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 31.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "i"], "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["d", "i"], "-", 
+       RowBox[{
+        SubscriptBox["c", "i"], 
+        SubscriptBox["z", 
+         RowBox[{"i", "-", "1"}]]}]}], ")"}], "/", 
+     SubscriptBox["l", "i"]}]}], TraditionalForm]]],
+ "\n\t\t\t\t\n\t\tStep 32.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["l", "N"], "=", 
+    RowBox[{
+     SubscriptBox["a", "N"], "-", 
+     RowBox[{
+      SubscriptBox["c", "N"], 
+      SubscriptBox["u", 
+       RowBox[{"N", "-", "1"}]]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 33.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "N"], "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["d", "N"], "-", 
+       RowBox[{
+        SubscriptBox["c", "N"], 
+        SubscriptBox["z", 
+         RowBox[{"N", "-", "1"}]]}]}], ")"}], "/", 
+     SubscriptBox["l", "N"]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 34.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", "N"], "=", 
+    SubscriptBox["z", "N"]}], TraditionalForm]]],
+ "\n\t\tStep 35.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "N"], "=", 
+    RowBox[{
+     SubscriptBox["w", "N"], "+", 
+     SubscriptBox["v", "N"]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 36.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", 
+     RowBox[{"N", "-", "1"}]}], ",", "\[Ellipsis]", ",", "1"}], 
+   TraditionalForm]]],
+ "\n\t\t\t\tStep 37.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", "i"], "=", 
+    RowBox[{
+     SubscriptBox["z", "i"], "-", 
+     RowBox[{
+      SubscriptBox["u", "i"], 
+      SubscriptBox["v", 
+       RowBox[{"i", "+", "1"}]]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 38.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "i"], "=", 
+    RowBox[{
+     SubscriptBox["w", "i"], "+", 
+     SubscriptBox["v", "i"]}]}], TraditionalForm]]],
+ "\n\t\t\t\t\n\t\tStep 39.  If ||",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["v", "_"], "||", " ", 
+    RowBox[{"\[LessEqual]", " ", "TOL"}]}], TraditionalForm]]],
+ " do Steps 40-42\n\t\t\t\t\n\t\t\t\tStep 40.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "0"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"N", "+", "1"}]}], TraditionalForm]]],
+ "\n\t\t\t\t\tStep 41.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 42.  Stop procedure\n\t\t\t\t\n\t\tStep 43.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", "=", 
+    RowBox[{"k", "+", "1"}]}], TraditionalForm]]],
+ "\n\t\t\n\tStep 44.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"k", "=", 
+     RowBox[{"Max", " ", "iterations"}]}], ",", " ", 
+    RowBox[{"print", " ", "message"}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.498444069173332*^9, 3.498445456222105*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+},
+ScreenStyleEnvironment->"SlideShow",
+WindowSize->{1552, 1295},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+Magnification:>FEPrivate`If[
+  FEPrivate`Equal[FEPrivate`$VersionNumber, 6.], 0.75, 0.75 Inherited],
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[567, 22, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[2985, 82, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[15130, 490, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[23563, 762, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[39814, 1336, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[51730, 1705, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[60529, 1975, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[66936, 2162, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[76434, 2449, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[85405, 2786, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 98462, 3259}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[656, 27, 108, 1, 84, "Section"],
+Cell[767, 30, 1385, 26, 186, "Text"],
+Cell[2155, 58, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2985, 82, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[3074, 87, 102, 1, 84, "Section"],
+Cell[3179, 90, 1544, 41, 195, "Text"],
+Cell[CellGroupData[{
+Cell[4748, 135, 792, 22, 35, "Input"],
+Cell[5543, 159, 364, 11, 60, "Output"]
+}, Open  ]],
+Cell[5922, 173, 315, 10, 33, "Text"],
+Cell[CellGroupData[{
+Cell[6262, 187, 814, 25, 59, "Input"],
+Cell[7079, 214, 326, 10, 60, "Output"]
+}, Open  ]],
+Cell[7420, 227, 332, 8, 33, "Text"],
+Cell[CellGroupData[{
+Cell[7777, 239, 352, 9, 35, "Input"],
+Cell[8132, 250, 310, 8, 60, "Output"]
+}, Open  ]],
+Cell[8457, 261, 302, 10, 33, "Text"],
+Cell[CellGroupData[{
+Cell[8784, 275, 867, 26, 59, "Input"],
+Cell[9654, 303, 368, 11, 60, "Output"]
+}, Open  ]],
+Cell[10037, 317, 306, 8, 33, "Text"],
+Cell[CellGroupData[{
+Cell[10368, 329, 253, 7, 35, "Input"],
+Cell[10624, 338, 246, 7, 60, "Output"]
+}, Open  ]],
+Cell[10885, 348, 458, 7, 55, "Text"],
+Cell[CellGroupData[{
+Cell[11368, 359, 294, 9, 60, "Input"],
+Cell[11665, 370, 509, 17, 78, "Output"]
+}, Open  ]],
+Cell[12189, 390, 371, 10, 33, "Text"],
+Cell[CellGroupData[{
+Cell[12585, 404, 694, 22, 35, "Input"],
+Cell[13282, 428, 370, 11, 60, "Output"]
+}, Open  ]],
+Cell[13667, 442, 267, 7, 33, "Text"],
+Cell[CellGroupData[{
+Cell[13959, 453, 253, 7, 35, "Input"],
+Cell[14215, 462, 70, 1, 35, "Output"]
+}, Open  ]],
+Cell[14300, 466, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15130, 490, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[15219, 495, 109, 1, 84, "Section"],
+Cell[15331, 498, 7399, 238, 979, "Text"],
+Cell[22733, 738, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23563, 762, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[23652, 767, 175, 2, 84, "Section"],
+Cell[23830, 771, 15151, 539, 1187, "Text"],
+Cell[38984, 1312, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[39814, 1336, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[39903, 1341, 114, 1, 84, "Section"],
+Cell[40020, 1344, 10877, 335, 1041, "Text"],
+Cell[50900, 1681, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51730, 1705, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[51819, 1710, 119, 1, 84, "Section"],
+Cell[51941, 1713, 7755, 236, 1186, "Text"],
+Cell[59699, 1951, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60529, 1975, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[60618, 1980, 118, 1, 84, "Section"],
+Cell[60739, 1983, 5364, 153, 699, "Text"],
+Cell[66106, 2138, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[66936, 2162, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[67025, 2167, 115, 1, 84, "Section"],
+Cell[67143, 2170, 8458, 253, 899, "Text"],
+Cell[75604, 2425, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[76434, 2449, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[76523, 2454, 173, 2, 30, "Section"],
+Cell[76699, 2458, 7873, 302, 357, "Text"],
+Cell[84575, 2762, 781, 18, 10, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[85405, 2786, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[85494, 2791, 129, 1, 22, "Section"],
+Cell[85626, 2794, 11533, 426, 390, "Text"],
+Cell[97162, 3222, 781, 18, 7, "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

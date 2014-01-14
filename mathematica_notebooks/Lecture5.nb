@@ -1,0 +1,3160 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[    117732,       3151]
+NotebookOptionsPosition[    113008,       3000]
+NotebookOutlinePosition[    114379,       3041]
+CellTagsIndexPosition[    114299,       3036]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The eigenvalue problem.", "Section",
+ CellChangeTimes->{{3.486165058141493*^9, 3.486165082691049*^9}, 
+   3.486165142756048*^9, {3.486170574083695*^9, 3.486170581433323*^9}, {
+   3.4861743399707623`*^9, 3.486174394400867*^9}, 3.4861746857316427`*^9, {
+   3.487038063234351*^9, 3.487038073814953*^9}, {3.48703889921646*^9, 
+   3.487038915318046*^9}, {3.487378910988463*^9, 3.487378927522559*^9}, {
+   3.488680418359262*^9, 3.488680430920867*^9}, {3.4905699052335443`*^9, 
+   3.490569913956645*^9}, 3.4905712010298*^9}],
+
+Cell[TextData[{
+ "The eigenvalue problem was discussed previously in conjunction with the \
+convergence of iterative methods in the solution of linear systems.  As \
+engineers we are often introduced to the eigenproblem in mechanics courses as \
+the principal values and directions of the moment of inertia tensor, the \
+stress and strain tensors, and as natural frequencies and modes in vibration \
+theory.  From a mathematical standpoint the eigenproblem can provide an \
+elegant method viewing the structure of a matrix.  A more formal introduction \
+to the problem and the methods one might use to solve the eigenproblem is the \
+subject of the next lecture set.\n\nFirst, a short refresher.  Suppose a \
+scalar, \[Lambda], and a vector ",
+ Cell[BoxData[
+  FormBox[
+   OverscriptBox["x", "_"], TraditionalForm]]],
+ " are found to satisfy the matrix equation:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"A", " ", 
+     OverscriptBox["x", "_"]}], "=", " ", 
+    RowBox[{"\[Lambda]", " ", 
+     OverscriptBox["x", "_"]}]}], TraditionalForm]]],
+ "\n\t\nThen \[Lambda] is said to be an ",
+ StyleBox["eigenvalue",
+  FontSlant->"Italic"],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   OverscriptBox["x", "_"], TraditionalForm]]],
+ " an ",
+ StyleBox["eigenvectors",
+  FontSlant->"Italic"],
+ " of ",
+ StyleBox["A.  ",
+  FontSlant->"Italic"],
+ "We can rearrange this equation to be in the equivalent form:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"A", "-", 
+       RowBox[{"\[Lambda]", " ", "I"}]}], ")"}], 
+     OverscriptBox["x", "_"]}], "=", "0"}], TraditionalForm]]],
+ "\n\t\nIn order for a non-trivial solution to exist then,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"det", "(", 
+     RowBox[{"A", "-", 
+      RowBox[{"\[Lambda]", " ", "I"}]}], ")"}], " ", "=", "0"}], 
+   TraditionalForm]]],
+ "\n\t\nwhich results in a polynomial equation in \[Lambda] known as the ",
+ StyleBox["characteristic polynomial",
+  FontSlant->"Italic"],
+ ".  The roots of the characteristic polynomial can be found to solve for the \
+eigenvalues of ",
+ StyleBox["A.",
+  FontSlant->"Italic"],
+ "  This would be a very direct method for finding the eigenvalues of ",
+ StyleBox["A ",
+  FontSlant->"Italic"],
+ "and typically how we may have been taught to do it in vibrations class or \
+when solving for principal stresses in mechanics of materials.  However, for \
+large ",
+ StyleBox["A",
+  FontSlant->"Italic"],
+ ", the problem becomes intractable to proceed by hand and we must resort to \
+the computer for help.  The problem is, that finding determinants of matrices \
+is somewhat computationally expensive and finding good approximations to the \
+roots of the characteristic polynomial can be difficult (we shall see when we \
+cover nonlinear root solving).  There are other computational ways of \
+estimating the eigenvalues of a matrix, these methods are discussed in the \
+following slides."
+}], "Text",
+ CellChangeTimes->{{3.490570849201935*^9, 3.490570872845545*^9}, {
+  3.490571127911331*^9, 3.4905715234615717`*^9}, {3.490571592861463*^9, 
+  3.490571602066909*^9}, {3.4911812419657393`*^9, 3.4911817452401953`*^9}, {
+  3.491181837139971*^9, 3.4911822376067133`*^9}, {3.4911845303187313`*^9, 
+  3.491184567107888*^9}, {3.492219706922035*^9, 3.492219739224742*^9}}],
+
+Cell[TextData[{
+ ButtonBox[",\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.491181286679303*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The Power Method.", "Section",
+ CellChangeTimes->{{3.486165058141493*^9, 3.486165082691049*^9}, 
+   3.486165142756048*^9, {3.486170574083695*^9, 3.486170581433323*^9}, {
+   3.4861743399707623`*^9, 3.486174394400867*^9}, 3.4861746857316427`*^9, {
+   3.487038063234351*^9, 3.487038073814953*^9}, {3.48703889921646*^9, 
+   3.487038915318046*^9}, {3.487378910988463*^9, 3.487378927522559*^9}, {
+   3.488680418359262*^9, 3.488680430920867*^9}, {3.4905699052335443`*^9, 
+   3.490569913956645*^9}, 3.4905712010298*^9, {3.4911828344888783`*^9, 
+   3.491182837351091*^9}}],
+
+Cell[TextData[{
+ "The Power Method is an iterative technique used to determine the eigenvalue \
+of largest magnitude in a matrix.  Once this method is understood, we will \
+modify it slightly to determine other eigenvalues.  This method also produces \
+an associated eigenvector.  Sometimes this method is used to find an \
+eigenvector when an eigenvalue is known or found by other means.  Let us \
+assume that an ",
+ StyleBox["n ",
+  FontSlant->"Italic"],
+ "x ",
+ StyleBox["n ",
+  FontSlant->"Italic"],
+ "matrix ",
+ StyleBox["A",
+  FontSlant->"Italic"],
+ " has ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ " eigenvalues, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "1"], ",", " ", 
+    SubscriptBox["\[Lambda]", "2"], ",", " ", "...", ",", " ", 
+    SubscriptBox["\[Lambda]", "n"]}], TraditionalForm]]],
+ " with an associated collection of linearly independent eigenvectors ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox[
+     OverscriptBox["v", "_"], "1"], ",", 
+    SubscriptBox[
+     OverscriptBox["v", "_"], "2"], ",", " ", "...", ",", " ", 
+    SubscriptBox[
+     OverscriptBox["v", "_"], "n"]}], TraditionalForm]]],
+ ".  Let us also make the assumption that ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Lambda]", "1"], TraditionalForm]]],
+ " is the largest in magnitude, meaning, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["\[Lambda]", "1"], "|", " ", 
+    RowBox[{">", 
+     RowBox[{"|", 
+      SubscriptBox["\[Lambda]", "2"], "|", " ", 
+      RowBox[{
+       RowBox[{"\[GreaterEqual]", "  ", "..."}], " ", "\[GreaterEqual]"}], 
+      " ", "|", 
+      SubscriptBox["\[Lambda]", "n"], "|"}]}]}], TraditionalForm]]],
+ ".  If we define a vector ",
+ Cell[BoxData[
+  FormBox[
+   OverscriptBox["x", "_"], TraditionalForm]]],
+ " in ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["\[DoubleStruckCapitalR]", "n"], TraditionalForm]]],
+ ", because the eigenvectors are linear independent, it implies that \
+constants ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Beta]", "1"], ",", 
+    SubscriptBox["\[Beta]", "2"], ",", " ", "...", ",", " ", 
+    SubscriptBox["\[Beta]", "n"]}], TraditionalForm]]],
+ " exist such that,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{
+     UnderoverscriptBox["\[Sum]", 
+      RowBox[{"j", "=", "1"}], "n"], 
+     RowBox[{
+      SubscriptBox["\[Beta]", "j"], 
+      SubscriptBox[
+       OverscriptBox["v", "_"], "j"]}]}]}], TraditionalForm]]],
+ "\n\t\nMultiplying this equation on both sides by ",
+ StyleBox["A, ",
+  FontSlant->"Italic"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", "2"], ",", " ", "...", ",", " ", 
+    SuperscriptBox["A", "k"]}], TraditionalForm]]],
+ " we have:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"A", " ", 
+      OverscriptBox["x", "_"]}], "=", 
+     RowBox[{
+      RowBox[{
+       UnderoverscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "1"}], "n"], 
+       RowBox[{
+        SubscriptBox["\[Beta]", "j"], "A", " ", 
+        SubscriptBox[
+         OverscriptBox["v", "_"], "j"]}]}], "=", 
+      RowBox[{
+       UnderoverscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "1"}], "n"], 
+       RowBox[{
+        SubscriptBox["\[Beta]", "j"], 
+        SubscriptBox["\[Lambda]", "j"], 
+        SubscriptBox[
+         OverscriptBox["v", "_"], "j"]}]}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["A", "2"], " ", 
+      OverscriptBox["x", "_"]}], "=", 
+     RowBox[{
+      RowBox[{
+       UnderoverscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "1"}], "n"], 
+       RowBox[{
+        SubscriptBox["\[Beta]", "j"], "A", " ", 
+        SubscriptBox[
+         OverscriptBox["v", "_"], "j"]}]}], "=", 
+      RowBox[{
+       UnderoverscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "1"}], "n"], 
+       RowBox[{
+        SubscriptBox["\[Beta]", "j"], 
+        SubsuperscriptBox["\[Lambda]", "j", "2"], 
+        SubscriptBox[
+         OverscriptBox["v", "_"], "j"]}]}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"             ", "\[VerticalEllipsis]", "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["A", "k"], " ", 
+     OverscriptBox["x", "_"]}], "=", 
+    RowBox[{
+     RowBox[{
+      UnderoverscriptBox["\[Sum]", 
+       RowBox[{"j", "=", "1"}], "n"], 
+      RowBox[{
+       SubscriptBox["\[Beta]", "j"], "A", " ", 
+       SubscriptBox[
+        OverscriptBox["v", "_"], "j"]}]}], "=", 
+     RowBox[{
+      UnderoverscriptBox["\[Sum]", 
+       RowBox[{"j", "=", "1"}], "n"], 
+      RowBox[{
+       SubscriptBox["\[Beta]", "j"], 
+       SubsuperscriptBox["\[Lambda]", "j", "k"], 
+       SubscriptBox[
+        OverscriptBox["v", "_"], "j"]}]}]}]}], TraditionalForm]}]],
+ "\n\t\nNow let use factor out ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["\[Lambda]", "1", "k"], TraditionalForm]]],
+ " from the right hand side of the last equation.\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\t", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["A", "k"], 
+      OverscriptBox["x", "_"]}], "=", 
+     RowBox[{
+      SubsuperscriptBox["\[Lambda]", "1", "k"], 
+      RowBox[{
+       UnderoverscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "1"}], "n"], 
+       RowBox[{
+        SuperscriptBox[
+         RowBox[{
+          SubscriptBox["\[Beta]", "j"], "(", 
+          FractionBox[
+           SubscriptBox["\[Lambda]", "j"], 
+           SubscriptBox["\[Lambda]", "1"]], ")"}], "k"], 
+        SubscriptBox[
+         OverscriptBox["v", "_"], "j"]}]}]}]}]}], TraditionalForm]]],
+ "\n\nNow take the limit of both sides as ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", "\[Rule]", " ", 
+    RowBox[{"\[Infinity]", "."}]}], TraditionalForm]]],
+ "\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["lim", 
+      RowBox[{"k", "\[Rule]", " ", "\[Infinity]"}]], 
+     RowBox[{
+      SuperscriptBox["A", "k"], 
+      OverscriptBox["x", "_"]}]}], "=", 
+    RowBox[{
+     UnderscriptBox["lim", 
+      RowBox[{"k", "\[Rule]", " ", "\[Infinity]"}]], " ", 
+     RowBox[{
+      SubsuperscriptBox["\[Lambda]", "1", "k"], 
+      RowBox[{
+       UnderoverscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "1"}], "n"], 
+       RowBox[{
+        SuperscriptBox[
+         RowBox[{
+          SubscriptBox["\[Beta]", "j"], "(", 
+          FractionBox[
+           SubscriptBox["\[Lambda]", "j"], 
+           SubscriptBox["\[Lambda]", "1"]], ")"}], "k"], 
+        SubscriptBox[
+         OverscriptBox["v", "_"], "j"]}]}]}]}]}], TraditionalForm]]],
+ "\n\t\nFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "2"}], ",", "3", ",", "...", ",", " ", "n"}], 
+   TraditionalForm]]],
+ " we have ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["lim", 
+      RowBox[{"k", "\[Rule]", " ", "\[Infinity]"}]], 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["\[Lambda]", "j"], "/", 
+        SubscriptBox["\[Lambda]", "1"]}], ")"}], "k"]}], "=", "0"}], 
+   TraditionalForm]]],
+ " because ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["\[Lambda]", "1"], "|", 
+    RowBox[{">", 
+     RowBox[{"|", 
+      SubscriptBox["\[Lambda]", "j"], "|"}]}]}], TraditionalForm]]],
+ ", that leaves\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["lim", 
+      RowBox[{"k", "\[Rule]", "\[Infinity]"}]], 
+     RowBox[{
+      SuperscriptBox["A", "k"], 
+      OverscriptBox["x", "_"]}]}], "=", 
+    RowBox[{
+     SubscriptBox["lim", 
+      RowBox[{"k", "\[Rule]", "\[Infinity]"}]], 
+     RowBox[{
+      SubsuperscriptBox["\[Lambda]", "1", "k"], 
+      SubscriptBox["\[Beta]", "1"], 
+      SubscriptBox[
+       OverscriptBox["v", "_"], "1"]}]}]}], TraditionalForm]]],
+ "\n\t\nThe final equation converges to 0 if ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["\[Lambda]", "1"], "|", 
+    RowBox[{"<", " ", "1"}]}], TraditionalForm]]],
+ " and diverges if ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["\[Lambda]", "1"], "|", " ", 
+    RowBox[{">", " ", "1"}]}], TraditionalForm]]],
+ ".",
+ Cell[BoxData[Cell[""]]],
+ "\n\t"
+}], "Text",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBWIQ7VCm5rOH8ZXjFj5pfxC9QPNvHog2Opq3AERLT5Re
+CaLlVJxWgeiw53bhz5heOa5brz4NRC+pWrIQRBtlbb4Mok8kVcs/B9Jm6azG
+ILoj+KkViJYpz0wE0WItFhUg2tdHsgpEJ6/MqwPRF1xuNoDoGylybSB6j4Hp
+JBDtdW/HTBC9xmvKQhD96pDeKhB9zsliC4jekim6C0RPl/13CURXTT30AETv
+sMp+CqIbBDxeg+jPRXlvQbR3xsUfIJopqpjjBZD2mdfLA6I/ONpLgWi2xCJF
+EL10/1UdEP1GhM8JRIs98PMD0aymq6PA6tk8KkG03YuF2Q9ZXjl2sXjmgWgA
+UYKkEg==
+  "]],
+
+Cell[TextData[{
+ ButtonBox[",\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.491181286679303*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The Power Method (cont.)", "Section",
+ CellChangeTimes->{{3.486165058141493*^9, 3.486165082691049*^9}, 
+   3.486165142756048*^9, {3.486170574083695*^9, 3.486170581433323*^9}, {
+   3.4861743399707623`*^9, 3.486174394400867*^9}, 3.4861746857316427`*^9, {
+   3.487038063234351*^9, 3.487038073814953*^9}, {3.48703889921646*^9, 
+   3.487038915318046*^9}, {3.487378910988463*^9, 3.487378927522559*^9}, {
+   3.488680418359262*^9, 3.488680430920867*^9}, {3.4905699052335443`*^9, 
+   3.490569913956645*^9}, 3.4905712010298*^9, {3.4911828344888783`*^9, 
+   3.491182837351091*^9}, {3.491611484322689*^9, 3.49161148813323*^9}}],
+
+Cell[TextData[{
+ "Looking at the final relationship from the previous slide, we can scale the \
+powers of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", "k"], 
+    OverscriptBox["x", "_"]}], TraditionalForm]]],
+ " in a manner which ensures that the limit is always finite and non-zero.  \
+The scaling begins by choosing ",
+ Cell[BoxData[
+  FormBox[
+   OverscriptBox["x", "_"], TraditionalForm]]],
+ "to be a unit vector, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", "0", ")"}]], ","}], TraditionalForm]]],
+ " relative to the infinity norm and choosing a component ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["x", 
+    SubscriptBox["p", "0"], 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ " of ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    OverscriptBox["x", "_"], 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ " such that:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["x", 
+     SubscriptBox["p", "0"], 
+     RowBox[{"(", "0", ")"}]], "=", 
+    RowBox[{"1", "=", 
+     RowBox[{"||", 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "0", ")"}]], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ "\n\t\nNow, we let ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["y", "_"], 
+     RowBox[{"(", "1", ")"}]], "=", 
+    RowBox[{"A", " ", 
+     SuperscriptBox[
+      OverscriptBox["x", "_"], 
+      RowBox[{"(", "0", ")"}]]}]}], TraditionalForm]]],
+ ", and define ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Mu]", 
+     RowBox[{"(", "1", ")"}]], " ", "=", " ", 
+    SubsuperscriptBox["y", 
+     SubscriptBox["p", "0"], 
+     RowBox[{"(", "1", ")"}]]}], TraditionalForm]]],
+ ".  Then,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Mu]", 
+     RowBox[{"(", "1", ")"}]], "=", 
+    RowBox[{
+     SubsuperscriptBox["y", 
+      SubscriptBox["p", "0"], 
+      RowBox[{"(", "1", ")"}]], "=", 
+     RowBox[{
+      FractionBox[
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "0"], 
+        RowBox[{"(", "1", ")"}]], 
+       SubsuperscriptBox["x", 
+        SubscriptBox["p", "0"], 
+        RowBox[{"(", "0", ")"}]]], "=", 
+      RowBox[{
+       FractionBox[
+        RowBox[{
+         RowBox[{
+          SubscriptBox["\[Beta]", "1"], 
+          SubscriptBox["\[Lambda]", "1"], 
+          SubsuperscriptBox["v", 
+           SubscriptBox["p", "0"], 
+           RowBox[{"(", "1", ")"}]]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Sum]", 
+           RowBox[{"j", "=", "2"}], "n"], 
+          RowBox[{
+           SubscriptBox["\[Beta]", "j"], 
+           SubscriptBox["\[Lambda]", "j"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", "0"], 
+            RowBox[{"(", "j", ")"}]]}]}]}], 
+        RowBox[{
+         RowBox[{
+          SubscriptBox["\[Beta]", "1"], 
+          SubsuperscriptBox["v", 
+           SubscriptBox["p", "0"], 
+           RowBox[{"(", "1", ")"}]]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Sum]", 
+           RowBox[{"j", "=", "2"}], "n"], 
+          RowBox[{
+           SubscriptBox["\[Beta]", "j"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", "0"], 
+            RowBox[{"(", "j", ")"}]]}]}]}]], "=", 
+       RowBox[{
+        SubscriptBox["\[Lambda]", "1"], "[", 
+        FractionBox[
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[Beta]", "1"], 
+           SubscriptBox["\[Lambda]", "1"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", "0"], 
+            RowBox[{"(", "1", ")"}]]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["\[Sum]", 
+            RowBox[{"j", "=", "2"}], "n"], 
+           RowBox[{
+            RowBox[{
+             SubscriptBox["\[Beta]", "j"], "(", 
+             RowBox[{
+              SubscriptBox["\[Lambda]", "j"], "/", 
+              SubscriptBox["\[Lambda]", "1"]}], ")"}], 
+            SubsuperscriptBox["v", 
+             SubscriptBox["p", "0"], 
+             RowBox[{"(", "j", ")"}]]}]}]}], 
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[Beta]", "1"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", "0"], 
+            RowBox[{"(", "1", ")"}]]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["\[Sum]", 
+            RowBox[{"j", "=", "2"}], "n"], 
+           RowBox[{
+            SubscriptBox["\[Beta]", "j"], 
+            SubsuperscriptBox["v", 
+             SubscriptBox["p", "0"], 
+             RowBox[{"(", "j", ")"}]]}]}]}]], "]"}]}]}]}]}], 
+   TraditionalForm]]],
+ "\n\t\nLet ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["p", "1"], TraditionalForm]]],
+ "be the smallest integer such that\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubsuperscriptBox["y", 
+     SubscriptBox["p", "1"], 
+     RowBox[{"(", "1", ")"}]], "|", 
+    RowBox[{"=", 
+     RowBox[{"||", " ", 
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "1", ")"}]], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ "\n\t\nfinally we define ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    OverscriptBox["x", "_"], 
+    RowBox[{"(", "1", ")"}]], TraditionalForm]]],
+ " as\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", "1", ")"}]], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", 
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "1"], 
+        RowBox[{"(", "1", ")"}]]], 
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "1", ")"}]]}], "=", 
+     RowBox[{
+      FractionBox["1", 
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "1"], 
+        RowBox[{"(", "1", ")"}]]], "A", 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "0", ")"}]]}]}]}], TraditionalForm]]],
+ "\n\t\nthen,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["x", 
+     SubscriptBox["p", "1"], 
+     RowBox[{"(", "1", ")"}]], "=", 
+    RowBox[{"1", "=", 
+     RowBox[{"||", 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "1", ")"}]], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.4916115359729843`*^9, 3.4916117005400667`*^9}, {
+  3.491611759177978*^9, 3.4916117744394503`*^9}, {3.491611877924431*^9, 
+  3.491611889664887*^9}, {3.4916120926020308`*^9, 3.491613179023714*^9}}],
+
+Cell[TextData[{
+ ButtonBox[",\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.491181286679303*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The Power Method (cont.)", "Section",
+ CellChangeTimes->{{3.486165058141493*^9, 3.486165082691049*^9}, 
+   3.486165142756048*^9, {3.486170574083695*^9, 3.486170581433323*^9}, {
+   3.4861743399707623`*^9, 3.486174394400867*^9}, 3.4861746857316427`*^9, {
+   3.487038063234351*^9, 3.487038073814953*^9}, {3.48703889921646*^9, 
+   3.487038915318046*^9}, {3.487378910988463*^9, 3.487378927522559*^9}, {
+   3.488680418359262*^9, 3.488680430920867*^9}, {3.4905699052335443`*^9, 
+   3.490569913956645*^9}, 3.4905712010298*^9, {3.4911828344888783`*^9, 
+   3.491182837351091*^9}, {3.491611484322689*^9, 3.49161148813323*^9}}],
+
+Cell[TextData[{
+ "Now define,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["y", "_"], 
+     RowBox[{"(", "2", ")"}]], "=", 
+    RowBox[{
+     RowBox[{"A", " ", 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "1", ")"}]]}], "=", 
+     RowBox[{
+      SuperscriptBox["A", "2"], " ", 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "0", ")"}]]}]}]}], TraditionalForm]]],
+ "\n\nand\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Mu]", 
+     RowBox[{"(", "2", ")"}]], "=", 
+    RowBox[{
+     SubsuperscriptBox["y", 
+      SubscriptBox["p", "1"], 
+      RowBox[{"(", "2", ")"}]], "=", 
+     RowBox[{
+      FractionBox[
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "1"], 
+        RowBox[{"(", "2", ")"}]], 
+       SubsuperscriptBox["x", 
+        SubscriptBox["p", "1"], 
+        RowBox[{"(", "1", ")"}]]], "=", 
+      RowBox[{
+       FractionBox[
+        RowBox[{
+         RowBox[{"[", 
+          RowBox[{
+           RowBox[{
+            SubscriptBox["\[Beta]", "1"], 
+            SubsuperscriptBox["\[Lambda]", "1", "2"], 
+            SubsuperscriptBox["v", 
+             SubscriptBox["p", "1"], 
+             RowBox[{"(", "1", ")"}]]}], "+", 
+           RowBox[{
+            SubsuperscriptBox["\[Sum]", 
+             RowBox[{"j", "=", "2"}], "n"], 
+            RowBox[{
+             SubscriptBox["\[Beta]", "j"], 
+             SubsuperscriptBox["\[Lambda]", "j", "2"], 
+             SubsuperscriptBox["v", 
+              SubscriptBox["p", "1"], 
+              RowBox[{"(", "j", ")"}]]}]}]}], "]"}], "/", 
+         SubsuperscriptBox["y", 
+          SubscriptBox["p", "1"], 
+          RowBox[{"(", "1", ")"}]]}], 
+        RowBox[{
+         RowBox[{"[", 
+          RowBox[{
+           RowBox[{
+            SubscriptBox["\[Beta]", "1"], 
+            SubscriptBox["\[Lambda]", "1"], 
+            SubsuperscriptBox["v", 
+             SubscriptBox["p", "1"], 
+             RowBox[{"(", "1", ")"}]]}], "+", 
+           RowBox[{
+            SubsuperscriptBox["\[Sum]", 
+             RowBox[{"j", "=", "2"}], "n"], 
+            RowBox[{
+             SubscriptBox["\[Beta]", "j"], 
+             SubscriptBox["\[Lambda]", "j"], 
+             SubsuperscriptBox["v", 
+              SubscriptBox["p", "1"], 
+              RowBox[{"(", "j", ")"}]]}]}]}], "]"}], "/", 
+         SubsuperscriptBox["y", 
+          SubscriptBox["p", "1"], 
+          RowBox[{"(", "1", ")"}]]}]], "=", 
+       RowBox[{
+        SubscriptBox["\[Lambda]", "1"], "[", 
+        FractionBox[
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[Beta]", "1"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", "1"], 
+            RowBox[{"(", "1", ")"}]]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["\[Sum]", 
+            RowBox[{"j", "=", "2"}], "n"], 
+           RowBox[{
+            SuperscriptBox[
+             RowBox[{
+              SubscriptBox["\[Beta]", "j"], "(", 
+              RowBox[{
+               SubscriptBox["\[Lambda]", "j"], "/", 
+               SubscriptBox["\[Lambda]", "1"]}], ")"}], "2"], 
+            SubsuperscriptBox["v", 
+             SubscriptBox["p", "1"], 
+             RowBox[{"(", "j", ")"}]]}]}]}], 
+         RowBox[{
+          RowBox[{
+           SubscriptBox["\[Beta]", "1"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", "1"], 
+            RowBox[{"(", "1", ")"}]]}], "+", 
+          RowBox[{
+           SubsuperscriptBox["\[Sum]", 
+            RowBox[{"j", "=", "2"}], "n"], 
+           RowBox[{
+            RowBox[{
+             SubscriptBox["\[Beta]", "j"], "(", 
+             RowBox[{
+              SubscriptBox["\[Lambda]", "j"], "/", 
+              SubscriptBox["\[Lambda]", "1"]}], ")"}], 
+            SubsuperscriptBox["v", 
+             SubscriptBox["p", "1"], 
+             RowBox[{"(", "j", ")"}]]}]}]}]], "]"}]}]}]}]}], 
+   TraditionalForm]]],
+ "\n\t\nLet ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["p", "2"], TraditionalForm]]],
+ "be the smallest integer such that\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubsuperscriptBox["y", 
+     SubscriptBox["p", "2"], 
+     RowBox[{"(", "2", ")"}]], "|", 
+    RowBox[{"=", 
+     RowBox[{"||", " ", 
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "2", ")"}]], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ "\n\t\nfinally we define ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    OverscriptBox["x", "_"], 
+    RowBox[{"(", "1", ")"}]], TraditionalForm]]],
+ " as\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", "2", ")"}]], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", 
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "2"], 
+        RowBox[{"(", "2", ")"}]]], 
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "2", ")"}]]}], "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox["1", 
+        SubsuperscriptBox["y", 
+         SubscriptBox["p", "1"], 
+         RowBox[{"(", "2", ")"}]]], "A", 
+       SuperscriptBox[
+        OverscriptBox["x", "_"], 
+        RowBox[{"(", "1", ")"}]]}], "=", 
+      RowBox[{
+       FractionBox["1", 
+        RowBox[{
+         SubsuperscriptBox["y", 
+          SubscriptBox["p", "2"], 
+          RowBox[{"(", "2", ")"}]], 
+         SubsuperscriptBox["y", 
+          SubscriptBox["p", "1"], 
+          RowBox[{"(", "1", ")"}]]}]], 
+       SuperscriptBox["A", "2"], 
+       SuperscriptBox[
+        OverscriptBox["x", "_"], 
+        RowBox[{"(", "0", ")"}]]}]}]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.4916115359729843`*^9, 3.4916117005400667`*^9}, {
+  3.491611759177978*^9, 3.4916117744394503`*^9}, {3.491611877924431*^9, 
+  3.491611889664887*^9}, {3.4916120926020308`*^9, 3.491613179023714*^9}, {
+  3.49161330767557*^9, 3.4916137287963343`*^9}, {3.491613858000795*^9, 
+  3.491613910362137*^9}, {3.491614211623014*^9, 3.491614211825491*^9}, {
+  3.4916142515070333`*^9, 3.4916142705373287`*^9}}],
+
+Cell[TextData[{
+ ButtonBox[",\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.491181286679303*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The Power Method (cont.)", "Section",
+ CellChangeTimes->{{3.486165058141493*^9, 3.486165082691049*^9}, 
+   3.486165142756048*^9, {3.486170574083695*^9, 3.486170581433323*^9}, {
+   3.4861743399707623`*^9, 3.486174394400867*^9}, 3.4861746857316427`*^9, {
+   3.487038063234351*^9, 3.487038073814953*^9}, {3.48703889921646*^9, 
+   3.487038915318046*^9}, {3.487378910988463*^9, 3.487378927522559*^9}, {
+   3.488680418359262*^9, 3.488680430920867*^9}, {3.4905699052335443`*^9, 
+   3.490569913956645*^9}, 3.4905712010298*^9, {3.4911828344888783`*^9, 
+   3.491182837351091*^9}, {3.491611484322689*^9, 3.49161148813323*^9}}],
+
+Cell[TextData[{
+ "Continuing this sequence we have,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["y", "_"], 
+     RowBox[{"(", "m", ")"}]], "=", 
+    RowBox[{"A", " ", 
+     SuperscriptBox[
+      OverscriptBox["x", "_"], 
+      RowBox[{"(", 
+       RowBox[{"m", "-", "1"}], ")"}]]}]}], TraditionalForm]]],
+ "\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Mu]", 
+     RowBox[{"(", "m", ")"}]], "=", 
+    RowBox[{
+     SubsuperscriptBox["y", 
+      SubscriptBox["p", 
+       RowBox[{"m", "-", "1"}]], 
+      RowBox[{"(", "m", ")"}]], "=", 
+     RowBox[{
+      FractionBox[
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "0"], 
+        RowBox[{"(", "2", ")"}]], 
+       SubsuperscriptBox["x", 
+        SubscriptBox["p", "0"], 
+        RowBox[{"(", "1", ")"}]]], "=", 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "1"], "[", 
+       FractionBox[
+        RowBox[{
+         RowBox[{
+          SubscriptBox["\[Beta]", "1"], 
+          SubsuperscriptBox["v", 
+           SubscriptBox["p", 
+            RowBox[{"m", "-", "1"}]], 
+           RowBox[{"(", "1", ")"}]]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Sum]", 
+           RowBox[{"j", "=", "2"}], "n"], 
+          RowBox[{
+           SuperscriptBox[
+            RowBox[{
+             SubscriptBox["\[Beta]", "j"], "(", 
+             RowBox[{
+              SubscriptBox["\[Lambda]", "j"], "/", 
+              SubscriptBox["\[Lambda]", "1"]}], ")"}], "m"], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", 
+             RowBox[{"m", "-", "1"}]], 
+            RowBox[{"(", "j", ")"}]]}]}]}], 
+        RowBox[{
+         RowBox[{
+          SubscriptBox["\[Beta]", "1"], 
+          SubsuperscriptBox["v", 
+           SubscriptBox["p", 
+            RowBox[{"m", "-", "1"}]], 
+           RowBox[{"(", "1", ")"}]]}], "+", 
+         RowBox[{
+          SubsuperscriptBox["\[Sum]", 
+           RowBox[{"j", "=", "2"}], "n"], 
+          RowBox[{
+           SuperscriptBox[
+            RowBox[{
+             SubscriptBox["\[Beta]", "j"], "(", 
+             RowBox[{
+              SubscriptBox["\[Lambda]", "j"], "/", 
+              SubscriptBox["\[Lambda]", "1"]}], ")"}], 
+            RowBox[{"m", "-", "1"}]], 
+           SubsuperscriptBox["v", 
+            SubscriptBox["p", 
+             RowBox[{"m", "-", "1"}]], 
+            RowBox[{"(", "j", ")"}]]}]}]}]], "]"}], "           ", 
+      RowBox[{"(*", ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\nand\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", "m", ")"}]], "=", 
+    RowBox[{
+     FractionBox[
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "m", ")"}]], 
+      SubsuperscriptBox["y", 
+       SubscriptBox["p", "m"], 
+       RowBox[{"(", "m", ")"}]]], "=", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["A", "m"], 
+       SuperscriptBox[
+        OverscriptBox["x", "_"], 
+        RowBox[{"(", "0", ")"}]]}], 
+      RowBox[{
+       UnderoverscriptBox["\[Product]", 
+        RowBox[{"k", "=", "1"}], "m"], 
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", "k"], 
+        RowBox[{"(", "k", ")"}]]}]]}]}], TraditionalForm]]],
+ "\n\t\nwhere at each step, ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["p", "m"], TraditionalForm]]],
+ " is used to represent the smallest integer for which\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubsuperscriptBox["y", 
+     SubscriptBox["p", "m"], 
+     RowBox[{"(", "m", ")"}]], "|", 
+    RowBox[{"=", 
+     RowBox[{"||", 
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "m", ")"}]], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ "\n\t\nIf we look at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(*", ")"}], TraditionalForm]]],
+ " we can see that at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"m", "\[Rule]", " ", "\[Infinity]"}], TraditionalForm]]],
+ ",  then ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Mu]", "\[Rule]", " ", 
+    SubscriptBox["\[Lambda]", "1"]}], TraditionalForm]]],
+ " as long as ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    OverscriptBox["x", "_"], 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ " is chosen so that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Beta]", "1"], "\[NotEqual]", " ", "0."}], 
+   TraditionalForm]]],
+ "  Also, the sequence of vectors ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    OverscriptBox["x", "_"], 
+    RowBox[{"(", "m", ")"}]], TraditionalForm]]],
+ " converges to an eigenvector associated with ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Lambda]", "1"], TraditionalForm]]],
+ " that has infinity norm of unity.  This method has the disadvantage that it \
+will not work if the matrix does not have a single dominant eigenvalue."
+}], "Text",
+ CellChangeTimes->{{3.4916115359729843`*^9, 3.4916117005400667`*^9}, {
+  3.491611759177978*^9, 3.4916117744394503`*^9}, {3.491611877924431*^9, 
+  3.491611889664887*^9}, {3.4916120926020308`*^9, 3.491613179023714*^9}, {
+  3.49161330767557*^9, 3.4916137287963343`*^9}, {3.491613783959317*^9, 
+  3.49161383420252*^9}, {3.49161393012156*^9, 3.49161400540333*^9}, {
+  3.491614429453046*^9, 3.491614677516523*^9}, {3.491614716191313*^9, 
+  3.491614961734666*^9}, {3.4922197700016947`*^9, 3.49221977179707*^9}}],
+
+Cell[TextData[{
+ ButtonBox[",\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.491181286679303*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Pseudocode for Power Method.", "Section",
+ CellChangeTimes->{{3.4916170750929117`*^9, 3.49161708257134*^9}}],
+
+Cell[TextData[{
+ "Step 1.\t\tInitialize an eigenvector, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{"{", 
+     RowBox[{
+      SubscriptBox["x", "1"], ",", 
+      SubscriptBox["x", "2"], ",", 
+      SubscriptBox["x", "3"]}], "}"}]}], TraditionalForm]]],
+ ", that is not in the nullspace of ",
+ StyleBox["A.",
+  FontSlant->"Italic"],
+ "\nStep 2.\t\tInitialize ",
+ StyleBox["ERR",
+  FontSlant->"Italic"],
+ " > ",
+ StyleBox["TOL.",
+  FontSlant->"Italic"],
+ "\nStep 3.\t\tFind the smallest integer ",
+ StyleBox["p",
+  FontSlant->"Italic"],
+ " with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", "\[LessEqual]", " ", "p", " ", "\[LessEqual]", " ", "n"}], 
+   TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["x", "p"], "|", " ", 
+    RowBox[{"=", " ", 
+     RowBox[{"||", " ", 
+      OverscriptBox["x", "_"], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ ", where ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ " is the length of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "."}], TraditionalForm]]],
+ "\nStep 4.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{
+     OverscriptBox["x", "_"], "/", 
+     SubscriptBox["x", "p"]}]}], TraditionalForm]]],
+ "\nStep 5.\t\tWhile ",
+ StyleBox["ERR > TOL",
+  FontSlant->"Italic"],
+ ", do Steps 6-10.\n\tStep 6.\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["y", "_"], "=", 
+    RowBox[{"A", " ", 
+     OverscriptBox["x", "_"]}]}], TraditionalForm]]],
+ "\n\tStep 7.\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Mu]", "=", 
+    SubscriptBox["y", "p"]}], TraditionalForm]]],
+ "\n\tStep 8.\t\tFind the smallest integer ",
+ StyleBox["p",
+  FontSlant->"Italic"],
+ " with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", "\[LessEqual]", " ", "p", "\[LessEqual]", " ", "n"}], 
+   TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["y", "p"], "|", " ", 
+    RowBox[{"=", " ", 
+     RowBox[{"||", " ", 
+      OverscriptBox["y", "_"], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ "\n\tStep 9.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    StyleBox["ERR",
+     FontSlant->"Italic"], 
+    StyleBox["=",
+     FontSlant->"Plain"], 
+    RowBox[{
+     StyleBox["||",
+      FontSlant->"Plain"], 
+     RowBox[{
+      OverscriptBox[
+       StyleBox["x",
+        FontSlant->"Plain"], "_"], "-", 
+      RowBox[{"(", 
+       RowBox[{
+        OverscriptBox["y", "_"], "/", 
+        SubscriptBox["y", "p"]}], ")"}]}], "||"}]}], TraditionalForm]]],
+ "\n\tStep 10.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{
+     OverscriptBox["y", "_"], "/", 
+     SubscriptBox["y", "p"]}]}], TraditionalForm]]],
+ "\n\t\nThe rate of convergence for the Power Method is ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    RowBox[{"|", 
+     RowBox[{
+      SubscriptBox["\[Lambda]", "2"], "/", 
+      SubscriptBox["\[Lambda]", "1"]}], 
+     SuperscriptBox["|", "m"]}], ")"}], TraditionalForm]]],
+ ". Next we will make some modifications to help improve the rate of \
+convergence.\n"
+}], "Text",
+ CellChangeTimes->{{3.491617415462665*^9, 3.491617428290317*^9}, {
+   3.491617485442478*^9, 3.491617701350841*^9}, {3.491617785864338*^9, 
+   3.491617842082849*^9}, {3.491618339702094*^9, 3.491618574194127*^9}, {
+   3.4916186656971073`*^9, 3.491618779969878*^9}, {3.491618818474964*^9, 
+   3.491618859813426*^9}, {3.491618969403146*^9, 3.491619022788464*^9}, {
+   3.491697109036674*^9, 3.491697241680167*^9}, 3.492219800715927*^9}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Simulation of Power Method converging.", "Section",
+ CellChangeTimes->{{3.4934175554900923`*^9, 3.493417565183796*^9}, {
+  3.4934185275606194`*^9, 3.493418532779467*^9}}],
+
+Cell[TextData[{
+ "The following simulation shows a Power Law method converging to an \
+eigenvalue and eigenvector with the following ",
+ StyleBox["A ",
+  FontSlant->"Italic"],
+ "matrix and initial guess for an eigenvector.  "
+}], "Text",
+ CellChangeTimes->{{3.493417573776374*^9, 3.493417661402753*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0.1", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0.1"}], "}"}]}], "}"}]}], ";", 
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<A = \>\"", ",", 
+    RowBox[{"MatrixForm", "[", "A", "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", "=", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "0"}], "}"}]}], ";", 
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<\!\(\*OverscriptBox[\(v\), \(_\)]\) = \>\"", ",", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{
+      RowBox[{"{", "x", "}"}], "\[Transpose]"}], "]"}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  RowBox[{"\"\<The dominant eigenvalue of \!\(\*
+StyleBox[\"A\",
+FontSlant->\"Italic\"]\) is: \>\"", ",", 
+   RowBox[{"Max", "[", 
+    RowBox[{"Abs", "[", 
+     RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}], "]"}]}], "]"}]}], "Input",\
+
+ CellOpen->False,
+ CellChangeTimes->{{3.4916150315525627`*^9, 3.491615056645616*^9}, {
+   3.493045342609852*^9, 3.493045383139886*^9}, {3.493047432506836*^9, 
+   3.4930474463201723`*^9}, 3.493047652575657*^9, {3.493050328033668*^9, 
+   3.493050330575632*^9}, {3.4930871431249332`*^9, 3.493087148788289*^9}, {
+   3.493417463642606*^9, 3.493417496921104*^9}, {3.493417667533193*^9, 
+   3.4934177790013323`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"A = \"\>", "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0.1`", "1"},
+       {"1", "0.1`"}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["A = ", 
+   MatrixForm[{{0.1, 1}, {1, 0.1}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.493417698914894*^9, 3.49341770749755*^9}, 
+   3.49341773789104*^9, 3.493417779755911*^9}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"\\!\\(\\*OverscriptBox[\\(v\\), \\(_\\)]\\) = \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1"},
+       {"0"}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["\!\(\*OverscriptBox[\(v\), \(_\)]\) = ", 
+   MatrixForm[{{1}, {0}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.493417698914894*^9, 3.49341770749755*^9}, 
+   3.49341773789104*^9, 3.493417779757785*^9}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The dominant eigenvalue of \
+\\!\\(\\*\\nStyleBox[\\\"A\\\",\\nFontSlant->\\\"Italic\\\"]\\) is: \"\>", 
+   "\[InvisibleSpace]", "1.1`"}],
+  SequenceForm[
+  "The dominant eigenvalue of \!\(\*\nStyleBox[\"A\",\nFontSlant->\"Italic\"]\
+\) is: ", 1.1],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.493417698914894*^9, 3.49341770749755*^9}, 
+   3.49341773789104*^9, 3.4934177799935007`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"animatePlot", "=", 
+    RowBox[{"{", 
+     RowBox[{"Graphics", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Arrow", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0"}], "}"}], ",", "x"}], "}"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"PointSize", "[", "Large", "]"}], ",", "Red", ",", 
+           RowBox[{"Point", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Max", "[", 
+               RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}], ",", 
+              RowBox[{"Max", "[", 
+               RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}]}], "}"}], 
+            "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", 
+              RowBox[{"-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", 
+              RowBox[{"-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", 
+              RowBox[{"-", "1"}]}], "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+       RowBox[{"Axes", "\[Rule]", "True"}]}], "]"}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"err", "=", "1"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p", "=", 
+   RowBox[{"Min", "[", 
+    RowBox[{"Position", "[", 
+     RowBox[{
+      RowBox[{"Abs", "[", "x", "]"}], ",", 
+      RowBox[{"Norm", "[", 
+       RowBox[{"x", ",", "\[Infinity]"}], "]"}]}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", "=", 
+   RowBox[{"x", "/", 
+    RowBox[{"x", "[", 
+     RowBox[{"[", "p", "]"}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"AppendTo", "[", 
+    RowBox[{"animatePlot", ",", 
+     RowBox[{"Graphics", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Arrow", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0"}], "}"}], ",", "x"}], "}"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"PointSize", "[", "Large", "]"}], ",", "Red", ",", 
+           RowBox[{"Point", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Max", "[", 
+               RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}], ",", 
+              RowBox[{"Max", "[", 
+               RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}]}], "}"}], 
+            "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"Line", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", 
+              RowBox[{"-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", "1"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"1", ",", 
+              RowBox[{"-", "1"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", "1"}], ",", 
+              RowBox[{"-", "1"}]}], "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+       RowBox[{"Axes", "\[Rule]", "True"}]}], "]"}]}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"While", "[", 
+   RowBox[{
+    RowBox[{"err", ">", "0.000001"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"y", "=", 
+      RowBox[{"A", ".", "x"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"\[Mu]", "=", 
+      RowBox[{"y", "[", 
+       RowBox[{"[", "p", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"p", "=", 
+      RowBox[{"Min", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{
+         RowBox[{"Abs", "[", "y", "]"}], ",", 
+         RowBox[{"Norm", "[", 
+          RowBox[{"y", ",", "\[Infinity]"}], "]"}]}], "]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"err", "=", 
+      RowBox[{"Norm", "[", 
+       RowBox[{
+        RowBox[{"x", "-", 
+         RowBox[{"(", 
+          RowBox[{"y", "/", 
+           RowBox[{"y", "[", 
+            RowBox[{"[", "p", "]"}], "]"}]}], ")"}]}], ",", "\[Infinity]"}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"x", "=", 
+      RowBox[{"y", "/", 
+       RowBox[{"y", "[", 
+        RowBox[{"[", "p", "]"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+     "\[IndentingNewLine]", 
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"animatePlot", ",", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Arrow", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"0", ",", "0"}], "}"}], ",", "x"}], "}"}], "]"}], ",", 
+           
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"PointSize", "[", "Large", "]"}], ",", "Red", ",", 
+             RowBox[{"Point", "[", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Max", "[", 
+                 RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}], ",", 
+                RowBox[{"Max", "[", 
+                 RowBox[{"Eigenvalues", "[", "A", "]"}], "]"}]}], "}"}], 
+              "]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"PointSize", "[", "Large", "]"}], ",", "Black", ",", 
+             RowBox[{"Point", "[", 
+              RowBox[{"{", 
+               RowBox[{"\[Mu]", ",", "\[Mu]"}], "}"}], "]"}]}], "}"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Line", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"-", "1"}], ",", 
+                RowBox[{"-", "1"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"-", "1"}], ",", "1"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", "1"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"1", ",", 
+                RowBox[{"-", "1"}]}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"-", "1"}], ",", 
+                RowBox[{"-", "1"}]}], "}"}]}], "}"}], "]"}]}], "}"}], ",", 
+         RowBox[{"Axes", "\[Rule]", "True"}]}], "]"}]}], "]"}], ";"}]}], 
+   "\[IndentingNewLine]", "]"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"ListAnimate", "[", 
+  RowBox[{"animatePlot", ",", "3"}], "]"}]}], "Input",
+ CellOpen->False,
+ CellChangeTimes->{{3.491615102539646*^9, 3.491615104009817*^9}, {
+   3.4916151454725227`*^9, 3.491615210070959*^9}, {3.491616091881833*^9, 
+   3.4916163060404167`*^9}, {3.4916163583059263`*^9, 3.491616441567541*^9}, {
+   3.491616643992498*^9, 3.4916166857196302`*^9}, {3.491616718217812*^9, 
+   3.491616723719404*^9}, 3.49161847353903*^9, {3.49304541249831*^9, 
+   3.4930454290653687`*^9}, {3.493045497963892*^9, 3.493045524708297*^9}, {
+   3.493045691438896*^9, 3.4930457140528717`*^9}, {3.493045791446591*^9, 
+   3.493045800198553*^9}, {3.49304595128377*^9, 3.493045963035825*^9}, {
+   3.493046013546899*^9, 3.4930460269726477`*^9}, 3.4930460766454563`*^9, {
+   3.493046260409513*^9, 3.493046292699325*^9}, {3.493046324667943*^9, 
+   3.49304633077042*^9}, {3.493046424327652*^9, 3.493046453774067*^9}, {
+   3.4930465950128307`*^9, 3.4930466157919283`*^9}, {3.493046662501006*^9, 
+   3.493046683713501*^9}, {3.493047368252555*^9, 3.493047397662633*^9}, {
+   3.493047642255373*^9, 3.493047655534539*^9}, {3.493047770482566*^9, 
+   3.493047806558289*^9}, {3.493047907903528*^9, 3.493047915171423*^9}, {
+   3.493047975846253*^9, 3.4930479778749447`*^9}, {3.493048971043144*^9, 
+   3.49304901000979*^9}, {3.493050323689399*^9, 3.493050336410461*^9}, {
+   3.493050490420923*^9, 3.49305050254359*^9}, {3.4930843102177277`*^9, 
+   3.493084372879318*^9}, {3.493084513935548*^9, 3.49308458715451*^9}, {
+   3.4930847440853786`*^9, 3.4930848623745117`*^9}, {3.493087158691503*^9, 
+   3.493087164852748*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`i4$$ = 1, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {
+    "\"min\"" :> {$CellContext`i4$$ = 1}, 
+     "\"max\"" :> {$CellContext`i4$$ = 76}}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`i4$$], 1, ""}, 1, 76, 1}}, Typeset`size$$ = 
+    Automatic, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`i4$4230$$ = 0}, 
+    PaneBox[
+     PanelBox[
+      DynamicWrapperBox[GridBox[{
+         {
+          ItemBox[
+           ItemBox[
+            StyleBox[GridBox[{
+               {
+                TagBox["\<\"\"\>",
+                 HoldForm], 
+                AnimatorBox[Dynamic[$CellContext`i4$$], {1, 76, 1},
+                 AnimationRate->3,
+                 
+                 AppearanceElements->{
+                  "ProgressSlider", "PlayPauseButton", "FasterSlowerButtons", 
+                   "DirectionButton"},
+                 AutoAction->False,
+                 ContinuousAction->True,
+                 DisplayAllSteps->True,
+                 PausedTime->0.]}
+              },
+              AutoDelete->False,
+              
+              GridBoxAlignment->{
+               "Columns" -> {Right, {Left}}, "ColumnsIndexed" -> {}, 
+                "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+              
+              GridBoxItemSize->{
+               "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}], 
+             "ManipulateLabel",
+             StripOnInput->False],
+            Alignment->{Automatic, Inherited},
+            StripOnInput->False],
+           Background->None,
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            StyleBox[
+             PaneBox[
+              TagBox[
+               PaneSelectorBox[{1->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1, 0}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]},
+                   LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 2->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1, 0}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]},
+                   LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 3->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.1, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], PointBox[{0.1, 0.1}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 4->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.19801980198019803`}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], PointBox[{0.2, 0.2}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 5->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.2922330097087379, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.29801980198019806`, 0.29801980198019806`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 6->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.3810961230072635}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.39223300970873787`, 0.39223300970873787`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 7->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.4634348023625625, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.48109612300726345`, 0.48109612300726345`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 8->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.5384797755277676}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.5634348023625625, 0.5634348023625625}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 9->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.6058556728556159, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.6384797755277676, 0.6384797755277676}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 10->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.6655339226067037}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.7058556728556159, 0.7058556728556159}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 11->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.7177642752455883, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.7655339226067037, 0.7655339226067037}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 12->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.7629989373197422}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.8177642752455883, 0.8177642752455883}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 13->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.8018201454311865, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.8629989373197422, 0.8629989373197422}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 14->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.8348779495394826}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.9018201454311865, 0.9018201454311865}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 15->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.8628412372464407, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.9348779495394826, 0.9348779495394826}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 16->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.8863622474247868}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.9628412372464407, 0.9628412372464407}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 17->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9060531194964735, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{0.9863622474247867, 0.9863622474247867}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 18->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9224722348894285}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0060531194964735`, 1.0060531194964735`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 19->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9361179528782565, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0224722348894286`, 1.0224722348894286`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 20->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9474275582457141}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0361179528782565`, 1.0361179528782565`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 21->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9567796203015576, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0474275582457142`, 1.0474275582457142`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 22->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.964498380841279}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0567796203015576`, 1.0567796203015576`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 23->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9708591709962046, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0644983808412791`, 1.0644983808412791`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 24->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.976094173031815}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0708591709962045`, 1.0708591709962045`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 25->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9803980870315149, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.076094173031815, 1.076094173031815}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 26->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9839334407260949}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0803980870315149`, 1.0803980870315149`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 27->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9868354051628716, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.083933440726095, 1.083933440726095}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 28->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.98921606184448}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0868354051628717`, 1.0868354051628717`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 29->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9911681194678967, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.08921606184448, 1.08921606184448}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 30->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9927681094561605}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0911681194678968`, 1.0911681194678968`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 31->
+                
+                GraphicsBox[{
+                  ArrowBox[{{0, 0}, {0.9940791059861831, 
+                    0.9999999999999999}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0927681094561605`, 1.0927681094561605`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 32->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9951530232218054}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0940791059861832`, 1.0940791059861832`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 33->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9960325435297153, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0951530232218054`, 1.0951530232218054`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 34->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9967527280324782}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0960325435297154`, 1.0960325435297154`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 35->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9973423565637523, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0967527280324783`, 1.0967527280324783`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 36->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9978250389820816}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0973423565637523`, 1.0973423565637523`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 37->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.998220134518245, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0978250389820816`, 1.0978250389820816`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 38->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9985435107553884}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.098220134518245, 1.098220134518245}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 39->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9988081691736107, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0985435107553885`, 1.0985435107553885`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 40->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9990247600219478}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0988081691736107`, 1.0988081691736107`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 41->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9992020056328657, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0990247600219478`, 1.0990247600219478`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 42->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9993470481494447}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0992020056328657`, 1.0992020056328657`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 43->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9994657349541503, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0993470481494447`, 1.0993470481494447`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 44->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9995628528213542}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0994657349541503`, 1.0994657349541503`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 45->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9996423199121224, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0995628528213541`, 1.0995628528213541`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 46->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9997073431392336}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0996423199121224`, 1.0996423199121224`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 47->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9997605471068701, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0997073431392337`, 1.0997073431392337`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 48->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9998040797316505}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.09976054710687, 1.09976054710687}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 49->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9998396987435083, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0998040797316506`, 1.0998040797316506`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 50->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9998688425151697}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0998396987435084`, 1.0998396987435084`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 51->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9998926880510692, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0998688425151697`, 1.0998688425151697`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 52->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999121984579518}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0998926880510693`, 1.0998926880510693`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 53->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999281618012784, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999121984579519`, 1.0999121984579519`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 54->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999412229080968}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999281618012784`, 1.0999281618012784`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 55->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999519093951134, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.099941222908097, 1.099941222908097}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 56->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999606529694361}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999519093951133`, 1.0999519093951133`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 57->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999678068598382, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999606529694361`, 1.0999606529694361`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 58->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999736600809617}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999678068598382`, 1.0999678068598382`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 59->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999784491055461, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999736600809618`, 1.0999736600809618`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 60->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999823674154471}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999784491055462`, 1.0999784491055462`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 61->
+                
+                GraphicsBox[{
+                  ArrowBox[{{0, 0}, {0.999985573316786, 0.9999999999999999}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999823674154472`, 1.0999823674154472`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 62->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999881963346172}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.099985573316786, 1.099985573316786}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 63->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999903424452327, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999881963346172`, 1.0999881963346172`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 64->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.999992098357344}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999903424452326`, 1.0999903424452326`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 65->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999935350150011, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999920983573441`, 1.0999920983573441`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 66->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999947104637105}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999935350150012`, 1.0999935350150012`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 67->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999956721955002, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999947104637104`, 1.0999947104637104`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 68->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999964590676526}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999956721955002`, 1.0999956721955002`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 69->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999971028726012, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999964590676525`, 1.0999964590676525`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 70->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999976296224131}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999971028726012`, 1.0999971028726012`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 71->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999980605997383, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999976296224132`, 1.0999976296224132`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 72->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.999998413217688}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999980605997384`, 1.0999980605997384`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 73->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999987017233757, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.099998413217688, 1.099998413217688}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 74->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.9999989377735455}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999987017233757`, 1.0999987017233757`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 75->
+                GraphicsBox[{ArrowBox[{{0, 0}, {0.9999991309055443, 1.}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999989377735455`, 1.0999989377735455`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True], 76->
+                GraphicsBox[{ArrowBox[{{0, 0}, {1., 0.999999288922662}}], 
+                  {RGBColor[1, 0, 0], PointSize[Large], PointBox[{1.1, 1.1}]}, 
+                  {GrayLevel[0], PointSize[Large], 
+                   PointBox[{1.0999991309055444`, 1.0999991309055444`}]}, 
+                  LineBox[{{-1, -1}, {-1, 1}, {1, 1}, {1, -1}, {-1, -1}}]},
+                 Axes->True]}, Dynamic[$CellContext`i4$$],
+                Alignment->Automatic,
+                ImageSize->All],
+               Identity,
+               Editable->True,
+               Selectable->True],
+              ImageMargins->10],
+             Deployed->False,
+             StripOnInput->False,
+             ScriptLevel->0,
+             GraphicsBoxOptions->{PreserveImageOptions->True},
+             Graphics3DBoxOptions->{PreserveImageOptions->True}],
+            Identity,
+            Editable->False,
+            Selectable->False],
+           Alignment->{Left, Center},
+           Background->GrayLevel[1],
+           Frame->1,
+           FrameStyle->GrayLevel[0, 0.2],
+           ItemSize->Automatic,
+           StripOnInput->False]}
+        },
+        AutoDelete->False,
+        GridBoxAlignment->{
+         "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Top}}, 
+          "RowsIndexed" -> {}},
+        GridBoxDividers->{
+         "Columns" -> {{False}}, "ColumnsIndexed" -> {}, "Rows" -> {{False}}, 
+          "RowsIndexed" -> {}},
+        GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.7], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.7]}, "ColumnsIndexed" -> {}, "Rows" -> {
+            Offset[0.4], {
+             Offset[0.8]}, 
+            Offset[0.4]}, "RowsIndexed" -> {}}], If[
+        CurrentValue["SelectionOver"], 
+        Manipulate`Dump`ReadControllerState[
+         Map[Manipulate`Dump`updateOneVar[#, 
+           CurrentValue["PreviousFormatTime"], 
+           CurrentValue["CurrentFormatTime"]]& , {
+           
+           Manipulate`Dump`controllerLink[{$CellContext`i4$$, \
+$CellContext`i4$4230$$}, "X1", 
+            If["DefaultAbsolute", True, "JB1"], False, {1, 76, 1}, 76, 1.]}], 
+         
+         CurrentValue[{
+          "ControllerData", {
+           "Gamepad", "Joystick", "Multi-Axis Controller"}}], {}]],
+       ImageSizeCache->{391., {206.59375, 211.90625}}],
+      DefaultBaseStyle->{},
+      FrameMargins->{{5, 5}, {5, 5}}],
+     BaselinePosition->Automatic,
+     ImageMargins->0],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.493048994019394*^9, 3.493049012244729*^9}, 
+   3.4930503476892014`*^9, 3.493050505757607*^9, {3.493084356332489*^9, 
+   3.493084374571981*^9}, 3.493084591325512*^9, {3.493084753217291*^9, 
+   3.493084764971178*^9}, 3.4930848150010967`*^9, 3.493084864669538*^9, {
+   3.493087129549506*^9, 3.4930871391868277`*^9}, {3.493087171815873*^9, 
+   3.493087183411708*^9}, {3.493417375612236*^9, 3.493417397835318*^9}, {
+   3.4934177971926317`*^9, 3.4934178144916563`*^9}}]
+}, {2}]],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Inverse Power Method", "Section",
+ CellChangeTimes->{{3.491696651066299*^9, 3.491696655423873*^9}}],
+
+Cell[TextData[{
+ "The ",
+ StyleBox["Inverse Power Method",
+  FontSlant->"Italic"],
+ " is a modification of the power method that gives faster convergence.  It \
+is used to determine the eigenvalue of A that is closest to a specified \
+number ",
+ StyleBox["q.\n\n",
+  FontSlant->"Italic"],
+ "Suppose the matrix ",
+ StyleBox["A",
+  FontSlant->"Italic"],
+ " has eigenvalues ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "1"], ",", " ", 
+    RowBox[{"...", "."}], " ", ",", 
+    SubscriptBox["\[Lambda]", "n"]}], TraditionalForm]]],
+ " with linearly independent eigenvectors ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["v", "_"], 
+     RowBox[{"(", "1", ")"}]], ",", " ", "...", " ", ",", " ", 
+    SuperscriptBox[
+     OverscriptBox["v", "_"], 
+     RowBox[{"(", "n", ")"}]]}], TraditionalForm]]],
+ ".  The eigenvalues of ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"A", "-", 
+      RowBox[{"q", " ", "I"}]}], ")"}], 
+    RowBox[{"-", "1"}]], TraditionalForm]]],
+ ", where ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"q", " ", "\[NotEqual]", " ", 
+     SubscriptBox["\[Lambda]", "i"]}], ",", " ", 
+    RowBox[{
+     RowBox[{"for", " ", "i"}], "=", "1"}], ",", "2", ",", "...", ",", "n"}], 
+   TraditionalForm]]],
+ ", are\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["1", 
+     RowBox[{
+      SubscriptBox["\[Lambda]", "1"], "-", "q"}]], ",", " ", 
+    FractionBox["1", 
+     RowBox[{
+      SubscriptBox["\[Lambda]", "2"], "-", "q"}]], ",", " ", "...", ",", " ", 
+    
+    FractionBox["1", 
+     RowBox[{
+      SubscriptBox["\[Lambda]", "n"], "-", "q"}]], ","}], TraditionalForm]]],
+ "\n\t\nIf we apply the power method to ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"A", "-", 
+      RowBox[{"q", " ", "I"}]}], ")"}], 
+    RowBox[{"-", "1"}]], TraditionalForm]]],
+ " we have\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["y", "_"], 
+     RowBox[{"(", "m", ")"}]], "=", 
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"A", " ", "-", 
+        RowBox[{"q", " ", "I"}]}], ")"}], 
+      RowBox[{"-", "1"}]], 
+     SuperscriptBox[
+      OverscriptBox["x", "_"], 
+      RowBox[{"(", 
+       RowBox[{"m", "-", "1"}], ")"}]]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Mu]", 
+     RowBox[{"(", "m", ")"}]], "=", 
+    RowBox[{
+     SubsuperscriptBox["y", 
+      SubscriptBox["p", 
+       RowBox[{"m", "-", "1"}]], 
+      RowBox[{"(", "m", ")"}]], "=", 
+     RowBox[{
+      FractionBox[
+       SubsuperscriptBox["y", 
+        SubscriptBox["p", 
+         RowBox[{"m", "-", "1"}]], 
+        RowBox[{"(", "m", ")"}]], 
+       SubsuperscriptBox["x", 
+        SubscriptBox["p", 
+         RowBox[{"m", "-", "1"}]], 
+        RowBox[{"(", 
+         RowBox[{"m", "-", "1"}], ")"}]]], "=", 
+      FractionBox[
+       RowBox[{
+        SubsuperscriptBox["\[Sum]", 
+         RowBox[{"j", "=", "1"}], "n"], 
+        RowBox[{
+         SubscriptBox["\[Beta]", "j"], 
+         FractionBox["1", 
+          SuperscriptBox[
+           RowBox[{"(", 
+            RowBox[{
+             SubscriptBox["\[Lambda]", "j"], "-", "q"}], ")"}], "m"]], 
+         SubsuperscriptBox["v", 
+          SubscriptBox["p", 
+           RowBox[{"m", "-", "1"}]], 
+          RowBox[{"(", "j", ")"}]]}]}], 
+       RowBox[{
+        SubsuperscriptBox["\[Sum]", 
+         RowBox[{"j", "=", "1"}], "n"], 
+        RowBox[{
+         SubscriptBox["\[Beta]", "j"], 
+         FractionBox["1", 
+          SuperscriptBox[
+           RowBox[{"(", 
+            RowBox[{
+             SubscriptBox["\[Lambda]", "j"], "-", "q"}], ")"}], 
+           RowBox[{"m", "-", "1"}]]], 
+         SubsuperscriptBox["v", 
+          SubscriptBox["p", 
+           RowBox[{"m", "-", "1"}]], 
+          RowBox[{"(", "j", ")"}]]}]}]]}]}]}], TraditionalForm]]],
+ "\n\t\nand\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", "m", ")"}]], "=", 
+    FractionBox[
+     SuperscriptBox[
+      OverscriptBox["y", "_"], 
+      RowBox[{"(", "m", ")"}]], 
+     SubsuperscriptBox["y", 
+      SubscriptBox["p", "m"], 
+      RowBox[{"(", "m", ")"}]]]}], TraditionalForm]]],
+ "\n\t\nwhere, at each step, ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["p", "m"], TraditionalForm]]],
+ " represents the smallest integer for which ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubsuperscriptBox["y", 
+     SubscriptBox["p", "m"], 
+     RowBox[{"(", "m", ")"}]], "|", 
+    RowBox[{"=", 
+     RowBox[{"||", 
+      SuperscriptBox[
+       OverscriptBox["y", "_"], 
+       RowBox[{"(", "m", ")"}]], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ ".  \[Mu] will then converge to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"1", "/", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "k"], "-", "q"}], ")"}]}], ","}], 
+   TraditionalForm]]],
+ " where\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox["1", 
+      RowBox[{"|", 
+       RowBox[{
+        SubscriptBox["\[Lambda]", "k"], "-", "q"}], "|"}]], "=", " ", 
+     RowBox[{
+      RowBox[{"max", " ", 
+       FractionBox["1", 
+        RowBox[{"|", 
+         RowBox[{
+          SubscriptBox["\[Lambda]", "i"], "-", "q"}], "|"}]], " ", "where", 
+       " ", "i"}], " ", "=", "1"}]}], ",", "2", ",", "...", ",", " ", "n"}], 
+   TraditionalForm]]],
+ "\n\t\nand ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "k"], "\[TildeTilde]", 
+    RowBox[{"q", "+", 
+     RowBox[{"1", "/", 
+      SuperscriptBox["\[Mu]", 
+       RowBox[{"(", "m", ")"}]]}]}]}], TraditionalForm]]],
+ " is an eigenvalue of ",
+ StyleBox["A",
+  FontSlant->"Italic"],
+ " closest to ",
+ StyleBox["q.\n\n\t",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.491696660672089*^9, 3.4916966805041122`*^9}, {
+   3.491697281752205*^9, 3.491697383479496*^9}, {3.4916974202600183`*^9, 
+   3.491697466386767*^9}, {3.491697718051573*^9, 3.4916978519219847`*^9}, {
+   3.4916979530069532`*^9, 3.491698051912383*^9}, {3.491698097581687*^9, 
+   3.4916984042393503`*^9}, {3.4916984607447243`*^9, 3.491698792566111*^9}, {
+   3.491698901321455*^9, 3.491698903688777*^9}, 3.4922198039027767`*^9}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Inverse Power Method (cont.)", "Section",
+ CellChangeTimes->{{3.491696651066299*^9, 3.491696655423873*^9}, {
+  3.4916989198585997`*^9, 3.491698922408492*^9}}],
+
+Cell[TextData[{
+ "Once ",
+ StyleBox["k ",
+  FontSlant->"Italic"],
+ "is known we can write,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Mu]", 
+     RowBox[{"(", "m", ")"}]], "=", 
+    RowBox[{
+     FractionBox["1", 
+      RowBox[{
+       SubscriptBox["\[Lambda]", "k"], "-", "q"}]], "[", 
+     FractionBox[
+      RowBox[{
+       RowBox[{
+        SubscriptBox["\[Beta]", "k"], 
+        SubsuperscriptBox["v", 
+         SubscriptBox["p", 
+          RowBox[{"m", "-", "1"}]], 
+         RowBox[{"(", "k", ")"}]]}], "+", 
+       RowBox[{
+        SubsuperscriptBox["\[Sum]", 
+         RowBox[{
+          RowBox[{"j", "=", "1"}], "\[IndentingNewLine]", 
+          RowBox[{"j", "\[NotEqual]", " ", "k"}]}], "n"], 
+        RowBox[{
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["\[Beta]", "j"], " ", "[", 
+           FractionBox[
+            RowBox[{
+             SubscriptBox["\[Lambda]", "k"], "-", "q"}], 
+            RowBox[{
+             SubscriptBox["\[Lambda]", "j"], "-", "q"}]], "]"}], "m"], 
+         SubsuperscriptBox["v", 
+          SubscriptBox["p", 
+           RowBox[{"m", "-", "1"}]], 
+          RowBox[{"(", "j", ")"}]]}]}]}], 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["\[Beta]", "k"], 
+        SubsuperscriptBox["v", 
+         SubscriptBox["p", 
+          RowBox[{"m", "-", "1"}]], 
+         RowBox[{"(", "k", ")"}]]}], "+", 
+       RowBox[{
+        SubsuperscriptBox["\[Sum]", 
+         RowBox[{
+          RowBox[{"j", "=", "1"}], "\[IndentingNewLine]", 
+          RowBox[{"j", "\[NotEqual]", " ", "k"}]}], "n"], 
+        RowBox[{
+         SuperscriptBox[
+          RowBox[{
+           SubscriptBox["\[Beta]", "j"], " ", "[", 
+           FractionBox[
+            RowBox[{
+             SubscriptBox["\[Lambda]", "k"], "-", "q"}], 
+            RowBox[{
+             SubscriptBox["\[Lambda]", "j"], "-", "q"}]], "]"}], 
+          RowBox[{"m", "-", "1"}]], 
+         SubsuperscriptBox["v", 
+          SubscriptBox["p", 
+           RowBox[{"m", "-", "1"}]], 
+          RowBox[{"(", "j", ")"}]]}]}]}]], "]"}]}], TraditionalForm]]],
+ "\n\t\nThe choice of ",
+ StyleBox["q",
+  FontSlant->"Italic"],
+ " determines the convergence, provided that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", "/", 
+    RowBox[{"(", 
+     RowBox[{
+      SubscriptBox["\[Lambda]", "k"], "-", "q"}], ")"}]}], 
+   TraditionalForm]]],
+ " is a dominant eigenvalue of ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{"A", "-", 
+      RowBox[{"q", " ", "I"}]}], ")"}], 
+    RowBox[{"-", "1"}]], TraditionalForm]]],
+ ".  The closer ",
+ StyleBox["q",
+  FontSlant->"Italic"],
+ " is to an eigenvalue ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Lambda]", "k"], TraditionalForm]]],
+ ", the faster the convergence.  The convergence is on the order\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"O", "(", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[VerticalSeparator]", 
+        FractionBox[
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"\[Lambda]", "-", "q"}], ")"}], 
+          RowBox[{"-", "1"}]], 
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{
+            SubscriptBox["\[Lambda]", "k"], "-", "q"}], ")"}], 
+          RowBox[{"-", "1"}]]], "\[VerticalSeparator]"}], " ", ")"}], "m"], 
+     ")"}], "=", 
+    RowBox[{"O", "(", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[VerticalSeparator]", 
+        FractionBox[
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["\[Lambda]", "k"], "-", "q"}], ")"}], 
+         RowBox[{"(", 
+          RowBox[{"\[Lambda]", "-", "q"}], ")"}]], "\[VerticalSeparator]"}], 
+       " ", ")"}], "m"], ")"}]}], TraditionalForm]]],
+ StyleBox["\n\n",
+  FontSlant->"Italic"],
+ "where \[Lambda]",
+ StyleBox[" ",
+  FontSlant->"Italic"],
+ "represents the eigenvalue of A that is second closest to ",
+ StyleBox["q.\n\n",
+  FontSlant->"Italic"],
+ "The vector ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox[
+    OverscriptBox["y", "_"], 
+    RowBox[{"(", "m", ")"}]], TraditionalForm]]],
+ " is obtained by solving the equation,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"A", "-", 
+       RowBox[{"q", " ", "I"}]}], ")"}], " ", 
+     SuperscriptBox[
+      OverscriptBox["y", "_"], 
+      RowBox[{"(", "m", ")"}]]}], "=", 
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", 
+      RowBox[{"m", "-", "1"}], ")"}]]}], TraditionalForm]]],
+ "\n\t\nThis equation can be solved by any of the methods we previously \
+learned for solving linear systems.  The selection of ",
+ StyleBox["q ",
+  FontSlant->"Italic"],
+ "can be based on some means of localizing an eigenvalue (e.g. Gerschgorin \
+Circle, etc.)  If we have an initial approximation to the eigenvector, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "_"], 
+     RowBox[{"(", "0", ")"}]], ","}], TraditionalForm]]],
+ "  we can choose ",
+ StyleBox["q, ",
+  FontSlant->"Italic"],
+ " as such\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"q", "=", 
+    FractionBox[
+     RowBox[{
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{
+        RowBox[{"(", "0", ")"}], "T"}]], "A", " ", 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "0", ")"}]]}], 
+     RowBox[{
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{
+        RowBox[{"(", "0", ")"}], "T"}]], 
+      SuperscriptBox[
+       OverscriptBox["x", "_"], 
+       RowBox[{"(", "0", ")"}]]}]]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.491696660672089*^9, 3.4916966805041122`*^9}, {
+  3.491697281752205*^9, 3.491697383479496*^9}, {3.4916974202600183`*^9, 
+  3.491697466386767*^9}, {3.491697718051573*^9, 3.4916978519219847`*^9}, {
+  3.4916979530069532`*^9, 3.491698051912383*^9}, {3.491698097581687*^9, 
+  3.4916984042393503`*^9}, {3.4916984607447243`*^9, 3.491698792566111*^9}, {
+  3.491698901321455*^9, 3.491698954745584*^9}, {3.491699116930443*^9, 
+  3.4916993409986153`*^9}, {3.49169939869271*^9, 3.491699821521557*^9}, {
+  3.491700369993764*^9, 3.491700608199636*^9}, {3.491700736266027*^9, 
+  3.491700961707839*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Pseudocode for Inverse Power Method.", "Section",
+ CellChangeTimes->{{3.4917009736557493`*^9, 3.491701012798957*^9}}],
+
+Cell[TextData[{
+ "Step 1.\t\tInitialize an eigenvector, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{"{", 
+     RowBox[{
+      SubscriptBox["x", "1"], ",", 
+      SubscriptBox["x", "2"], ",", 
+      SubscriptBox["x", "3"]}], "}"}]}], TraditionalForm]]],
+ ", that is not in the null space of ",
+ StyleBox["A.",
+  FontSlant->"Italic"],
+ "\nStep 2.\t\tInitialize ",
+ StyleBox["ERR",
+  FontSlant->"Italic"],
+ " > ",
+ StyleBox["TOL.\n",
+  FontSlant->"Italic"],
+ "Step 3.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"q", "=", 
+    FractionBox[
+     RowBox[{
+      SuperscriptBox[
+       OverscriptBox["x", "_"], "T"], "A", " ", 
+      OverscriptBox["x", "_"]}], 
+     RowBox[{
+      SuperscriptBox[
+       OverscriptBox["x", "_"], "T"], 
+      OverscriptBox["x", "_"]}]]}], TraditionalForm]]],
+ "\nStep 4.\t\tFind the smallest integer ",
+ StyleBox["p",
+  FontSlant->"Italic"],
+ " with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", "\[LessEqual]", " ", "p", " ", "\[LessEqual]", " ", "n"}], 
+   TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["x", "p"], "|", " ", 
+    RowBox[{"=", " ", 
+     RowBox[{"||", " ", 
+      OverscriptBox["x", "_"], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ ", where ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ " is the length of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "."}], TraditionalForm]]],
+ "\nStep 5.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{
+     OverscriptBox["x", "_"], "/", 
+     SubscriptBox["x", "p"]}]}], TraditionalForm]]],
+ "\nStep 6.\t\tWhile ",
+ StyleBox["ERR > TOL",
+  FontSlant->"Italic"],
+ ", do Steps 7-11.\n\tStep 7.\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"Solve", "  ", 
+     RowBox[{"(", 
+      RowBox[{"A", "-", 
+       RowBox[{"q", " ", "I"}]}], ")"}], 
+     OverscriptBox["y", "_"]}], "=", 
+    OverscriptBox["x", "_"]}], TraditionalForm]]],
+ "\n\tStep 8.\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Mu]", "=", 
+    SubscriptBox["y", "p"]}], TraditionalForm]]],
+ "\n\tStep 9.\t\tFind the smallest integer ",
+ StyleBox["p",
+  FontSlant->"Italic"],
+ " with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"1", "\[LessEqual]", " ", "p", "\[LessEqual]", " ", "n"}], 
+   TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["y", "p"], "|", " ", 
+    RowBox[{"=", " ", 
+     RowBox[{"||", " ", 
+      OverscriptBox["y", "_"], 
+      SubscriptBox["||", "\[Infinity]"]}]}]}], TraditionalForm]]],
+ "\n\tStep 10.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    StyleBox["ERR",
+     FontSlant->"Italic"], 
+    StyleBox["=",
+     FontSlant->"Plain"], 
+    RowBox[{
+     StyleBox["||",
+      FontSlant->"Plain"], 
+     RowBox[{
+      OverscriptBox[
+       StyleBox["x",
+        FontSlant->"Plain"], "_"], "-", 
+      RowBox[{"(", 
+       RowBox[{
+        OverscriptBox["y", "_"], "/", 
+        SubscriptBox["y", "p"]}], ")"}]}], "||"}]}], TraditionalForm]]],
+ "\n\tStep 11.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "=", 
+    RowBox[{
+     OverscriptBox["y", "_"], "/", 
+     SubscriptBox["y", "p"]}]}], TraditionalForm]]],
+ "\nStep 12.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Mu]", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "/", "\[Mu]"}], ")"}], "+", "q"}]}], TraditionalForm]]],
+ "\n"
+}], "Text",
+ CellChangeTimes->{{3.491617415462665*^9, 3.491617428290317*^9}, {
+   3.491617485442478*^9, 3.491617701350841*^9}, {3.491617785864338*^9, 
+   3.491617842082849*^9}, {3.491618339702094*^9, 3.491618574194127*^9}, {
+   3.4916186656971073`*^9, 3.491618779969878*^9}, {3.491618818474964*^9, 
+   3.491618859813426*^9}, {3.491618969403146*^9, 3.491619022788464*^9}, {
+   3.491697109036674*^9, 3.491697241680167*^9}, {3.491702327402857*^9, 
+   3.4917023394218407`*^9}, {3.491702486492399*^9, 3.4917025670739117`*^9}, {
+   3.491702706384087*^9, 3.4917027250032673`*^9}, {3.491702887805643*^9, 
+   3.491702904891214*^9}, {3.4917029639525414`*^9, 3.4917030453766413`*^9}, 
+   3.4922198548854713`*^9}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Deflation techniques.", "Section",
+ CellChangeTimes->{{3.491783695667598*^9, 3.491783706294973*^9}}],
+
+Cell[TextData[{
+ "There are several ways of determining approximation to the other \
+eigenvalues once a dominant eigenvalue is known.  A class of techniques \
+called ",
+ StyleBox["deflation techniques",
+  FontSlant->"Italic"],
+ " involve forming a new matrix ",
+ StyleBox["B",
+  FontSlant->"Italic"],
+ " with eigenvalues identical to those in ",
+ StyleBox["A",
+  FontSlant->"Italic"],
+ " with the dominant eigenvalue of ",
+ StyleBox["A",
+  FontSlant->"Italic"],
+ " replaced with 0.  There are then a series of steps that allow you to find \
+the remaining eigenvalues.  One popular deflation technique is called ",
+ StyleBox["Wieland deflation",
+  FontSlant->"Italic"],
+ ".  These deflation techniques tend to be very susceptible to roundoff error \
+and usually they are only useful in approximating an initial guess, ",
+ StyleBox["q",
+  FontSlant->"Italic"],
+ ", for use with the Inverse Power Method.  When all of the eigenvalues of a \
+matrix are required there are better methods for achieving their \
+approximations.  Therefore, we will fore go a discussion of deflation \
+techniques and move on to these other methods which involve similarity \
+transforms."
+}], "Text",
+ CellChangeTimes->{{3.491783808280778*^9, 3.491784034526226*^9}, {
+  3.491784113064352*^9, 3.491784166467025*^9}, {3.491784200526619*^9, 
+  3.491784358459991*^9}, {3.492219862897599*^9, 3.492219870410399*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{944, 910},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[567, 22, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[5382, 142, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[15615, 469, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[23672, 726, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[31310, 956, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[38229, 1165, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[42895, 1328, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[90813, 2277, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[98163, 2526, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[105437, 2757, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[110614, 2937, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 113303, 3010}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[656, 27, 523, 7, 67, "Section"],
+Cell[1182, 36, 3324, 79, 356, "Text"],
+Cell[4509, 117, 824, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5382, 142, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[5471, 147, 569, 8, 67, "Section"],
+Cell[6043, 157, 8696, 285, 589, "Text"],
+Cell[14742, 444, 824, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15615, 469, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[15704, 474, 621, 8, 67, "Section"],
+Cell[16328, 484, 6468, 215, 409, "Text"],
+Cell[22799, 701, 824, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23672, 726, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[23761, 731, 621, 8, 67, "Section"],
+Cell[24385, 741, 6049, 188, 301, "Text"],
+Cell[30437, 931, 824, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31310, 956, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[31399, 961, 621, 8, 67, "Section"],
+Cell[32023, 971, 5330, 167, 319, "Text"],
+Cell[37356, 1140, 824, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38229, 1165, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[38318, 1170, 114, 1, 67, "Section"],
+Cell[38435, 1173, 3627, 129, 246, "Text"],
+Cell[42065, 1304, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42895, 1328, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[42984, 1333, 176, 2, 67, "Section"],
+Cell[43163, 1337, 303, 7, 26, "Text"],
+Cell[CellGroupData[{
+Cell[43491, 1348, 1348, 36, 19, "Input",
+ CellOpen->False],
+Cell[CellGroupData[{
+Cell[44864, 1388, 888, 24, 38, "Print"],
+Cell[45755, 1414, 942, 25, 38, "Print"],
+Cell[46700, 1441, 442, 10, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47191, 1457, 8360, 214, 19, "Input",
+ CellOpen->False],
+Cell[55554, 1673, 34417, 577, 449, "Output"]
+}, {2}]],
+Cell[89983, 2253, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[90813, 2277, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[90902, 2282, 105, 1, 67, "Section"],
+Cell[91010, 2285, 6320, 215, 506, "Text"],
+Cell[97333, 2502, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[98163, 2526, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[98252, 2531, 164, 2, 67, "Section"],
+Cell[98419, 2535, 6185, 196, 419, "Text"],
+Cell[104607, 2733, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[105437, 2757, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[105526, 2762, 123, 1, 67, "Section"],
+Cell[105652, 2765, 4129, 146, 257, "Text"],
+Cell[109784, 2913, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[110614, 2937, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[110703, 2942, 106, 1, 67, "Section"],
+Cell[110812, 2945, 1384, 31, 71, "Text"],
+Cell[112199, 2978, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

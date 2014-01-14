@@ -1,0 +1,2157 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     66183,       2148]
+NotebookOptionsPosition[     63123,       2049]
+NotebookOutlinePosition[     64348,       2088]
+CellTagsIndexPosition[     64269,       2083]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Multistep Methods", "Section",
+ CellChangeTimes->{{3.497651803622395*^9, 3.497651807211838*^9}}],
+
+Cell[TextData[{
+ "Runge-Kutta type methods (which include Euler and modified Euler as special \
+cases) are called single-step methods because they only use information from \
+the last step computed.  These methods are very useful when only initial \
+conditions are available to start the solution; however after the solution \
+has begun if we are savvy enough to store a few previous values in memory, we \
+can use interpolating polynomials to get better estimates of the function and \
+derivative of the function over the step interval.  This can prove useful\n\n\
+The principle behind a multistep method is to utilized the past values of ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " and/or ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"y", "'"}], TraditionalForm]]],
+ " to construct a polynomial that approximates the derivative function, and \
+extrapolate this into the next interval.  Most methods use equispaced past \
+values to make the construction of the polynomial easy.  The Adams method is \
+one of these methods.  The number of past points that are used sets the \
+degree of the polynomial and is therefore responsible for the truncation \
+error.  The order of the method is equal to the power of ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " in the global error term of  the formula, which is also equal to one more \
+than the degree of the polynomial.\n\nTo derive the relations for the Adams \
+method, we write the differential equation ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[DifferentialD]", "y"}], "/", 
+     RowBox[{"\[DifferentialD]", "x"}]}], "=", 
+    RowBox[{"f", "(", 
+     RowBox[{"x", ",", "y"}], ")"}]}], TraditionalForm]]],
+ " in the form\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"\[DifferentialD]", "y"}], "=", 
+    RowBox[{
+     RowBox[{"f", "(", 
+      RowBox[{"x", ",", "y"}], ")"}], 
+     RowBox[{"\[DifferentialD]", "x"}]}]}], TraditionalForm]]],
+ "\n\t\nand we integrate between ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "n"], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ ":\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["\[Integral]", 
+      SubscriptBox["x", "n"], 
+      SubscriptBox["x", 
+       RowBox[{"n", "+", "1"}]]], 
+     RowBox[{"\[DifferentialD]", "y"}]}], "=", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]], "-", 
+      SubscriptBox["y", "n"]}], "=", 
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", 
+       SubscriptBox["x", "n"], 
+       SubscriptBox["x", 
+        RowBox[{"n", "+", "1"}]]], 
+      RowBox[{
+       RowBox[{"f", "(", 
+        RowBox[{"x", ",", "y"}], ")"}], 
+       RowBox[{"\[DifferentialD]", "x"}]}]}]}]}], TraditionalForm]]],
+ "\n\t\nIn order to integrate the term on the right, we approximate ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "(", 
+    RowBox[{"x", ",", "y"}], ")"}], TraditionalForm]]],
+ " as a polynomial in ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ ", deriving this by making it fit at several past points.  If we use three \
+past points, the approximating polynomial will be quadratic.  If we use four \
+points, it will be cubic.  Suppose we fit a second-degree Newton-Gregory \
+backward polynomial:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["\[Integral]", 
+      SubscriptBox["x", "n"], 
+      SubscriptBox["x", 
+       RowBox[{"n", "+", "1"}]]], 
+     RowBox[{"\[DifferentialD]", "y"}]}], "=", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]], "-", 
+      SubscriptBox["y", "n"]}], "=", 
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", 
+       SubscriptBox["x", "n"], 
+       SubscriptBox["x", 
+        RowBox[{"n", "+", "1"}]]], 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["f", "n"], "+", 
+         RowBox[{"s", " ", "\[CapitalDelta]", " ", 
+          SubscriptBox["f", 
+           RowBox[{"n", "-", "1"}]]}], "+", 
+         RowBox[{
+          FractionBox[
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"s", "+", "1"}], ")"}], "s"}], "2"], 
+          SuperscriptBox["\[CapitalDelta]", "2"], 
+          SubscriptBox["f", 
+           RowBox[{"n", "-", "2"}]]}], "+", "error"}], ")"}], 
+       RowBox[{"\[DifferentialD]", "x"}]}]}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"\t   ", 
+    RowBox[{"=", 
+     RowBox[{
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        RowBox[{"s", "=", "0"}], 
+        RowBox[{"s", "=", "1"}]], 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          SubscriptBox["f", "n"], "+", 
+          RowBox[{"s", " ", "\[CapitalDelta]", " ", 
+           SubscriptBox["f", 
+            RowBox[{"n", "-", "1"}]]}], "+", 
+          RowBox[{
+           FractionBox[
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"s", "+", "1"}], ")"}], "s"}], "2"], 
+           SuperscriptBox["\[CapitalDelta]", "2"], " ", 
+           SubscriptBox["f", 
+            RowBox[{"n", "-", "2"}]]}]}], ")"}], "h", 
+        RowBox[{"\[DifferentialD]", "x"}]}]}], "+", 
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        RowBox[{"s", "=", "0"}], 
+        RowBox[{"s", "=", "1"}]], 
+       RowBox[{
+        FractionBox[
+         RowBox[{
+          RowBox[{"s", "(", 
+           RowBox[{"s", "+", "1"}], ")"}], 
+          RowBox[{"(", 
+           RowBox[{"s", "+", "2"}], ")"}]}], "6"], 
+        SuperscriptBox["h", "3"], 
+        RowBox[{"f", "'''"}], 
+        RowBox[{"(", "\[Xi]", ")"}], "h", 
+        RowBox[{"\[DifferentialD]", "s"}]}]}]}]}]}], TraditionalForm]}]],
+ "\n\t\nHere we have changed the variable of integration to ",
+ Cell[BoxData[
+  FormBox["s", TraditionalForm]]],
+ " and identified ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "n"], TraditionalForm]]],
+ " as ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "0"], TraditionalForm]]],
+ ".  The interval of integration becomes ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"s", "=", "0"}], TraditionalForm]]],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"s", "=", "1"}], TraditionalForm]]],
+ ".  Performing the integration we get\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", 
+      RowBox[{"n", "+", "1"}]], "-", 
+     SubscriptBox["y", "n"]}], "=", 
+    RowBox[{
+     RowBox[{"h", "(", 
+      RowBox[{
+       SubscriptBox["f", "n"], "+", 
+       RowBox[{
+        FractionBox["1", "2"], "\[CapitalDelta]", " ", 
+        SubscriptBox["f", 
+         RowBox[{"n", "-", "1"}]]}], "+", 
+       RowBox[{
+        FractionBox["5", "12"], 
+        SuperscriptBox["\[CapitalDelta]", "2"], 
+        SubscriptBox["f", 
+         RowBox[{"n", "-", "2"}]]}]}], ")"}], "+", 
+     RowBox[{"O", "(", 
+      SuperscriptBox["h", "4"], ")"}]}]}], TraditionalForm]]],
+ "\n\t\nWe could construct a difference table and use the previous equation \
+as is, or we can further expand the differences of ",
+ Cell[BoxData[
+  FormBox["f", TraditionalForm]]],
+ " in terms of the values of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["f", "n"], ",", 
+    SubscriptBox["f", 
+     RowBox[{"n", "-", "1"}]]}], TraditionalForm]]],
+ ", etc.  Here we get a more useful formula:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", 
+     RowBox[{"n", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["y", "n"], "+", 
+     RowBox[{"h", "[", 
+      RowBox[{
+       SubscriptBox["f", "n"], "+", 
+       FractionBox[
+        RowBox[{
+         SubscriptBox["f", "n"], "-", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], "2"], "+", 
+       FractionBox[
+        RowBox[{"5", 
+         RowBox[{"(", 
+          RowBox[{
+           SubscriptBox["f", "n"], "-", 
+           RowBox[{"2", 
+            SubscriptBox["f", 
+             RowBox[{"n", "-", "1"}]]}], "+", 
+           SubscriptBox["f", 
+            RowBox[{"n", "-", "2"}]]}], ")"}]}], "12"]}], "]"}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"           ", 
+    RowBox[{"=", 
+     RowBox[{
+      SubscriptBox["y", "n"], "+", 
+      RowBox[{
+       FractionBox["h", "12"], "[", 
+       RowBox[{
+        RowBox[{"23", " ", 
+         SubscriptBox["f", "n"]}], "-", 
+        RowBox[{"16", " ", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], "+", 
+        RowBox[{"5", " ", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "2"}]]}]}], "]"}], "+", 
+      RowBox[{"O", "(", 
+       SuperscriptBox["h", "4"], ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t\nIf we use a third degree Newton-Gregory backward polynomial \
+(requiring 4 points) we have:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", 
+     RowBox[{"n", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["y", "n"], "+", 
+     RowBox[{"h", "(", 
+      RowBox[{
+       SubscriptBox["f", "n"], "+", 
+       RowBox[{
+        FractionBox["1", "2"], "\[CapitalDelta]", " ", 
+        SubscriptBox["f", 
+         RowBox[{"n", "-", "1"}]]}], "+", 
+       RowBox[{
+        FractionBox["5", "12"], 
+        SuperscriptBox["\[CapitalDelta]", "2"], 
+        SubscriptBox["f", 
+         RowBox[{"n", "-", "2"}]]}], "+", 
+       RowBox[{
+        FractionBox["3", "8"], 
+        SuperscriptBox["\[CapitalDelta]", "3"], 
+        SubscriptBox["f", 
+         RowBox[{"n", "-", "3"}]]}]}], ")"}], "+", 
+     RowBox[{"O", "(", 
+      SuperscriptBox["h", "5"], ")"}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"          ", 
+    RowBox[{"=", 
+     RowBox[{
+      SubscriptBox["y", "n"], "+", 
+      RowBox[{
+       FractionBox["h", "24"], 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"55", " ", 
+          SubscriptBox["f", "n"]}], "-", 
+         RowBox[{"59", " ", 
+          SubscriptBox["f", 
+           RowBox[{"n", "-", "1"}]]}], "+", 
+         RowBox[{"37", " ", 
+          SubscriptBox["f", 
+           RowBox[{"n", "-", "2"}]]}], "-", 
+         RowBox[{"9", 
+          SubscriptBox["f", 
+           RowBox[{"n", "-", "3"}]]}]}], ")"}]}], "+", 
+      RowBox[{"O", "(", 
+       SuperscriptBox["h", "5"], ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t"
+}], "Text",
+ CellChangeTimes->{{3.497652177624202*^9, 3.4976529168078337`*^9}, {
+  3.497653009908228*^9, 3.497653399222657*^9}, {3.497653468531035*^9, 
+  3.497653551080289*^9}, {3.4976535938396606`*^9, 3.497653707204712*^9}, {
+  3.497657325427527*^9, 3.497657508619214*^9}, {3.497668295384837*^9, 
+  3.4976683020337763`*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Milne's Method", "Section",
+ CellChangeTimes->{{3.497658210508305*^9, 3.497658214516983*^9}}],
+
+Cell[TextData[{
+ "Milne's method is a multistep method that first predicts a ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ " by extrapolating values for the derivative.  It differs from the Adam's \
+method in that it integrates over more than one interval.  The past values \
+that we need may be computed with by the R-K method, or possibly by the \
+Taylor-Series method.  In the Milne method we suppose that four equispaced \
+starting values of ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ " are known, at the points ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "n"], ",", " ", 
+    SubscriptBox["x", 
+     RowBox[{"n", "-", "1"}]], ",", 
+    SubscriptBox["x", 
+     RowBox[{"n", "-", "2"}]]}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", 
+     RowBox[{"n", "-", "3"}]], "."}], TraditionalForm]]],
+ "  We can employ quadrature formulas to integrate as follows:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"\[DifferentialD]", "y"}], 
+      RowBox[{"\[DifferentialD]", "x"}]], "=", 
+     RowBox[{"f", "(", 
+      RowBox[{"x", ",", "y"}], ")"}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["\[Integral]", 
+      SubscriptBox["x", 
+       RowBox[{"n", "-", "3"}]], 
+      SubscriptBox["x", 
+       RowBox[{"n", "+", "1"}]]], 
+     RowBox[{
+      RowBox[{"(", 
+       FractionBox[
+        RowBox[{"\[DifferentialD]", "y"}], 
+        RowBox[{"\[DifferentialD]", "x"}]], ")"}], 
+      RowBox[{"\[DifferentialD]", "x"}]}]}], "=", 
+    RowBox[{
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", 
+       SubscriptBox["x", 
+        RowBox[{"n", "-", "3"}]], 
+       SubscriptBox["x", 
+        RowBox[{"n", "+", "1"}]]], 
+      RowBox[{
+       RowBox[{"f", "(", 
+        RowBox[{"x", ",", "y"}], ")"}], 
+       RowBox[{"\[DifferentialD]", "x"}]}]}], "=", 
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", 
+       SubscriptBox["x", 
+        RowBox[{"n", "-", "3"}]], 
+       SubscriptBox["x", 
+        RowBox[{"n", "+", "1"}]]], 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["P", "2"], "(", "x", ")"}], 
+       RowBox[{"\[DifferentialD]", "x"}]}]}]}]}], TraditionalForm]}]],
+ "\n\t\nwhere ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["P", "2"], "(", "x", ")"}], TraditionalForm]]],
+ " is a quadratic interpolating polynomial.  Omitting the details, we have:\n\
+\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]], "-", 
+      SubscriptBox["y", 
+       RowBox[{"n", "-", "3"}]]}], "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{"4", "h"}], "3"], 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", 
+          SubscriptBox["f", "n"]}], "-", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]], "+", 
+         RowBox[{"2", 
+          SubscriptBox["f", 
+           RowBox[{"n", "-", "2"}]]}]}], ")"}]}], "+", 
+      RowBox[{
+       FractionBox["28", "90"], 
+       SuperscriptBox["h", "5"], 
+       RowBox[{
+        SuperscriptBox["y", 
+         RowBox[{"(", 
+          StyleBox["v",
+           FontSlant->"Plain"], 
+          StyleBox[")",
+           FontSlant->"Plain"]}]], "(", 
+        SubscriptBox["\[Xi]", "1"], ")"}]}]}]}], ",", "       ", 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"n", "-", "3"}]], "<", 
+     SubscriptBox["\[Xi]", "1"], "<", 
+     SubscriptBox["x", 
+      RowBox[{"n", "+", "1"}]]}]}], TraditionalForm]]],
+ "   (*)\n\t\nWith this value of ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ " we can calculate ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["f", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ " reasonably well.  In Milne's method, we use (*) as a predictor formula and \
+then correct with:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", 
+       SubscriptBox["x", 
+        RowBox[{"n", "-", "1"}]], 
+       SubscriptBox["x", 
+        RowBox[{"n", "+", "1"}]]], 
+      RowBox[{
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{"\[DifferentialD]", "x"}], 
+         RowBox[{"\[DifferentialD]", "y"}]], ")"}], 
+       RowBox[{"\[DifferentialD]", "x"}]}]}], "=", 
+     RowBox[{
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        SubscriptBox["x", 
+         RowBox[{"n", "-", "1"}]], 
+        SubscriptBox["x", 
+         RowBox[{"n", "+", "1"}]]], 
+       RowBox[{
+        RowBox[{"f", "(", 
+         RowBox[{"x", ",", "y"}], ")"}], 
+        RowBox[{"\[DifferentialD]", "x"}]}]}], "=", 
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        SubscriptBox["x", 
+         RowBox[{"n", "-", "1"}]], 
+        SubscriptBox["x", 
+         RowBox[{"n", "+", "1"}]]], 
+       RowBox[{
+        RowBox[{
+         SubscriptBox["P", "2"], "(", "x", ")"}], 
+        RowBox[{"\[DifferentialD]", "x"}]}]}]}]}], ",", "\[IndentingNewLine]",
+     "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]], "-", 
+      SubscriptBox["y", 
+       RowBox[{"n", "-", "1"}]]}], "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox["h", "3"], 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["f", 
+          RowBox[{"n", "+", "1"}]], "+", 
+         RowBox[{"4", 
+          SubscriptBox["f", "n"]}], "+", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], ")"}]}], "-", 
+      RowBox[{
+       FractionBox[
+        SuperscriptBox["h", "5"], "90"], 
+       RowBox[{
+        SuperscriptBox["y", 
+         RowBox[{"(", 
+          StyleBox["v",
+           FontSlant->"Plain"], 
+          StyleBox[")",
+           FontSlant->"Plain"]}]], "(", 
+        SubscriptBox["\[Xi]", "2"], ")"}]}]}]}], ",", "          ", 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"n", "-", "1"}]], "<", 
+     SubscriptBox["\[Xi]", "2"], "<", 
+     SubscriptBox["x", 
+      RowBox[{"n", "+", "1"}]], "     ", 
+     RowBox[{"(*", "*)"}]}]}], TraditionalForm]]],
+ " \n\t\nIn the predictor equation (*) we extrapolate one panel to the right \
+and left hence the larger error term.  The corrector equation (**) is not \
+extrapolated and is the familiar 1/3 Simpson's quadrature rule.\n\nMilne's \
+method is simple and has a nice error term, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["h", "5"], ")"}], TraditionalForm]]],
+ " for local error, but it is subject to an instability problem in certain \
+cases.  We will illustrate this instability below."
+}], "Text",
+ CellChangeTimes->{{3.497658286634104*^9, 3.497658302697824*^9}, {
+  3.4976583518696404`*^9, 3.497658680886194*^9}, {3.497658716731533*^9, 
+  3.497658854759143*^9}, {3.497658998188933*^9, 3.4976592408383617`*^9}, {
+  3.497659277629437*^9, 3.497659287859954*^9}, {3.4976596959728203`*^9, 
+  3.4976597729393272`*^9}, {3.497659961821887*^9, 3.4976600259032*^9}, {
+  3.497668311711358*^9, 3.4976683202875013`*^9}, {3.4977169592699337`*^9, 
+  3.497716959825427*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Milne's Method Instability", "Section",
+ CellChangeTimes->{{3.4976600313543797`*^9, 3.4976600379751663`*^9}}],
+
+Cell[TextData[{
+ "The instability in Milne's method shows up in certain cases in which the \
+errors do no tend to zero as ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " is made smaller.  We will illustrate this instability with a simple \
+example.  Consider the differential equation ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"\[DifferentialD]", "y"}], "/", 
+     RowBox[{"\[DifferentialD]", "x"}]}], "=", 
+    RowBox[{"A", " ", "y"}]}], TraditionalForm]]],
+ ", where ",
+ Cell[BoxData[
+  FormBox["A", TraditionalForm]]],
+ " is a constant.  The general solution is ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"y", "=", 
+    RowBox[{"c", " ", 
+     SuperscriptBox["e", 
+      RowBox[{"A", " ", "x"}]]}]}], TraditionalForm]]],
+ ".  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"y", "(", 
+     SubscriptBox["x", "0"], ")"}], "=", 
+    SubscriptBox["y", "0"]}], TraditionalForm]]],
+ " is the initial condition that the solution must satisfy then we have the \
+analytic solution:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "n"], "=", 
+    RowBox[{
+     SubscriptBox["y", "0"], 
+     SuperscriptBox["e", 
+      RowBox[{"A", "(", 
+       RowBox[{
+        SubscriptBox["x", "n"], "-", 
+        SubscriptBox["x", "0"]}], ")"}]]}]}], TraditionalForm]]],
+ "   (***)\n\t\nIf we solve the differential equation with the Milne's \
+method, we will have, from the corrector formula:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", 
+     RowBox[{"n", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["y", 
+      RowBox[{"n", "-", "1"}]], "+", 
+     RowBox[{
+      FractionBox["h", "3"], 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox[
+         RowBox[{"y", "'"}], 
+         RowBox[{"n", "+", "1"}]], "+", 
+        RowBox[{"4", 
+         SubscriptBox[
+          RowBox[{"y", "'"}], "n"]}], "+", 
+        SubscriptBox[
+         RowBox[{"y", "'"}], 
+         RowBox[{"n", "-", "1"}]]}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\nLetting ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox[
+     RowBox[{"y", "'"}], "n"], "=", 
+    RowBox[{"A", " ", 
+     SubscriptBox["y", "n"]}]}], TraditionalForm]]],
+ ", from the original differential equation, and rearranging we have:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", 
+      RowBox[{"n", "+", "1"}]], "=", 
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "-", "1"}]], "+", 
+      RowBox[{
+       FractionBox["h", "3"], 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"A", " ", 
+          SubscriptBox["y", 
+           RowBox[{"n", "+", "1"}]]}], "+", 
+         RowBox[{"4", " ", "A", " ", 
+          SubscriptBox["y", "n"]}], "+", 
+         RowBox[{"A", " ", 
+          SubscriptBox["y", 
+           RowBox[{"n", "-", "1"}]]}]}], ")"}]}]}]}], "\[IndentingNewLine]"}],
+    TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        FractionBox[
+         RowBox[{"h", " ", "A"}], "3"]}], ")"}], 
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]]}], "-", 
+     RowBox[{
+      FractionBox[
+       RowBox[{"4", " ", "h", " ", "A"}], "3"], 
+      SubscriptBox["y", "n"]}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "+", 
+        FractionBox[
+         RowBox[{"h", " ", "A"}], "3"]}], ")"}], 
+      SubscriptBox["y", 
+       RowBox[{"n", "-", "1"}]]}]}], "=", "0"}], TraditionalForm]}]],
+ "\n\t\nThis is a second-order linear difference equation that can be solved \
+in a manner analogous to differential equations.  The solution is\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "n"], "=", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["C", "1"], 
+      SubsuperscriptBox["Z", "1", "n"]}], "+", 
+     RowBox[{
+      SubscriptBox["C", "2"], 
+      SubsuperscriptBox["Z", "2", "n"], "      ", 
+      RowBox[{"(", "\[Dagger]", ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\nwhere, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["Z", "1"], ",", " ", 
+    SubscriptBox["Z", "2"]}], TraditionalForm]]],
+ " are the roots of the quadratic\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        FractionBox[
+         RowBox[{"h", " ", "A"}], "3"]}], ")"}], 
+      SuperscriptBox["Z", "2"]}], "-", 
+     RowBox[{
+      FractionBox[
+       RowBox[{"4", " ", "h", " ", "A"}], "3"], "Z"}], "-", 
+     RowBox[{"(", 
+      RowBox[{"1", "+", 
+       FractionBox[
+        RowBox[{"h", " ", "A"}], "3"]}], ")"}]}], "=", "0"}], 
+   TraditionalForm]]],
+ "\n\t\nfor simplification let ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"h", " ", 
+     RowBox[{"A", "/", "3"}]}], "=", "r"}], TraditionalForm]]],
+ " the roots are then\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["Z", 
+     RowBox[{"1", ",", "2"}]], "=", 
+    FractionBox[
+     RowBox[{
+      RowBox[{"2", "r"}], "\[PlusMinus]", 
+      SqrtBox[
+       RowBox[{
+        RowBox[{"3", " ", 
+         SuperscriptBox["r", "2"]}], "+", "1"}]]}], 
+     RowBox[{"1", "-", "r"}]]}], TraditionalForm]]],
+ "\n\nWe want to compare (\[Dagger]) to (***) as the step size gets small.  \
+As ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"h", "\[Rule]", " ", "0"}], ",", " ", 
+    RowBox[{"r", "\[Rule]", " ", "0"}]}], TraditionalForm]]],
+ ", ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["r", "2"], "\[Rule]", " ", "0"}], TraditionalForm]]],
+ ".  We neglect the ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"3", 
+    SuperscriptBox["r", "2"]}], TraditionalForm]]],
+ " term in comparison to the constant 1 under the radical it will be small, \
+we have\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["Z", "1"], "=", 
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        RowBox[{"2", "r"}], "+", "1"}], 
+       RowBox[{"1", "-", "r"}]], "=", 
+      RowBox[{
+       RowBox[{"1", "+", 
+        RowBox[{"3", "r"}], "+", 
+        RowBox[{"O", "(", 
+         SuperscriptBox["r", "2"], ")"}]}], "=", 
+       RowBox[{"1", "+", 
+        RowBox[{"A", " ", "h"}], " ", "+", " ", 
+        RowBox[{"O", "(", 
+         SuperscriptBox["h", "2"], ")"}]}]}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    SubscriptBox["Z", "2"], "=", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       RowBox[{"2", "r"}], "-", "1"}], 
+      RowBox[{"1", "-", "r"}]], "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"-", "1"}], "+", "r", "+", 
+       RowBox[{"O", "(", 
+        SuperscriptBox["r", "2"], ")"}]}], "=", 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"1", "-", 
+          FractionBox[
+           RowBox[{"A", " ", "h"}], "3"]}], ")"}]}], "+", 
+       RowBox[{"O", "(", 
+        SuperscriptBox["h", "2"], ")"}]}]}]}]}], TraditionalForm]}]],
+ "\n\t\nNow let us compare these results to a Maclaurin series expansion of \
+the exponential functions,\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["e", 
+      RowBox[{"h", " ", "A"}]], "=", 
+     RowBox[{"1", "+", " ", 
+      RowBox[{"h", " ", "A"}], "+", 
+      RowBox[{"O", "(", 
+       SuperscriptBox["h", "2"], ")"}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    SuperscriptBox["e", 
+     RowBox[{
+      RowBox[{"-", "h"}], " ", 
+      RowBox[{"A", "/", "3"}]}]], "=", 
+    RowBox[{"1", "-", 
+     FractionBox[
+      RowBox[{"h", " ", "A"}], "3"], "+", 
+     RowBox[{"O", "(", 
+      SuperscriptBox["h", "2"], ")"}]}]}], TraditionalForm]}]],
+ "\n\t\nWe can see that for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "\[Rule]", "0"}], TraditionalForm]]],
+ "\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["Z", "1"], "=", 
+    SuperscriptBox["e", 
+     RowBox[{
+      RowBox[{"-", "h"}], " ", "A"}]]}], TraditionalForm]]],
+ "      and      ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["Z", "2"], "=", 
+    SuperscriptBox["e", 
+     RowBox[{
+      RowBox[{"-", "h"}], " ", 
+      RowBox[{"A", "/", "3"}]}]]}], TraditionalForm]]],
+ "\n\t\nHence the Milne solution is represented by\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "n"], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{
+        SubscriptBox["C", "1"], "(", 
+        SuperscriptBox["e", 
+         RowBox[{"h", " ", "A"}]], ")"}], "n"], "+", 
+      SuperscriptBox[
+       RowBox[{
+        SubscriptBox["C", "2"], "(", 
+        SuperscriptBox["e", 
+         RowBox[{
+          RowBox[{"-", "h"}], " ", 
+          RowBox[{"A", "/", "3"}]}]], ")"}], "n"]}], "=", 
+     RowBox[{
+      RowBox[{
+       SubscriptBox["C", "1"], 
+       SuperscriptBox["e", 
+        RowBox[{"A", "(", 
+         RowBox[{
+          SubscriptBox["x", "n"], "-", 
+          SubscriptBox["x", "0"]}], ")"}]]}], "+", 
+      RowBox[{
+       SubscriptBox["C", "2"], 
+       SuperscriptBox["e", 
+        RowBox[{
+         RowBox[{"-", 
+          RowBox[{"A", "(", 
+           RowBox[{
+            SubscriptBox["x", "n"], "-", 
+            SubscriptBox["x", "0"]}], ")"}]}], "/", "3"}]]}]}]}]}], 
+   TraditionalForm]]],
+ "\n\t\nusing the substitution ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["x", "n"], "-", 
+     SubscriptBox["x", "0"]}], "=", 
+    RowBox[{"n", " ", "h"}]}], TraditionalForm]]],
+ ".  The first term in this solution matches the analytic solution, but there \
+is a ",
+ StyleBox["parasitic term ",
+  FontSlant->"Italic"],
+ "that is the second term.  One can see that this term  will decay away if ",
+ Cell[BoxData[
+  FormBox["A", TraditionalForm]]],
+ " is a positive number, but will grow exponentially if ",
+ Cell[BoxData[
+  FormBox["A", TraditionalForm]]],
+ " is negative.  This behavior is independent of step size ",
+ StyleBox["h, ",
+  FontSlant->"Italic"],
+ "making ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " smaller will have no benefit in eliminating the error."
+}], "Text",
+ CellChangeTimes->{{3.497660054943118*^9, 3.497660285573393*^9}, {
+  3.497660396001172*^9, 3.49766058170077*^9}, {3.4976606244017067`*^9, 
+  3.4976606862738256`*^9}, {3.497662237166788*^9, 3.49766245969263*^9}, {
+  3.49766249490893*^9, 3.49766259084284*^9}, {3.4976628411416063`*^9, 
+  3.4976630039814367`*^9}, {3.497663052634109*^9, 3.497663508513102*^9}, {
+  3.4976683238316193`*^9, 3.497668327776587*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Adams-Moulton Method", "Section",
+ CellChangeTimes->{{3.497663729488543*^9, 3.497663737492696*^9}}],
+
+Cell[TextData[{
+ "A method that does not have the same instability problem as the Milne \
+method, but is nearly as efficient, is the Adams-Moulton method.  It also \
+assumes a set of starting values already calculated by some other technique.  \
+Here we take a cubic polynomial through four-points, from ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", "-", "3"}]], TraditionalForm]]],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "n"], TraditionalForm]]],
+ ", and integrate over one step, from ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "n"], TraditionalForm]]],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ ".  We have\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubsuperscriptBox["\[Integral]", 
+       SubscriptBox["x", "n"], 
+       SubscriptBox["x", 
+        RowBox[{"n", "+", "1"}]]], 
+      RowBox[{
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{"\[DifferentialD]", "y"}], 
+         RowBox[{"\[DifferentialD]", "x"}]], ")"}], 
+       RowBox[{"\[DifferentialD]", "x"}]}]}], "=", 
+     RowBox[{
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        SubscriptBox["x", "n"], 
+        SubscriptBox["x", 
+         RowBox[{"n", "+", "1"}]]], 
+       RowBox[{
+        RowBox[{"f", "(", 
+         RowBox[{"x", ",", "y"}], ")"}], 
+        RowBox[{"\[DifferentialD]", "x"}]}]}], "=", 
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        SubscriptBox["x", "n"], 
+        SubscriptBox["x", 
+         RowBox[{"n", "+", "1"}]]], 
+       RowBox[{
+        RowBox[{
+         SubscriptBox["P", "3"], "(", "x", ")"}], 
+        RowBox[{"\[DifferentialD]", "x"}]}]}]}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]], "-", 
+      SubscriptBox["y", "n"]}], "=", 
+     RowBox[{
+      RowBox[{"h", "(", 
+       RowBox[{
+        SubscriptBox["f", "n"], "+", 
+        RowBox[{
+         FractionBox["1", "2"], "\[CapitalDelta]", " ", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], "+", 
+        RowBox[{
+         FractionBox["5", "12"], 
+         SuperscriptBox["\[CapitalDelta]", "2"], 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "2"}]]}], "+", 
+        RowBox[{
+         FractionBox["3", "8"], 
+         SuperscriptBox["\[CapitalDelta]", "3"], 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "3"}]]}]}], ")"}], "+", 
+      RowBox[{
+       FractionBox["251", "720"], 
+       SuperscriptBox["h", "5"], 
+       RowBox[{
+        SuperscriptBox["y", 
+         RowBox[{"(", 
+          StyleBox["v",
+           FontSlant->"Plain"], 
+          StyleBox[")",
+           FontSlant->"Plain"]}]], "(", "\[Xi]", ")"}]}]}]}], ",", "    ", 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"n", "-", "3"}]], "<", "\[Xi]", "<", 
+     RowBox[{
+      SubscriptBox["x", 
+       RowBox[{"n", "+", "1"}]], "     ", 
+      RowBox[{"(", "\[Dagger]\[Dagger]", ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t\nIn the Adams-Moulton method we use (\[Dagger]\[Dagger]) as a \
+predictor equation and the continue by correcting ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ " before computing the next step.  For the corrector formula we will \
+approximate ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "(", 
+    RowBox[{"x", ",", "y"}], ")"}], TraditionalForm]]],
+ " as a cubic that fits over the interval ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", "-", "2"}]], TraditionalForm]]],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ " and integrate from ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "n"], TraditionalForm]]],
+ "to ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", 
+    RowBox[{"n", "+", "1"}]], TraditionalForm]]],
+ ", we do no extrapolate the polynomial and have a more favorable error term. \
+ The corrector formula is then\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", 
+       RowBox[{"n", "+", "1"}]], "-", 
+      SubscriptBox["y", "n"]}], "=", 
+     RowBox[{
+      RowBox[{"h", "(", 
+       RowBox[{
+        SubscriptBox["f", 
+         RowBox[{"n", "+", "1"}]], "-", 
+        RowBox[{
+         FractionBox["1", "2"], "\[CapitalDelta]", " ", 
+         SubscriptBox["f", "n"]}], "-", 
+        RowBox[{
+         FractionBox["1", "12"], 
+         SuperscriptBox["\[CapitalDelta]", "2"], 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], "-", 
+        RowBox[{
+         FractionBox["1", "24"], 
+         SuperscriptBox["\[CapitalDelta]", "3"], 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "2"}]]}]}], ")"}], "-", 
+      RowBox[{
+       FractionBox["19", "720"], 
+       SuperscriptBox["h", "5"], 
+       RowBox[{
+        SuperscriptBox["y", 
+         RowBox[{"(", 
+          StyleBox["v",
+           FontSlant->"Plain"], ")"}]], "(", 
+        SubscriptBox["\[Xi]", "1"], ")"}]}]}]}], ",", "   ", 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"n", "-", "2"}]], "<", 
+     SubscriptBox["\[Xi]", "1"], "<", 
+     SubscriptBox["x", 
+      RowBox[{"n", "+", "1"}]]}]}], TraditionalForm]]],
+ "\n\t\nThe two equations above would require difference tables and are not \
+well suited for computational programming.  They are most commonly given in \
+there equivalent form (which can be derived by a method of undetermined \
+coefficients) as follows:\n\n\tPredictor:  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", 
+     RowBox[{"n", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["y", "n"], "+", 
+     RowBox[{
+      FractionBox["h", "24"], 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"55", " ", 
+         SubscriptBox["f", "n"]}], "-", 
+        RowBox[{"59", " ", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], "+", 
+        RowBox[{"37", " ", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "2"}]]}], "-", 
+        RowBox[{"9", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "3"}]]}]}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\n\tCorrector:  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", 
+     RowBox[{"n", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["y", "n"], "+", 
+     RowBox[{
+      FractionBox["h", "24"], 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"9", 
+         SubscriptBox["f", 
+          RowBox[{"n", "+", "1"}]]}], "+", 
+        RowBox[{"19", " ", 
+         SubscriptBox["f", "n"]}], "-", 
+        RowBox[{"5", " ", 
+         SubscriptBox["f", 
+          RowBox[{"n", "-", "1"}]]}], "+", 
+        SubscriptBox["f", 
+         RowBox[{"n", "-", "2"}]]}], ")"}]}]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.497663741773057*^9, 3.4976641041092052`*^9}, {
+  3.497664178884286*^9, 3.497664232349477*^9}, {3.4976642628913593`*^9, 
+  3.4976644613243227`*^9}, {3.497664574364616*^9, 3.4976647442116337`*^9}, {
+  3.497668336968416*^9, 3.4976683388723373`*^9}, {3.500923686916232*^9, 
+  3.500923690721231*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Psuedocode for Adams-Moulton method", "Section",
+ CellChangeTimes->{{3.4976648244580593`*^9, 3.497664833394025*^9}}],
+
+Cell[TextData[{
+ "To approximate the solution of the initial value problem\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"y", "'"}], "=", 
+     RowBox[{"f", "(", 
+      RowBox[{"x", ",", "y"}], ")"}]}], ",", "     ", 
+    RowBox[{
+    "a", " ", "\[LessEqual]", " ", "x", " ", "\[LessEqual]", " ", "b"}], ",", 
+    "  ", 
+    RowBox[{
+     RowBox[{"y", "(", "a", ")"}], "=", "\[Alpha]"}]}], TraditionalForm]]],
+ ",\n\t\nat ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"N", "+", "1"}], TraditionalForm]]],
+ " equally spaced numbers in the interval ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"[", 
+    RowBox[{"a", ",", "b"}], "]"}], TraditionalForm]]],
+ "\n\nStep 1.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"b", "-", "a"}], ")"}], "/", "N"}]}], TraditionalForm]]],
+ "\nStep 2.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "0"], "=", "a"}], TraditionalForm]]],
+ "\nStep 3.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "0"], "=", "\[Alpha]"}], TraditionalForm]]],
+ "\n\nStep 4.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ",", "2", ",", "3"}], TraditionalForm]]],
+ " do Steps 5-19 (Compute starting values using R-K method)\n\n\tStep 5.  Set \
+",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["K", "1"], "=", 
+    RowBox[{"h", " ", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", 
+        RowBox[{"i", "-", "1"}]], ",", 
+       SubscriptBox["w", 
+        RowBox[{"i", "-", "1"}]]}], ")"}]}]}], TraditionalForm]]],
+ "\n\tStep 6.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["K", "2"], "=", 
+    RowBox[{"h", " ", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"i", "-", "1"}]], "+", 
+        RowBox[{"h", "/", "2"}]}], ",", 
+       RowBox[{
+        SubscriptBox["w", 
+         RowBox[{"i", "-", "1"}]], "+", 
+        RowBox[{
+         SubscriptBox["K", "1"], "/", "2"}]}]}], ")"}]}]}], TraditionalForm]]],
+ "\n\tStep 7.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["K", "3"], "=", 
+    RowBox[{"h", " ", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"i", "-", "1"}]], "+", 
+        RowBox[{"h", "/", "2"}]}], ",", " ", 
+       RowBox[{
+        SubscriptBox["w", 
+         RowBox[{"i", "-", "1"}]], "+", 
+        RowBox[{
+         SubscriptBox["K", "2"], "/", "2"}]}]}], ")"}]}]}], TraditionalForm]]],
+ "\n\tStep 8.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["K", "4"], "=", 
+    RowBox[{"h", " ", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"i", "-", "1"}]], "+", "h"}], ",", " ", 
+       RowBox[{
+        SubscriptBox["w", 
+         RowBox[{"i", "-", "1"}]], "+", 
+        SubscriptBox["K", "3"]}]}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\n\tStep 9.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "i"], "=", 
+    RowBox[{
+     SubscriptBox["w", 
+      RowBox[{"i", "-", "1"}]], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["K", "1"], "+", 
+        RowBox[{"2", 
+         SubscriptBox["K", "2"]}], "+", 
+        RowBox[{"2", 
+         SubscriptBox["K", "3"]}], "+", 
+        SubscriptBox["K", "4"]}], ")"}], "/", "6"}]}]}], TraditionalForm]]],
+ "\n\tStep 10.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "i"], "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]],
+ "\n\t\nStep 11.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "4"}], ",", " ", "\[Ellipsis]", ",", " ", "N"}], 
+   TraditionalForm]]],
+ " do Steps 12-19\n\n\t\tStep 12.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"a", "+", 
+     RowBox[{"i", " ", "h"}]}]}], TraditionalForm]]],
+ "\n\t\tStep 13.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"w", "=", 
+    RowBox[{
+     SubscriptBox["w", "3"], "+", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"h", "[", 
+        RowBox[{
+         RowBox[{"55", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{
+            SubscriptBox["x", "3"], ",", 
+            SubscriptBox["w", "3"]}], ")"}]}], "-", 
+         RowBox[{"59", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{
+            SubscriptBox["x", "2"], ",", 
+            SubscriptBox["w", "2"]}], ")"}]}], "+", 
+         RowBox[{"37", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{
+            SubscriptBox["x", "1"], ",", 
+            SubscriptBox["w", "1"]}], ")"}]}], "-", 
+         RowBox[{"9", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{
+            SubscriptBox["x", "0"], ",", 
+            SubscriptBox["w", "0"]}], ")"}]}]}], "]"}], "/", "24"}], "  ", 
+      RowBox[{"(", 
+       RowBox[{"Predict", " ", 
+        SubscriptBox["w", "i"]}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 14.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"w", "=", 
+    RowBox[{
+     SubscriptBox["w", "3"], "+", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"h", "[", 
+        RowBox[{
+         RowBox[{"9", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{"x", ",", "w"}], ")"}]}], "+", 
+         RowBox[{"19", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{
+            SubscriptBox["x", "3"], ",", 
+            SubscriptBox["w", "3"]}], ")"}]}], "-", 
+         RowBox[{"5", " ", 
+          RowBox[{"f", "(", 
+           RowBox[{
+            SubscriptBox["x", "2"], ",", 
+            SubscriptBox["w", "2"]}], ")"}]}], "+", 
+         RowBox[{"f", "(", 
+          RowBox[{
+           SubscriptBox["x", "1"], ",", 
+           SubscriptBox["w", "1"]}], ")"}]}], "]"}], "/", "24"}], "  ", 
+      RowBox[{"(", 
+       RowBox[{"Correct", " ", 
+        SubscriptBox["w", "i"]}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 15.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "0"}], ",", "1", ",", "2"}], TraditionalForm]]],
+ " do Steps 16-17\n\t\t\tStep 16.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "j"], "=", 
+    SubscriptBox["x", 
+     RowBox[{"j", "+", "1"}]]}], TraditionalForm]]],
+ "\n\t\t\tStep 17.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "j"], "=", 
+    SubscriptBox["w", 
+     RowBox[{"j", "+", "1"}]]}], TraditionalForm]]],
+ "\n\t\t\t\n\t\tStep 18.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "3"], "=", "x"}], TraditionalForm]]],
+ "\n\t\tStep 19.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "3"], "=", "w"}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.497664842024453*^9, 3.497665653998526*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Convergence of Adams-Moulton method", "Section",
+ CellChangeTimes->{{3.497665936912505*^9, 3.49766594601361*^9}}],
+
+Cell[TextData[{
+ "In all predictor-corrector schemes we have to option to recorrect the \
+corrected estimate.  We could do this multiple times until the difference the \
+corrected and recorrected values is insignificant.  In the Adams-Moulton \
+method we usually do not recorrect, but instead use a value of ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " that is small enough that a recorrection is unnecessary.  We can develop a \
+criterion for how small ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " needs to be.  Let us start by making some notational definitions:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "p"], "=", 
+    RowBox[{"value", " ", "of", " ", 
+     SubscriptBox["y", 
+      RowBox[{"n", "+", "1"}]], " ", "from", " ", "predictor", " ", 
+     "formula"}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "c"], "=", 
+    RowBox[{"value", " ", "of", " ", 
+     SubscriptBox["y", 
+      RowBox[{"n", "+", "1"}]], "from", " ", "corrector", " ", "formula"}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "cc"], ",", 
+    SubscriptBox["y", "ccc"], ",", " ", 
+    RowBox[{"etc", ".", " ", 
+     RowBox[{"=", " ", 
+      RowBox[{
+       SubscriptBox[
+        RowBox[{"values", " ", "of", " ", "y"}], 
+        RowBox[{"n", "+", "1"}]], "if", " ", "succcessive", " ", 
+       "recorections", " ", "are", " ", "made"}]}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "\[Infinity]"], "=", 
+    RowBox[{
+    "value", " ", "to", " ", "which", " ", "successive", " ", "recorrections",
+      " ", "converge"}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"D", "=", 
+    RowBox[{
+     SubscriptBox["y", "c"], "-", 
+     SubscriptBox["y", "p"]}]}], TraditionalForm]}]],
+ "\n\t\nA change of ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "c"], TraditionalForm]]],
+ " by recorrecting would be\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", "cc"], "-", 
+     SubscriptBox["y", "c"]}], "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["y", "n"], "+", 
+       RowBox[{
+        FractionBox["h", "24"], 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"9", " ", 
+           SubscriptBox[
+            RowBox[{"y", "'"}], "c"]}], "+", 
+          RowBox[{"19", " ", 
+           SubscriptBox[
+            RowBox[{"y", "'"}], "n"]}], "-", 
+          RowBox[{"5", " ", 
+           SubscriptBox[
+            RowBox[{"y", "'"}], 
+            RowBox[{"n", "-", "1"}]]}], "+", 
+          SubscriptBox[
+           RowBox[{"y", "'"}], 
+           RowBox[{"n", "-", "2"}]]}], ")"}]}]}], ")"}], "-", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["y", "n"], "+", 
+       RowBox[{
+        FractionBox["h", "24"], 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"9", " ", 
+           SubscriptBox[
+            RowBox[{"y", "'"}], "p"]}], "+", 
+          RowBox[{"19", " ", 
+           SubscriptBox[
+            RowBox[{"y", "'"}], "n"]}], "-", 
+          RowBox[{"5", " ", 
+           SubscriptBox[
+            RowBox[{"y", "'"}], 
+            RowBox[{"n", "-", "1"}]]}], "+", 
+          SubscriptBox[
+           RowBox[{"y", "'"}], 
+           RowBox[{"n", "-", "2"}]]}], ")"}]}]}], ")"}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                  ", 
+    RowBox[{"=", 
+     RowBox[{
+      FractionBox[
+       RowBox[{"9", " ", "h"}], "24"], 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox[
+         RowBox[{"y", "'"}], "c"], "-", 
+        SubscriptBox[
+         RowBox[{"y", "'"}], "p"]}], ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t\nwe can manipulate the difference ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox[
+      RowBox[{"y", "'"}], "c"], "-", 
+     SubscriptBox[
+      RowBox[{"y", "'"}], "p"]}], ")"}], TraditionalForm]]],
+ " as follows:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox[
+      RowBox[{"y", "'"}], "c"], "-", 
+     SubscriptBox[
+      RowBox[{"y", "'"}], "p"]}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"f", "(", 
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"n", "+", "1"}]], ",", 
+        SubscriptBox["y", "c"]}], ")"}], "-", 
+      RowBox[{"f", "(", 
+       RowBox[{
+        SubscriptBox["x", 
+         RowBox[{"n", "+", "1"}]], ",", 
+        SubscriptBox["y", "p"]}], ")"}]}], "=", 
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        RowBox[{"f", "(", 
+         RowBox[{
+          SubscriptBox["x", 
+           RowBox[{"n", "+", "1"}]], ",", 
+          SubscriptBox["y", "c"]}], ")"}], "-", 
+        RowBox[{"f", "(", 
+         RowBox[{
+          SubscriptBox["x", 
+           RowBox[{"n", "+", "1"}]], ",", 
+          SubscriptBox["y", "p"]}], ")"}]}], 
+       RowBox[{
+        SubscriptBox["y", "c"], "-", 
+        SubscriptBox["y", "p"]}]], 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["y", "c"], "-", 
+        SubscriptBox["y", "p"]}], ")"}]}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                    ", 
+    RowBox[{
+     RowBox[{"=", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["f", "y"], "(", 
+        SubscriptBox["\[Xi]", "1"], ")"}], "D"}]}], ",", "     ", 
+     RowBox[{
+      SubscriptBox["y", "c"], "  ", "<", " ", 
+      SubscriptBox["\[Xi]", "1"], "<", " ", 
+      SubscriptBox["y", "p"]}]}]}], TraditionalForm]}]],
+ "\n\t\nHence,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", "cc"], "-", 
+     SubscriptBox["y", "c"]}], "=", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"9", " ", "h", " ", "D"}], "24"], 
+     RowBox[{
+      SubscriptBox["f", "y"], "(", 
+      SubscriptBox["\[Xi]", "1"], ")"}]}]}], TraditionalForm]]],
+ "\n\t\nIf recorrected again, the result is\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", "ccc"], "-", 
+     SubscriptBox["y", "cc"]}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"9", " ", "h"}], "24"], 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox[
+         RowBox[{"y", "'"}], "cc"], "-", 
+        SubscriptBox[
+         RowBox[{"y", "'"}], "c"]}], ")"}]}], "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{"9", "h"}], "24"], 
+       RowBox[{
+        RowBox[{
+         SubscriptBox["f", "y"], "(", 
+         SubscriptBox["\[Xi]", "2"], ")"}], "\[CenterDot]", 
+        RowBox[{"(", 
+         RowBox[{
+          SubscriptBox["y", "cc"], "-", 
+          SubscriptBox["y", "c"]}], ")"}]}]}], "=", 
+      RowBox[{
+       FractionBox[
+        RowBox[{"9", "h"}], "24"], 
+       RowBox[{
+        RowBox[{
+         SubscriptBox["f", "y"], "(", 
+         SubscriptBox["\[Xi]", "2"], ")"}], "[", 
+        RowBox[{
+         FractionBox[
+          RowBox[{"9", " ", "h", " ", "D"}], "24"], 
+         RowBox[{
+          SubscriptBox["f", "y"], "(", 
+          SubscriptBox["\[Xi]", "1"], ")"}]}], "]"}]}]}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                     ", 
+    RowBox[{
+     RowBox[{"=", 
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{
+         SuperscriptBox[
+          RowBox[{"(", 
+           FractionBox[
+            RowBox[{"9", " ", "h", " ", "D"}], "24"], ")"}], "2"], "[", 
+         RowBox[{
+          SubscriptBox["f", "y"], "(", "\[Xi]", ")"}], "]"}], "2"], "D"}]}], 
+     ",", "       ", 
+     RowBox[{
+      SubscriptBox["y", "c"], "<", 
+      SubscriptBox["\[Xi]", "2"], "<", " ", 
+      SubscriptBox["y", "cc"]}]}]}], TraditionalForm]}]],
+ "\n\t\nOn further recorrections we will have a similar relation.  We get ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "\[Infinity]"], TraditionalForm]]],
+ " by adding all the correction of ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "p"], TraditionalForm]]],
+ " together:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "\[Infinity]"], "=", 
+    RowBox[{
+     SubscriptBox["y", "p"], "+", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["y", "c"], "-", 
+       SubscriptBox["y", "p"]}], ")"}], "+", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["y", "cc"], "-", 
+       SubscriptBox["y", "c"]}], ")"}], "+", 
+     RowBox[{"(", 
+      RowBox[{
+       SubscriptBox["y", "ccc"], "-", 
+       SubscriptBox["y", "c"]}], ")"}], "+", "\[Ellipsis]"}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"       ", 
+    RowBox[{"=", 
+     RowBox[{
+      SubscriptBox["y", "p"], "+", "D", "+", 
+      RowBox[{
+       FractionBox[
+        RowBox[{"9", "h", " ", 
+         RowBox[{
+          SubscriptBox["f", "y"], "(", "\[Xi]", ")"}]}], "24"], "D"}], "+", 
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{"(", 
+         FractionBox[
+          RowBox[{"9", "h", " ", 
+           RowBox[{
+            SubscriptBox["f", "y"], "(", "\[Xi]", ")"}]}], "24"], ")"}], "2"],
+        "D"}], "+", 
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{"(", 
+         FractionBox[
+          RowBox[{"9", "h", " ", 
+           RowBox[{
+            SubscriptBox["f", "y"], "(", "\[Xi]", ")"}]}], "24"], ")"}], "3"],
+        "D"}], "+", "\[Ellipsis]"}]}]}], TraditionalForm]}]],
+ "\n\t\nThis is a geometric series which only converges if the ratio is less \
+than 1,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", "\[Infinity]"], "=", 
+     RowBox[{
+      SubscriptBox["y", "p"], "+", 
+      FractionBox["D", 
+       RowBox[{"1", "-", "r"}]]}]}], ",", "         ", 
+    RowBox[{"r", "=", 
+     FractionBox[
+      RowBox[{"9", " ", "h", " ", 
+       RowBox[{
+        SubscriptBox["f", "y"], "(", "\[Xi]", ")"}]}], "24"]}], ",", 
+    "        ", 
+    RowBox[{
+     SubscriptBox["y", "p"], "<", "\[Xi]", "<", 
+     SubscriptBox["y", "\[Infinity]"]}]}], TraditionalForm]]],
+ "\n\t\nHence, unless the following is true,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"|", "r", "|", 
+     RowBox[{"=", 
+      FractionBox[
+       RowBox[{"h", " ", "|", 
+        RowBox[{
+         SubscriptBox["f", "y"], "(", "\[Xi]", ")"}], "|"}], 
+       RowBox[{"24", "/", "9"}]]}]}], "=", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"h", " ", "|", 
+       RowBox[{
+        SubscriptBox["f", "y"], "(", 
+        RowBox[{
+         SubscriptBox["x", "n"], ",", 
+         SubscriptBox["y", "n"]}], ")"}], "|"}], 
+      RowBox[{"24", "/", "9"}]], "<", "1"}]}], TraditionalForm]]],
+ "\n\t\nThe successive recorrections diverge.  Our first convergence \
+criterion is\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "<", 
+    FractionBox[
+     RowBox[{"24", "/", "9"}], 
+     RowBox[{"|", 
+      RowBox[{
+       SubscriptBox["f", "y"], "(", 
+       RowBox[{
+        SubscriptBox["x", "n"], ",", 
+        SubscriptBox["y", "n"]}], ")"}], "|"}]]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.497665950613845*^9, 3.4976663938538847`*^9}, {
+  3.497666425944284*^9, 3.497667106025033*^9}, {3.497667166170454*^9, 
+  3.497667440495377*^9}, {3.4976683560778*^9, 3.497668367639538*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Convergence (contd.)", "Section",
+ CellChangeTimes->{{3.497667456950536*^9, 3.497667469668955*^9}}],
+
+Cell[TextData[{
+ "If we wish to have ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "c"], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["y", "\[Infinity]"], TraditionalForm]]],
+ " the same within one in the ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["N", "th"], TraditionalForm]]],
+ " decimal place, then\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["y", "\[Infinity]"], "-", 
+     SubscriptBox["y", "c"]}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["y", "p"], "+", 
+        FractionBox["D", 
+         RowBox[{"1", "-", "r"}]]}], ")"}], "-", 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["y", "p"], "+", "D"}], ")"}]}], "=", 
+     RowBox[{
+      FractionBox[
+       RowBox[{"r", " ", "D"}], 
+       RowBox[{"1", "-", "r"}]], "<", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "N"}]]}]}]}], TraditionalForm]]],
+ "\n\t\nIf ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", " ", 
+    RowBox[{"<<", " ", "1"}]}], TraditionalForm]]],
+ ", the fraction\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["r", 
+     RowBox[{"1", "-", "r"}]], "=", "r"}], TraditionalForm]]],
+ "\n\t\nand a second convergence criterion, which ensures that the first \
+corrected value is adequate is\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"D", "\[CenterDot]", 
+      SuperscriptBox["10", "N"]}], "<"}], "|", 
+    FractionBox["1", "r"], "|", 
+    RowBox[{"=", 
+     FractionBox[
+      RowBox[{"24", "/", "9"}], 
+      RowBox[{"h", " ", "|", 
+       RowBox[{
+        SubscriptBox["f", "y"], "(", 
+        RowBox[{
+         SubscriptBox["x", "n"], ",", 
+         SubscriptBox["y", "n"]}], ")"}], "|"}]]}]}], TraditionalForm]]],
+ "\n\t\nThe accuracy criterion is\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"D", "\[CenterDot]", 
+     SuperscriptBox["10", "N"]}], "<", "14.2"}], TraditionalForm]]],
+ "\n\t\nThere criterion are valid for a single first order equation only.  A \
+similar analysis for a system can be done but is much more complicated."
+}], "Text",
+ CellChangeTimes->{{3.497667474821541*^9, 3.497667721404417*^9}, {
+  3.497668068706292*^9, 3.497668148851283*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+},
+ScreenStyleEnvironment->"SlideShow",
+WindowSize->{1379, 1287},
+WindowMargins->{{105, Automatic}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+Magnification:>FEPrivate`If[
+  FEPrivate`Equal[FEPrivate`$VersionNumber, 6.], 0.5, 0.5 Inherited],
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 6, \
+2010)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[567, 22, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[12138, 374, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[20333, 630, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[31816, 1015, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[40003, 1276, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[47728, 1546, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[59889, 1942, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 63628, 2065}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[656, 27, 102, 1, 22, "Section"],
+Cell[761, 30, 10544, 318, 228, "Text"],
+Cell[11308, 350, 781, 18, 8, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12138, 374, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[12227, 379, 99, 1, 22, "Section"],
+Cell[12329, 382, 7171, 222, 141, "Text"],
+Cell[19503, 606, 781, 18, 8, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20333, 630, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[20422, 635, 115, 1, 22, "Section"],
+Cell[20540, 638, 10443, 351, 320, "Text"],
+Cell[30986, 991, 781, 18, 13, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31816, 1015, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[31905, 1020, 105, 1, 35, "Section"],
+Cell[32013, 1023, 7157, 227, 185, "Text"],
+Cell[39173, 1252, 781, 18, 13, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40003, 1276, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[40092, 1281, 122, 1, 56, "Section"],
+Cell[40217, 1284, 6678, 236, 476, "Text"],
+Cell[46898, 1522, 781, 18, 22, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[47728, 1546, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[47817, 1551, 119, 1, 35, "Section"],
+Cell[47939, 1554, 11117, 362, 494, "Text"],
+Cell[59059, 1918, 781, 18, 4, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59889, 1942, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[59978, 1947, 105, 1, 10, "Section"],
+Cell[60086, 1950, 2225, 75, 56, "Text"],
+Cell[62314, 2027, 781, 18, 4, "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

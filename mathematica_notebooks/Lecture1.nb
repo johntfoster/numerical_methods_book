@@ -1,0 +1,1232 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     45412,       1223]
+NotebookOptionsPosition[     40771,       1071]
+NotebookOutlinePosition[     41913,       1108]
+CellTagsIndexPosition[     41834,       1103]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Computer Preliminaries and Error Descriptions", "Section",
+ CellChangeTimes->{{3.482106340466372*^9, 3.482106354632145*^9}}],
+
+Cell[TextData[{
+ "Unfortunately computers can't store numbers with infinite precision, but \
+instead use an approximation that can be packed into a fixed number of ",
+ StyleBox["bits. ",
+  FontSlant->"Italic"],
+ " These bits can be arranged to represent different data types usually \
+called ",
+ StyleBox["fixed point numbers ",
+  FontSlant->"Italic"],
+ "or ",
+ StyleBox["integers",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["floating point numbers.",
+  FontSlant->"Italic"],
+ "  Of most importance to us as numerical analysts are floating point \
+numbers.  \n\nA floating point number is represented within the computer as a \
+bit sign (positive or negative), an integer number representing the number of \
+significant digits called the ",
+ StyleBox["significand",
+  FontSlant->"Italic"],
+ StyleBox[" ",
+  FontSlant->"Italic"],
+ "or ",
+ StyleBox["mantissa",
+  FontSlant->"Italic"],
+ ", and an integer exponent.  Symbolically, we might write:\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"s", " ", "\[Times]", " ", "M", " ", "\[Times]", " ", 
+    SuperscriptBox["B", "sE"]}], TraditionalForm]]],
+ "\n\nwhere, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"s", Cell[""]}], TraditionalForm]]],
+ "is the sign, ",
+ Cell[BoxData[
+  FormBox["M", TraditionalForm]]],
+ " is the mantissa, ",
+ Cell[BoxData[
+  FormBox["B", TraditionalForm]]],
+ " is called the ",
+ StyleBox["base",
+  FontSlant->"Italic"],
+ " usually 2, but sometimes 10 or 16, and ",
+ Cell[BoxData[
+  FormBox["E", TraditionalForm]]],
+ " is the integer exponent.\n\nThe smallest floating point number which, when \
+added to the floating point number 1.0, produces a result different than 1.0 \
+is called the ",
+ StyleBox["machine precision",
+  FontSlant->"Italic"],
+ " or ",
+ StyleBox["machine epsilon",
+  FontSlant->"Italic"],
+ ", ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Epsilon]", "m"], TraditionalForm]]],
+ ".  Most modern computers have a machine epsilon value somewhere around ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["2", 
+     RowBox[{"-", "53"}]], 
+    RowBox[{"(", 
+     RowBox[{"1.11", "\[Times]", " ", 
+      SuperscriptBox["10", 
+       RowBox[{"-", "16"}]]}], ")"}]}], TraditionalForm]]],
+ ", although ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Epsilon]", "m"], TraditionalForm]]],
+ " can range depending on the base and the bit ",
+ StyleBox["wordlength",
+  FontSlant->"Italic"],
+ " (32-bit, 64-bit, etc.)\n\nAlmost any arithmetic between floating point \
+numbers will produce an additional fraction error of size ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Epsilon]", "m"], TraditionalForm]]],
+ ", this error is called ",
+ StyleBox["roundoff error.",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.4821065911065187`*^9, 3.482106764136345*^9}, {
+  3.482106811134253*^9, 3.482107062937539*^9}, {3.482107094516911*^9, 
+  3.482107108989485*^9}, {3.482107191544548*^9, 3.482107201568375*^9}, {
+  3.482107295150478*^9, 3.482107340341976*^9}, {3.4821074091153183`*^9, 
+  3.482107449982543*^9}, {3.482107480247843*^9, 3.482107686103326*^9}, {
+  3.4821078171525517`*^9, 3.482107898742375*^9}, {3.4821079390641823`*^9, 
+  3.482107993155224*^9}, {3.482108152050857*^9, 3.482108234386277*^9}, {
+  3.4821083443445797`*^9, 3.4821084475098763`*^9}, {3.482108531710733*^9, 
+  3.4821085634314127`*^9}, {3.482108629587867*^9, 3.4821087497923317`*^9}, {
+  3.4885958097822*^9, 3.488595819035284*^9}, {3.491847260692951*^9, 
+  3.491847260693061*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The Numerical Analyst's Enemy: Truncation Error", "Section",
+ CellChangeTimes->{{3.482108948152049*^9, 3.482108967835606*^9}}],
+
+Cell[TextData[{
+ "Roundoff error is a characteristic of computer hardware; however there is \
+another type of error that is completely a result of the algorithm or \
+software.\n\nMost numerical algorithms compute discrete approximations to a \
+continuous desired quantity.  An example of this is the use of the Taylor \
+series to approximate the function ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"sin", "(", "x", ")"}], ".", Cell[""]}], TraditionalForm]]],
+ " The Taylor series approximation of the function is as follows:\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"sin", "(", "x", ")"}], " ", "=", " ", 
+    RowBox[{
+     RowBox[{"x", " ", "-", " ", 
+      FractionBox[
+       SuperscriptBox["x", "3"], 
+       RowBox[{"3", "!"}]], "+", 
+      FractionBox[
+       SuperscriptBox["x", "5"], 
+       RowBox[{"5", "!"}]], "-", 
+      FractionBox[
+       SuperscriptBox["x", "7"], 
+       RowBox[{"7", "!"}]]}], " ", "..."}], " "}], TraditionalForm]]],
+ "\n\nOf course, this representation requires that the series be infinite for \
+the solution to be exact.  Even the best computers cannot evaluate an \
+infinite number of terms in the Taylor series therefore we must take a finite \
+number of terms for the approximation.  The difference between the \
+approximated answer and the exact solution is called the ",
+ StyleBox["truncation error",
+  FontSlant->"Italic"],
+ ".  Let's take a look at some numerics, we all know that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"sin", "(", 
+     RowBox[{"\[Pi]", "/", "2"}], ")"}], " ", "=", " ", "1."}], 
+   TraditionalForm]]],
+ "\n\nWe start by defining a function representing the Taylor series \
+expansion of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"sin", "(", "x", ")"}], "."}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.482108985805182*^9, 3.4821090148051453`*^9}, {
+  3.482109056599167*^9, 3.482109116276162*^9}, {3.482109179384606*^9, 
+  3.482109253420212*^9}, {3.482109369236198*^9, 3.482109837205554*^9}, {
+  3.482110028127664*^9, 3.482110028611102*^9}, {3.482110384557961*^9, 
+  3.482110448565535*^9}, {3.482112605851759*^9, 3.482112635455124*^9}, {
+  3.482112670454118*^9, 3.4821126769813643`*^9}, {3.4885958305481987`*^9, 
+  3.4885958433294277`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TaylorSin", "[", 
+   RowBox[{"x_", ",", "nt_"}], "]"}], ":=", 
+  RowBox[{
+   UnderoverscriptBox["\[Sum]", 
+    RowBox[{"n", "=", "0"}], "nt"], 
+   RowBox[{
+    FractionBox[
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"-", "1"}], ")"}], "n"], 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"2", "n"}], "+", "1"}], ")"}], "!"}]], 
+    SuperscriptBox["x", 
+     RowBox[{
+      RowBox[{"2", "n"}], "+", "1"}]]}]}]}]], "Input",
+ CellChangeTimes->{{3.48210990755009*^9, 3.48210996194244*^9}, {
+   3.482110049931608*^9, 3.482110072364842*^9}, {3.482110243451748*^9, 
+   3.48211024813651*^9}, {3.482110508118936*^9, 3.482110521949584*^9}, {
+   3.482110573247505*^9, 3.482110574165413*^9}, {3.482110615224361*^9, 
+   3.4821106215031757`*^9}, {3.48211066481719*^9, 3.482110681923299*^9}, 
+   3.48211072827215*^9, {3.482110766127356*^9, 3.482110767274044*^9}, {
+   3.4821108278661947`*^9, 3.482110835975501*^9}, {3.482110879790785*^9, 
+   3.482110887584805*^9}, {3.482110971855439*^9, 3.482111002491597*^9}, {
+   3.4821110978322697`*^9, 3.48211111864924*^9}, {3.482111258003241*^9, 
+   3.4821113773589897`*^9}, {3.482111416678153*^9, 3.482111419697606*^9}, {
+   3.482111589185093*^9, 3.482111606728903*^9}, 3.482111694010385*^9, 
+   3.4821120441682453`*^9, {3.48228019207963*^9, 3.482280194368909*^9}, 
+   3.482280552391485*^9, {3.482280608996552*^9, 3.482280638351945*^9}}],
+
+Cell[TextData[{
+ "By evaluating the function above at x = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Pi]", "/", "2"}], TraditionalForm]]],
+ " and subtracting it from 1 we can see how the truncation error evolves as \
+we add more terms in the Taylor series."
+}], "Text",
+ CellChangeTimes->{{3.482112702360216*^9, 3.482112791258382*^9}, {
+  3.482281289323579*^9, 3.482281292520473*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"trunError", "=", 
+  RowBox[{
+   RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Column", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"TaylorSin", "[", 
+         RowBox[{"x", ",", "nt"}], "]"}], ",", "\"\< \>\"", ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Sin", "[", 
+          RowBox[{"\[Pi]", "/", "2"}], "]"}], "-", 
+         RowBox[{"Re", "[", 
+          RowBox[{"TaylorSin", "[", 
+           RowBox[{
+            RowBox[{"\[Pi]", "/", "2"}], ",", "nt"}], "]"}], "]"}]}]}], "}"}],
+       "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"nt", ",", "1", ",", "\"\<No. of terms\>\""}], "}"}], ",", 
+       "1", ",", "9", ",", "1", ",", 
+       RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+     RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+      RowBox[{"{", "nt", "}"}]}], ",", 
+     RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "]"}], "//", 
+   "N"}]}]], "Input",
+ CellChangeTimes->{{3.482109971529715*^9, 3.482110008544725*^9}, {
+   3.482110077908229*^9, 3.482110078600626*^9}, {3.482111744225739*^9, 
+   3.482111761770887*^9}, {3.482111811473773*^9, 3.482111828567273*^9}, {
+   3.482111915958564*^9, 3.482111961512436*^9}, {3.482111994057292*^9, 
+   3.4821119943627787`*^9}, 3.482112418990802*^9, {3.4822799918450003`*^9, 
+   3.482279995325683*^9}, 3.482280026565741*^9, {3.482280099839221*^9, 
+   3.482280156418003*^9}, {3.4822801869926357`*^9, 3.4822801876362333`*^9}, {
+   3.482280460836046*^9, 3.4822805069014997`*^9}, {3.482280660245775*^9, 
+   3.482280674731862*^9}, {3.482280909612657*^9, 3.482280937904509*^9}, {
+   3.4822823548091793`*^9, 3.482282374102532*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`nt$$ = 9., Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`nt$$], 1., "No. of terms"}, 1., 9., 1.}}, 
+    Typeset`size$$ = {586., {52.03125, 59.96875}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    False, $CellContext`nt$2113$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`nt$$ = 1.}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`nt$$, $CellContext`nt$2113$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Column[{
+         $CellContext`TaylorSin[$CellContext`x, $CellContext`nt$$], " ", 
+         Sin[3.141592653589793 0.5] - 1. Re[
+           $CellContext`TaylorSin[
+           3.141592653589793 0.5, $CellContext`nt$$]]}], 
+      "Specifications" :> {{{$CellContext`nt$$, 1., "No. of terms"}, 1., 9., 
+         1., Appearance -> "Labeled"}}, 
+      "Options" :> {TrackedSymbols :> {$CellContext`nt$$}}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{626., {96.03125, 103.96875}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    Initialization:>({$CellContext`TaylorSin[
+         Pattern[$CellContext`x, 
+          Blank[]], 
+         Pattern[$CellContext`nt, 
+          Blank[]]] := 
+       Sum[((-1)^$CellContext`n/Factorial[
+          2 $CellContext`n + 1]) $CellContext`x^(2 $CellContext`n + 
+           1), {$CellContext`n, 0, $CellContext`nt}]}; 
+     Typeset`initDone$$ = True),
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.482280107031557*^9, 3.482280171408635*^9}, 
+   3.482280202558052*^9, {3.482280472046947*^9, 3.4822805076761007`*^9}, {
+   3.4822806457604218`*^9, 3.482280675290963*^9}, {3.482280917236329*^9, 
+   3.4822809388408747`*^9}, 3.482281218663661*^9, {3.4822823619463263`*^9, 
+   3.4822823812588243`*^9}, 3.482282450568042*^9, 3.482580068648452*^9}]
+}, {2}]],
+
+Cell["\<\
+Here is an interesting visualization of how the difference between the two \
+functions evolves as we add more terms of the Taylor series.  The truncation \
+error is visualized as the maximum difference between the two curves.\
+\>", "Text",
+ CellChangeTimes->{{3.4821124827634068`*^9, 3.482112502192306*^9}, {
+  3.482112828019761*^9, 3.482112908883535*^9}, {3.482112952034164*^9, 
+  3.482112973315297*^9}, {3.4885958540198193`*^9, 3.4885958557861967`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Column", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"TaylorSin", "[", 
+       RowBox[{"x", ",", "nt"}], "]"}], ",", "\"\< \>\"", ",", 
+      RowBox[{"Plot", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"Sin", "[", "x", "]"}], ",", 
+          RowBox[{"TaylorSin", "[", 
+           RowBox[{"x", ",", "nt"}], "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", "0", ",", 
+          RowBox[{"2", "\[Pi]"}]}], "}"}], ",", 
+        RowBox[{"PlotRange", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"0", ",", 
+             RowBox[{"2", "\[Pi]"}]}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"-", "1"}], ",", "1"}], "}"}]}], "}"}]}], ",", 
+        RowBox[{"ImageSize", "\[Rule]", "Medium"}]}], "]"}]}], "}"}], "]"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"nt", ",", "1", ",", "\"\<No. of terms\>\""}], "}"}], ",", "1", 
+     ",", "9", ",", "1", ",", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Labeled\>\""}]}], "}"}], ",", 
+   RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+    RowBox[{"{", "nt", "}"}]}], ",", 
+   RowBox[{"SaveDefinitions", "\[Rule]", "True"}]}], "]"}]], "Input",
+ Editable->False,
+ CellChangeTimes->{{3.482111470358285*^9, 3.482111510874946*^9}, {
+   3.4821116119082212`*^9, 3.482111671036536*^9}, {3.48211184278633*^9, 
+   3.482111901250845*^9}, {3.48211200532873*^9, 3.48211210161694*^9}, {
+   3.482112146239053*^9, 3.482112167549363*^9}, {3.482112302553852*^9, 
+   3.4821123130887823`*^9}, {3.4821123433711853`*^9, 3.482112367289641*^9}, {
+   3.4822802391812267`*^9, 3.4822802751827097`*^9}, {3.482280972690827*^9, 
+   3.482281045852559*^9}, 3.482282379088559*^9, 3.482282439510553*^9}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`nt$$ = 9, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`nt$$], 1, "No. of terms"}, 1, 9, 1}}, 
+    Typeset`size$$ = {586., {127.03125, 134.96875}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = 
+    False, $CellContext`nt$2143$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`nt$$ = 1}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`nt$$, $CellContext`nt$2143$$, 0]}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Column[{
+         $CellContext`TaylorSin[$CellContext`x, $CellContext`nt$$], " ", 
+         Plot[{
+           Sin[$CellContext`x], 
+           $CellContext`TaylorSin[$CellContext`x, $CellContext`nt$$]}, \
+{$CellContext`x, 0, 2 Pi}, PlotRange -> {{0, 2 Pi}, {-1, 1}}, ImageSize -> 
+          Medium]}], 
+      "Specifications" :> {{{$CellContext`nt$$, 1, "No. of terms"}, 1, 9, 1, 
+         Appearance -> "Labeled"}}, 
+      "Options" :> {TrackedSymbols :> {$CellContext`nt$$}}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{626., {171.03125, 178.96875}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    Initialization:>({$CellContext`TaylorSin[
+         Pattern[$CellContext`x, 
+          Blank[]], 
+         Pattern[$CellContext`nt, 
+          Blank[]]] := 
+       Sum[((-1)^$CellContext`n/Factorial[
+          2 $CellContext`n + 1]) $CellContext`x^(2 $CellContext`n + 
+           1), {$CellContext`n, 0, $CellContext`nt}]}; 
+     Typeset`initDone$$ = True),
+    SynchronousInitialization->True,
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ Editable->False,
+ CellChangeTimes->{{3.482111500862872*^9, 3.482111511979389*^9}, {
+   3.482111672383232*^9, 3.48211168481231*^9}, 3.482111718338151*^9, 
+   3.4821118532590723`*^9, 3.482111902629456*^9, {3.482112006394145*^9, 
+   3.482112077485086*^9}, 3.4821121694691677`*^9, {3.4821123153799677`*^9, 
+   3.482112370833589*^9}, 3.482113069524702*^9, 3.48228023112733*^9, 
+   3.482280276667482*^9, 3.482280697611981*^9, {3.482281015447197*^9, 
+   3.482281046762992*^9}, 3.4822812188046303`*^9, {3.482282362058836*^9, 
+   3.482282381425511*^9}, 3.4822824507588673`*^9, 3.482580068775215*^9}]
+}, {2}]],
+
+Cell["\<\
+The minimization of truncation error is one of the main goals of numerical \
+analysis.\
+\>", "Text",
+ CellChangeTimes->{{3.482113186347672*^9, 3.482113215609415*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Stability", "Section",
+ CellChangeTimes->{{3.482113655250085*^9, 3.482113658048107*^9}}],
+
+Cell[TextData[{
+ "Usually roundoff error and truncation error do not interact with each \
+other, but sometimes roundoff error can cause a numerical algorithm to become \
+",
+ StyleBox["unstable.  ",
+  FontSlant->"Italic"],
+ "This happens when roundoff error gets mixed into the calculation and is \
+magnified as it continues.  Let's look at an example:\n\nSuppose we want to \
+calculate the powers of the so called \"Golden Mean\"\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Phi]", " ", "=", " ", 
+    FractionBox[
+     RowBox[{
+      SqrtBox["5"], "-", "1"}], "2"]}], TraditionalForm]]],
+ "\n\nIt can be verified that the powers ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["\[Phi]", "n"], TraditionalForm]]],
+ " can be calculated using the simple recursion relationship,\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Phi]", 
+     RowBox[{"n", "+", "1"}]], "=", " ", 
+    RowBox[{
+     SuperscriptBox["\[Phi]", 
+      RowBox[{"n", "-", "1"}]], "-", " ", 
+     SuperscriptBox["\[Phi]", "n"]}]}], TraditionalForm]]],
+ "\n\nTherefore by calculating ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Phi]", "0"], "=", " ", "1"}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Phi]", "1"], "=", " ", "0."}], TraditionalForm]]],
+ "618034 and successively applying the recursion relationship we should be \
+able to calculate as many powers as desired.  Let's see this in action:\n\n\
+First we'll calculate what we'll call the \"exact\" answer by actually \
+evaluating all the powers individually."
+}], "Text",
+ CellChangeTimes->{{3.482282877799802*^9, 3.482283000356174*^9}, {
+   3.482283130582662*^9, 3.482283133888454*^9}, {3.4822832136001587`*^9, 
+   3.482283273638713*^9}, {3.4822833372607117`*^9, 3.48228344198333*^9}, {
+   3.482283500287404*^9, 3.482283591330789*^9}, {3.482283627941847*^9, 
+   3.482283675809602*^9}, {3.482283726731895*^9, 3.482283768365891*^9}, {
+   3.4822853614688053`*^9, 3.482285409112364*^9}, 3.4822856047227383`*^9, {
+   3.482286243746944*^9, 3.482286263618898*^9}, {3.482286383132535*^9, 
+   3.482286383986264*^9}, {3.4822873356241617`*^9, 3.4822873402799273`*^9}, {
+   3.4885958579469957`*^9, 3.4885958596938972`*^9}, 3.4918512503078938`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[Phi]exact", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{"(", 
+       FractionBox[
+        RowBox[{
+         SqrtBox["5"], "-", "1"}], "2"], ")"}], "n"], ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "0", ",", "80"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.482283779274748*^9, 3.482283845892128*^9}, {
+  3.482285150349243*^9, 3.482285152312066*^9}, {3.482285743002174*^9, 
+  3.4822857600993834`*^9}, {3.482285792463386*^9, 3.482285794868497*^9}, {
+  3.48228595885248*^9, 3.482285964179866*^9}, {3.482287318898159*^9, 
+  3.482287321250469*^9}}],
+
+Cell["\<\
+Next we'll calculate the first 2 powers then use the recursion formula to \
+evaluate the rest.\
+\>", "Text",
+ CellChangeTimes->{{3.482285424601059*^9, 3.482285448833177*^9}, 
+   3.4885958628758497`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Phi]recursion", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", 
+       FractionBox[
+        RowBox[{
+         SqrtBox["5"], "-", "1"}], "2"]}], "}"}], ",", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{"0", ",", "79"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Do", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"\[Phi]recursion", "[", 
+     RowBox[{"[", 
+      RowBox[{"n", "+", "1"}], "]"}], "]"}], "=", 
+    RowBox[{
+     RowBox[{"\[Phi]recursion", "[", 
+      RowBox[{"[", 
+       RowBox[{"n", "-", "1"}], "]"}], "]"}], "-", 
+     RowBox[{"\[Phi]recursion", "[", 
+      RowBox[{"[", "n", "]"}], "]"}]}]}], "\[IndentingNewLine]", ",", 
+   RowBox[{"{", 
+    RowBox[{"n", ",", "2", ",", "70"}], "}"}]}], "\[IndentingNewLine]", 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.4822838591276627`*^9, 3.482283883931259*^9}, {
+  3.4822839168410063`*^9, 3.4822839875605507`*^9}, {3.482284056260384*^9, 
+  3.4822841706325493`*^9}, {3.482284201200247*^9, 3.482284210271452*^9}, {
+  3.482284252270742*^9, 3.482284257049655*^9}, {3.482284315668571*^9, 
+  3.4822843521126413`*^9}, {3.482284386611155*^9, 3.4822843909043016`*^9}, {
+  3.4822844636510077`*^9, 3.4822846113930798`*^9}, {3.482284647384335*^9, 
+  3.482284667176544*^9}, {3.482284743328117*^9, 3.482284745620077*^9}, {
+  3.482284802300774*^9, 3.482284825861418*^9}, {3.48228487190877*^9, 
+  3.482285013613612*^9}, {3.482285158081785*^9, 3.482285166339623*^9}, {
+  3.482285226236237*^9, 3.482285226800971*^9}, {3.4822857480997562`*^9, 
+  3.482285755392521*^9}, {3.482285798664035*^9, 3.482285800807641*^9}, {
+  3.4822859672067747`*^9, 3.4822859973787327`*^9}, {3.4822873283302317`*^9, 
+  3.482287330500901*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"<<", "PlotLegends`"}], "\[IndentingNewLine]", 
+ RowBox[{"ListLinePlot", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"\[Phi]exact", ",", "\[Phi]recursion"}], "}"}], ",", 
+   RowBox[{"PlotStyle", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Dashed", ",", "Blue", ",", 
+        RowBox[{"Thickness", "[", "0.005", "]"}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", 
+        RowBox[{"Thickness", "[", "0.002", "]"}]}], "}"}]}], "}"}]}], ",", 
+   RowBox[{"ImageSize", "\[Rule]", "Large"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.482285076559451*^9, 3.482285094085435*^9}, {
+  3.482285813470949*^9, 3.482285907384427*^9}, {3.48228603704357*^9, 
+  3.482286042886495*^9}, {3.482287720517725*^9, 3.482287922793594*^9}, {
+  3.4822879620605917`*^9, 3.482287970178979*^9}, {3.482288029620769*^9, 
+  3.482288177573201*^9}, {3.482288208729723*^9, 3.4822882319843407`*^9}, {
+  3.482580024010553*^9, 3.4825800299363527`*^9}, {3.482580062796008*^9, 
+  3.482580156499056*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {}, 
+   {RGBColor[0, 0, 1], Thickness[0.005], Dashing[{Small, Small}], 
+    LineBox[CompressedData["
+1:eJwtyw0s1HEcx/H/lK6nC7nNTI1UHGt3dVfycPhweTzpnmRFKnkoktxilR7c
+1oOpLCmkB2VJ6DJSScUtrCdFyOOSWmEzhajtqPXw//6233577/X7LIlMVEYb
+MQzj8/f+e8//1nzfI3GEoDHdSinb6cn8PyvAeVzplKzZSi3AWEvbp32JKuqV
+EHY8KWZm+VOvQlRum1trhTu1CJO8W+bCzSJqMfpnhsp9y+2oV8MicFwnnLuI
+eg3K6h6Nh6vNqJ3Qw0tIKYo3pl4LQzuvj3/Q4MG2Mx6pGxfYbhmldoGWKbjK
+df1M7YpxReev3Uw3tRtsI14fCR98Qy1Bg8/HQ4ct66ndUbuya0btpQfUHsi7
+1z58QKCj9sRAWa+V0ZxCaiDafLzgW2AO22nAi/QMoUPmKXIv/LyyyfQ+R0vu
+heJ32z0G5ieTe+NsU2HDPOM4cm/o+2yq9bxt5FJc751hmdOvIpdCX596pyPL
+n3wdZg9acMoiPMjX4cC1DyFGjSJyH1if2RupENuT+6Ak9sq5GN0icl/kVEpF
+kodm5L7gx93Vq4eMyf3A/VHs58ebcmfdD9K+WpfIx6NsM/7IFrZavSz/TO6P
+EcvQ8omsbvIAnMjIN/W81EwegJAS8+DS9HryQOx4yj3usLyaPBDnbMSCjV06
+chmcooZ6p5MKyWWo2X/hRmVTDnkQogtS7DIFp8mDYKassu2M05Kvx+38Y5w9
+J5PJ12N04fPUtMtx5MHYZeuVHabZRh6MBR+5bwPUavINyHg2VNpjE0C+AfzJ
+6K9JJp7kcoxcjI+VisRsQ474+xPcLTX29F+OGkODVqVezLZeDmvNsvwYm4W0
+V8DNzKu5O3YW7RXg3DR5OVAxJWH3CiQe0rQ3LR5jW6+ASOU6LOZ/YZtRIlwW
+kvrKrodtKDEnzDrsskML7ZUo6Y9HhKGe9kq0lRYNV1VU016F6RVRjiYn7tBe
+BR1/8Pbm94W0V+HGbINhpyKX9iokZN16ktd6mvZq9B6VObu0aGmvxvKlNXPr
+ZqZI/gCGozPN
+     "]]}, 
+   {RGBColor[1, 0, 0], Thickness[0.002], LineBox[CompressedData["
+1:eJxTTMoPSmViYGCwBGIQXfSx6HOejZaD3tEO6SDvDHsGMNBxYFiwyay0KB7K
+13NgSLj4qCQ/GMo3cGBgOLCcgc0Dyjd0YGjYan1poy2UbwTknxLWjzKC8o2B
+6hkC3NarQfkmQL7WWn0uGSjfFMi/9ikmRBDKNwOpb1iazQrlmwP5Eac1qn7Z
+QfgWQP4KE6XYD1C+JUg9A6/VEyjfCshfcCmf4SaUbw1yb1TC83NQvg1YfYPk
+YSjfFshv2Hpg9nYo3w4kP/Wf3loo3x6snoFzEZTvAOJr/fWdBuE3gPlrWFu6
+ofKOEPUCjVB5MD+C+0UJVN4JHB4v9bOg8k4Q9QwJUHlnEH/BpfgwqDyYfyDK
+wRkq7wJVHwCVh/CvMUlB5V1BfIel+32g8q5Q9TDgBrU/HSoP5ifoLgiE6ndH
+Vd8A5q/4Mr16H0TAA8aH6vdAM9/TAeKcmRD1DSB+g1f9zp1Q/V5o5nvB1EPt
+90bT741mvo8D2PrZ36H2w/lQ833RzAfxN4hdOPEAar4fjA813w/NfH8HsHMr
+zSHprwHIZ8hm7OVRhKbHAFT1DkA+MLTv7PHeD1EP50PUH0BTzxAIl/fb9JF5
+nWCgQ9ZO2xB99dj9AIKVpqk=
+     "]], 
+    LineBox[{{69.79450695850772, -0.0017793619344633423`}, {70., 0.}, {
+     70.07327305051857, -0.0017793619344633423`}}], 
+    LineBox[{{71.92672694948143, -0.0017793619344633423`}, {72., 0.}, {73., 
+     0.}, {74., 0.}, {75., 0.}, {76., 0.}, {77., 0.}, {78., 0.}, {79., 0.}, {
+     80., 0.}, {81., 0.}}]}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->True,
+  AxesOrigin->{0, 0},
+  ImageSize->Large,
+  PlotRange->{{0., 81.}, {-0.0017793619344633423`, 0.0029656032241055707`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{{3.4825801181861553`*^9, 3.48258015716494*^9}}]
+}, {2}]],
+
+Cell["\<\
+The recursion relationship is unstable and cannot be used as stated to solve \
+this problem.  Stability of algorithms is something we always need to be \
+aware of as numerical analysts.\
+\>", "Text",
+ CellChangeTimes->{{3.482286140165514*^9, 3.482286216485929*^9}, 
+   3.488595865293612*^9}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Psuedocode", "Section",
+ CellChangeTimes->{3.4861748003658857`*^9}],
+
+Cell["\<\
+Psuedocode is a compact and informal way of describing a numerical algorithm. \
+ It utilizes the conventional structure of a programming language (loops, \
+conditional statements, etc.) but is intended for human reading.\
+\>", "Text",
+ CellChangeTimes->{{3.488595867219963*^9, 3.488595870862166*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Conventional Programming Structures", "Section",
+ CellChangeTimes->{{3.4861748003658857`*^9, 3.486174832802993*^9}, 
+   3.488595876357656*^9}],
+
+Cell[TextData[{
+ StyleBox["Do Loops and For Loops:",
+  FontWeight->"Bold"],
+ "  These two structures essentially do the same thing in a slightly \
+different way.  They are used when you want to do something in sequence for a \
+set number of iterations.  Let's look at a couple of examples using ",
+ StyleBox["Mathematica.",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.488594753238598*^9, 3.488594892813457*^9}, {
+   3.488595263530816*^9, 3.488595290816986*^9}, 3.4885958785402718`*^9, {
+   3.488595930059869*^9, 3.488595936833765*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Do", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Print", "[", "i", "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Pause", "[", "1", "]"}], ";"}], "\[IndentingNewLine]", ",", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "1", ",", "10", ",", "2"}], "}"}]}], 
+  "\[IndentingNewLine]", "]"}]], "Input",
+ CellChangeTimes->{{3.4885948948315477`*^9, 3.4885949576395397`*^9}, {
+  3.4918480595296926`*^9, 3.4918480614536257`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["1"], "Print",
+ CellChangeTimes->{{3.4885949246741743`*^9, 3.4885949581711693`*^9}, 
+   3.488595224156785*^9, 3.4885959117643623`*^9, {3.491848050388628*^9, 
+   3.491848062403504*^9}}],
+
+Cell[BoxData["3"], "Print",
+ CellChangeTimes->{{3.4885949246741743`*^9, 3.4885949581711693`*^9}, 
+   3.488595224156785*^9, 3.4885959117643623`*^9, {3.491848050388628*^9, 
+   3.4918480633877773`*^9}}],
+
+Cell[BoxData["5"], "Print",
+ CellChangeTimes->{{3.4885949246741743`*^9, 3.4885949581711693`*^9}, 
+   3.488595224156785*^9, 3.4885959117643623`*^9, {3.491848050388628*^9, 
+   3.491848064396793*^9}}],
+
+Cell[BoxData["7"], "Print",
+ CellChangeTimes->{{3.4885949246741743`*^9, 3.4885949581711693`*^9}, 
+   3.488595224156785*^9, 3.4885959117643623`*^9, {3.491848050388628*^9, 
+   3.491848065407672*^9}}],
+
+Cell[BoxData["9"], "Print",
+ CellChangeTimes->{{3.4885949246741743`*^9, 3.4885949581711693`*^9}, 
+   3.488595224156785*^9, 3.4885959117643623`*^9, {3.491848050388628*^9, 
+   3.491848066417454*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"i", "=."}], ";", 
+  RowBox[{"For", "[", 
+   RowBox[{
+    RowBox[{"i", "=", "0"}], ",", 
+    RowBox[{"i", "<", "10"}], ",", 
+    RowBox[{"i", "=", 
+     RowBox[{"i", "+", "2"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Print", "[", "i", "]"}], "\[IndentingNewLine]", 
+     RowBox[{"Pause", "[", "1", "]"}]}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.488594965937632*^9, 3.488594967037705*^9}, {
+  3.48859501072099*^9, 3.488595047045938*^9}, {3.491848097668934*^9, 
+  3.4918481784139137`*^9}, {3.491848256575796*^9, 3.491848263821857*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["0"], "Print",
+ CellChangeTimes->{
+  3.488595047895041*^9, 3.4885952309185333`*^9, {3.491848076429867*^9, 
+   3.491848183235154*^9}, 3.4918482645239553`*^9}],
+
+Cell[BoxData["2"], "Print",
+ CellChangeTimes->{
+  3.488595047895041*^9, 3.4885952309185333`*^9, {3.491848076429867*^9, 
+   3.491848183235154*^9}, 3.4918482655154657`*^9}],
+
+Cell[BoxData["4"], "Print",
+ CellChangeTimes->{
+  3.488595047895041*^9, 3.4885952309185333`*^9, {3.491848076429867*^9, 
+   3.491848183235154*^9}, 3.4918482665246058`*^9}],
+
+Cell[BoxData["6"], "Print",
+ CellChangeTimes->{
+  3.488595047895041*^9, 3.4885952309185333`*^9, {3.491848076429867*^9, 
+   3.491848183235154*^9}, 3.491848267534223*^9}],
+
+Cell[BoxData["8"], "Print",
+ CellChangeTimes->{
+  3.488595047895041*^9, 3.4885952309185333`*^9, {3.491848076429867*^9, 
+   3.491848183235154*^9}, 3.4918482685434237`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Conventional Programming Structures (cont.)", "Section",
+ CellChangeTimes->{{3.4861748003658857`*^9, 3.486174832802993*^9}, {
+   3.488595317794998*^9, 3.48859532332126*^9}, 3.488595880263679*^9}],
+
+Cell[TextData[{
+ StyleBox["While Loops:",
+  FontWeight->"Bold"],
+ "  These loops are used to evaluate the body of the loop as long as a \
+certain test is passed.  An example:"
+}], "Text",
+ CellChangeTimes->{{3.488594753238598*^9, 3.488594892813457*^9}, {
+  3.488595263530816*^9, 3.488595290816986*^9}, {3.488595386212101*^9, 
+  3.488595436857053*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"i", "=", "0"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"While", "[", 
+  RowBox[{
+   RowBox[{"i", "<", "10"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "i", "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Pause", "[", "1", "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"i", "=", 
+     RowBox[{"i", "+", "2"}]}], ";"}]}], "\[IndentingNewLine]", 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.4885948948315477`*^9, 3.4885949576395397`*^9}, {
+  3.488595440648938*^9, 3.488595491771658*^9}, {3.4918482369111767`*^9, 
+  3.491848243323537*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["0"], "Print",
+ CellChangeTimes->{
+  3.488595492163378*^9, {3.4918482270376177`*^9, 3.491848243815877*^9}}],
+
+Cell[BoxData["2"], "Print",
+ CellChangeTimes->{
+  3.488595492163378*^9, {3.4918482270376177`*^9, 3.491848244806922*^9}}],
+
+Cell[BoxData["4"], "Print",
+ CellChangeTimes->{
+  3.488595492163378*^9, {3.4918482270376177`*^9, 3.491848245816167*^9}}],
+
+Cell[BoxData["6"], "Print",
+ CellChangeTimes->{
+  3.488595492163378*^9, {3.4918482270376177`*^9, 3.491848246826355*^9}}],
+
+Cell[BoxData["8"], "Print",
+ CellChangeTimes->{
+  3.488595492163378*^9, {3.4918482270376177`*^9, 3.491848247836532*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["If Statements",
+  FontWeight->"Bold"],
+ ": Used as tests to return different actions.  An example:"
+}], "Text",
+ CellChangeTimes->{{3.488595518505414*^9, 3.488595584515664*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"i", "=", "2"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"i", "\[Equal]", "1"}], ",", 
+     RowBox[{"Print", "[", "\"\<i is equal to 1\>\"", "]"}], ",", 
+     RowBox[{"Print", "[", "\"\<i is not equal to 1\>\"", "]"}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.488595588835299*^9, 3.4885956034132853`*^9}, {
+   3.488595634175371*^9, 3.488595666198929*^9}, 3.491848306456093*^9}],
+
+Cell[BoxData["\<\"i is not equal to 1\"\>"], "Print",
+ CellChangeTimes->{
+  3.488595666824235*^9, {3.49184830320317*^9, 3.491848307496791*^9}}]
+}, Open  ]],
+
+Cell["\<\
+When we write sophisticated code we might use multiple loops and if \
+statements in conjunction.\
+\>", "Text",
+ CellChangeTimes->{{3.488595674444398*^9, 3.4885957111166067`*^9}, 
+   3.488595887443605*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"i", "=", "0"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"While", "[", 
+  RowBox[{
+   RowBox[{"i", "<", "3"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{"i", "\[Equal]", "1"}], ",", 
+      RowBox[{"Print", "[", "\"\<i is equal to 1\>\"", "]"}], ",", 
+      RowBox[{"Print", "[", "\"\<i is not equal to 1\>\"", "]"}]}], "]"}], 
+    ";", "\[IndentingNewLine]", 
+    RowBox[{"Pause", "[", "1", "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"i", "++"}], ";"}]}], "\[IndentingNewLine]", "]"}]}], "Input",
+ CellChangeTimes->{{3.4885957334796133`*^9, 3.4885957737281*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"i is not equal to 1\"\>"], "Print",
+ CellChangeTimes->{{3.488595760503408*^9, 3.4885957744788313`*^9}, 
+   3.491848340425028*^9}],
+
+Cell[BoxData["\<\"i is equal to 1\"\>"], "Print",
+ CellChangeTimes->{{3.488595760503408*^9, 3.4885957744788313`*^9}, 
+   3.491848341409255*^9}],
+
+Cell[BoxData["\<\"i is not equal to 1\"\>"], "Print",
+ CellChangeTimes->{{3.488595760503408*^9, 3.4885957744788313`*^9}, 
+   3.491848342418726*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->None,
+ScreenStyleEnvironment->"SlideShow",
+WindowSize->{743, 556},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+Magnification:>FEPrivate`If[
+  FEPrivate`Equal[FEPrivate`$VersionNumber, 6.], 0.75, 0.75 Inherited],
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[567, 22, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[5060, 151, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[19866, 502, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[29728, 742, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[31036, 781, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[35745, 918, 64, 1, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 41286, 1087}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[656, 27, 130, 1, 84, "Section"],
+Cell[789, 30, 3438, 95, 519, "Text"],
+Cell[4230, 127, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5060, 151, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[5149, 156, 132, 1, 122, "Section"],
+Cell[5284, 159, 2261, 53, 371, "Text"],
+Cell[7548, 214, 1430, 31, 75, "Input"],
+Cell[8981, 247, 384, 9, 55, "Text"],
+Cell[CellGroupData[{
+Cell[9390, 260, 1737, 38, 32, "Input"],
+Cell[11130, 300, 2526, 51, 219, "Output"]
+}, {2}]],
+Cell[13668, 354, 465, 7, 77, "Text"],
+Cell[CellGroupData[{
+Cell[14158, 365, 1855, 45, 24, "Input"],
+Cell[16016, 412, 2829, 57, 369, "Output"]
+}, {2}]],
+Cell[18857, 472, 176, 4, 33, "Text"],
+Cell[19036, 478, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19866, 502, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[19955, 507, 94, 1, 84, "Section"],
+Cell[20052, 510, 2248, 52, 460, "Text"],
+Cell[22303, 564, 636, 16, 74, "Input"],
+Cell[22942, 582, 212, 5, 33, "Text"],
+Cell[23157, 589, 1777, 40, 164, "Input"],
+Cell[CellGroupData[{
+Cell[24959, 633, 1040, 22, 24, "Input"],
+Cell[26002, 657, 2580, 50, 276, "Output"]
+}, {2}]],
+Cell[28594, 710, 301, 6, 55, "Text"],
+Cell[28898, 718, 781, 18, 30, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29728, 742, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[29817, 747, 73, 1, 63, "Section"],
+Cell[29893, 750, 310, 5, 57, "Text"],
+Cell[30206, 757, 781, 18, 22, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31036, 781, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[31125, 786, 148, 2, 63, "Section"],
+Cell[31276, 790, 548, 11, 57, "Text"],
+Cell[CellGroupData[{
+Cell[31849, 805, 463, 10, 96, "Input"],
+Cell[CellGroupData[{
+Cell[32337, 819, 197, 3, 20, "Print"],
+Cell[32537, 824, 199, 3, 20, "Print"],
+Cell[32739, 829, 197, 3, 20, "Print"],
+Cell[32939, 834, 197, 3, 20, "Print"],
+Cell[33139, 839, 197, 3, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[33385, 848, 618, 15, 78, "Input"],
+Cell[CellGroupData[{
+Cell[34028, 867, 170, 3, 20, "Print"],
+Cell[34201, 872, 170, 3, 20, "Print"],
+Cell[34374, 877, 170, 3, 20, "Print"],
+Cell[34547, 882, 168, 3, 20, "Print"],
+Cell[34718, 887, 170, 3, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[34915, 894, 781, 18, 22, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[35745, 918, 64, 1, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[35834, 923, 201, 2, 63, "Section"],
+Cell[36038, 927, 351, 8, 41, "Text"],
+Cell[CellGroupData[{
+Cell[36414, 939, 599, 14, 113, "Input"],
+Cell[CellGroupData[{
+Cell[37038, 957, 120, 2, 20, "Print"],
+Cell[37161, 961, 120, 2, 20, "Print"],
+Cell[37284, 965, 120, 2, 20, "Print"],
+Cell[37407, 969, 120, 2, 20, "Print"],
+Cell[37530, 973, 120, 2, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[37677, 979, 204, 5, 24, "Text"],
+Cell[CellGroupData[{
+Cell[37906, 988, 508, 12, 78, "Input"],
+Cell[38417, 1002, 143, 2, 20, "Print"]
+}, Open  ]],
+Cell[38575, 1007, 214, 5, 24, "Text"],
+Cell[CellGroupData[{
+Cell[38814, 1016, 653, 15, 130, "Input"],
+Cell[CellGroupData[{
+Cell[39492, 1035, 147, 2, 20, "Print"],
+Cell[39642, 1039, 143, 2, 20, "Print"],
+Cell[39788, 1043, 147, 2, 20, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[39962, 1049, 781, 18, 22, "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

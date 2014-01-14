@@ -1,0 +1,2396 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     76577,       2387]
+NotebookOptionsPosition[     72310,       2246]
+NotebookOutlinePosition[     73884,       2293]
+CellTagsIndexPosition[     73805,       2288]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Partial Differential Equations", "Section",
+ CellChangeTimes->{{3.5000770561388407`*^9, 3.500077061183811*^9}}],
+
+Cell[TextData[{
+ "Many physical phenomena are a function of more than on independent variable \
+and must be represented by partial-differential equations (PDE\
+\[CloseCurlyQuote]s).  Most scientific problems have mathematical models that \
+are second-order equations, with the highest order of derivative being the \
+second.  If ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]]],
+ " is a function of the two independent variables ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ ", there are three second-order partial derivatives:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[PartialD]", "2"], "u"}], 
+     RowBox[{"\[PartialD]", 
+      SuperscriptBox["x", "2"]}]], ",", "    ", 
+    RowBox[{
+     FractionBox[
+      SuperscriptBox["\[PartialD]", "2"], 
+      RowBox[{
+       RowBox[{"\[PartialD]", "x"}], " ", 
+       RowBox[{"\[PartialD]", "y"}]}]], 
+     RowBox[{",", "   ", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[PartialD]", "2"], "u"}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["y", "2"]}]]}]}]}], TraditionalForm]]],
+ "\n\t\nIn general an equation involving these partial derivatives might have \
+the form:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"A", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[PartialD]", "2"], "u"}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["x", "2"]}]]}], "+", 
+     RowBox[{"B", " ", 
+      RowBox[{
+       FractionBox[
+        SuperscriptBox["\[PartialD]", "2"], 
+        RowBox[{
+         RowBox[{"\[PartialD]", "x"}], " ", 
+         RowBox[{"\[PartialD]", "y"}]}]], 
+       RowBox[{"+", "C"}]}], 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[PartialD]", "2"], "u"}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["y", "2"]}]]}], "+", 
+     RowBox[{"D", "(", 
+      RowBox[{"x", ",", "y", ",", "u", ",", 
+       FractionBox[
+        RowBox[{"\[PartialD]", "u"}], 
+        RowBox[{"\[PartialD]", "x"}]], ",", 
+       FractionBox[
+        RowBox[{"\[PartialD]", "u"}], 
+        RowBox[{"\[PartialD]", "y"}]]}], ")"}]}], "=", "0"}], 
+   TraditionalForm]]],
+ "\n\t\nDepending of the values of the coefficients of the second-derivative \
+terms, partial-differential equations are classified as elliptic, parabolic, \
+or hyperbolic according to the following:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["B", "2"], "-", 
+      RowBox[{"4", "A", " ", "C"}]}], "<", "0"}], "   ", "\[Rule]", " ", 
+    "Elliptic"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["B", "2"], "-", 
+     RowBox[{"4", " ", "A", " ", "C"}]}], " ", "=", " ", 
+    RowBox[{"0", " ", "\[Rule]", " ", "Parabolic"}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["B", "2"], "-", 
+      RowBox[{"4", " ", "A", " ", "C"}]}], ">", "0"}], "  ", "\[Rule]", " ", 
+    "Hyperbolic"}], TraditionalForm]}]],
+ "\n\n It is very important to understand the characteristic of the PDE \
+because this will influence our solution technique.  Notice that if the \
+coefficients are functions of either independent variable, it\
+\[CloseCurlyQuote]s possible for the characteristic of the PDE\
+\[CloseCurlyQuote]s to change throughout the domain or during the solution \
+time. We will begin our discussion of solution techniques with a very common \
+hyperbolic PDE."
+}], "Text",
+ CellChangeTimes->{{3.500077336339476*^9, 3.50007751695568*^9}, {
+   3.500077577114588*^9, 3.500077636475214*^9}, {3.5000776694194*^9, 
+   3.5000780140736732`*^9}, {3.5000780524413157`*^9, 
+   3.5000780792009478`*^9}, {3.500086368582768*^9, 3.500086384874352*^9}, 
+   3.500086435735909*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["The Wave Equation", "Section",
+ CellChangeTimes->{{3.500078083797477*^9, 3.500078086384634*^9}}],
+
+Cell[TextData[{
+ "The wave equation has the form:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[PartialD]", "2"], "u"}], 
+      RowBox[{"\[PartialD]", 
+       SuperscriptBox["t", "2"]}]], "-", 
+     RowBox[{
+      SuperscriptBox["c", "2"], 
+      FractionBox[
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["u", "2"]}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["x", "2"]}]]}]}], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nWe can use ",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " to solve this equation analytically:"
+}], "Text",
+ CellChangeTimes->{{3.500078124810708*^9, 3.5000782297337713`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Simplify", "[", 
+   RowBox[{
+    RowBox[{"DSolve", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"D", "[", 
+          RowBox[{
+           RowBox[{"u", "[", 
+            RowBox[{"x", ",", "t"}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"t", ",", "2"}], "}"}]}], "]"}], "-", 
+         RowBox[{
+          SuperscriptBox["c", "2"], 
+          RowBox[{"D", "[", 
+           RowBox[{
+            RowBox[{"u", "[", 
+             RowBox[{"x", ",", "t"}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", "2"}], "}"}]}], "]"}]}]}], "\[Equal]", "0"}], 
+       "}"}], ",", 
+      RowBox[{"u", "[", 
+       RowBox[{"x", ",", "t"}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"x", ",", "t"}], "}"}]}], "]"}], ",", 
+    RowBox[{"Assumptions", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"c", ">", "0"}], "}"}]}]}], "]"}], "//", "First"}]], "Input",
+ CellChangeTimes->{{3.500077075311109*^9, 3.500077103913632*^9}, {
+  3.5000771531173067`*^9, 3.500077204990569*^9}, {3.500077236237603*^9, 
+  3.500077245929656*^9}, {3.500077287128112*^9, 3.5000773059640007`*^9}, {
+  3.5000775473465137`*^9, 3.5000775487892733`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"u", "[", 
+    RowBox[{"x", ",", "t"}], "]"}], "\[Rule]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"C", "[", "1", "]"}], "[", 
+     RowBox[{"t", "-", 
+      FractionBox["x", "c"]}], "]"}], "+", 
+    RowBox[{
+     RowBox[{"C", "[", "2", "]"}], "[", 
+     RowBox[{"t", "+", 
+      FractionBox["x", "c"]}], "]"}]}]}], "}"}]], "Output",
+ CellChangeTimes->{3.5000772474475946`*^9, 3.500077307246149*^9, 
+  3.500077549379941*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "Here the C[1] and C[2] terms are functions of right-moving and left-moving \
+waves.  Any sum of two functions of this form that satisfy the boundary \
+conditions are found to be solutions to the wave equation.  More commonly you \
+will see the solution to the wave equations written as:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"u", "[", 
+     RowBox[{"x", ",", "t"}], "]"}], "=", 
+    RowBox[{
+     RowBox[{"f", "(", 
+      RowBox[{"x", "+", 
+       RowBox[{"c", " ", "t"}]}], ")"}], "+", 
+     RowBox[{"g", "(", 
+      RowBox[{"x", "-", 
+       RowBox[{"c", " ", "t"}]}], ")"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nOne method for solving the wave equation numerically is with a \
+finite-difference scheme, just as we did for boundary value problems.  Here \
+we have two independent variables to keep track of so we will introduce some \
+new notation:  we will use superscripts to denote time, and subscripts for \
+position.  Substituting in the central difference approximations to the \
+derivatives into the wave equations we have:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SubsuperscriptBox["u", "i", 
+        RowBox[{"j", "+", "1"}]], "-", 
+       RowBox[{"2", 
+        SubsuperscriptBox["u", "i", "j"]}], "+", 
+       SubsuperscriptBox["u", "i", 
+        RowBox[{"j", "-", "1"}]]}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"\[CapitalDelta]", " ", "t"}], ")"}], "2"]], "-", 
+     RowBox[{
+      SuperscriptBox["c", "2"], "(", 
+      FractionBox[
+       RowBox[{
+        SubsuperscriptBox["u", 
+         RowBox[{"i", "+", "1"}], "j"], "-", 
+        RowBox[{"2", 
+         SubsuperscriptBox["y", "i", "j"]}], "+", 
+        SubsuperscriptBox["y", 
+         RowBox[{"i", "-", "1"}], "j"]}], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]], ")"}]}], "=", 
+    "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nSolving for the displacement at the end of the current interval, at \
+",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    SubscriptBox["t", 
+     RowBox[{"j", "+", "1"}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "we get\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", "i", 
+     RowBox[{"j", "+", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"c", " ", 
+         FractionBox[
+          RowBox[{"\[CapitalDelta]", " ", "t"}], 
+          RowBox[{"\[CapitalDelta]", " ", "x"}]]}], ")"}], "2"], 
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["u", 
+         RowBox[{"i", "+", "1"}], "j"], "+", 
+        SubsuperscriptBox["u", 
+         RowBox[{"i", "-", "1"}], "j"]}], ")"}]}], "-", 
+     SubsuperscriptBox["u", "i", 
+      RowBox[{"j", "-", "1"}]], "+", 
+     RowBox[{"2", 
+      RowBox[{"(", 
+       RowBox[{"1", 
+        SuperscriptBox["-", Cell[""]], 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{"c", " ", 
+           FractionBox[
+            RowBox[{"\[CapitalDelta]", " ", "t"}], 
+            RowBox[{"\[CapitalDelta]", " ", "x"}]]}], ")"}], "2"]}], ")"}], 
+      SubsuperscriptBox["u", "i", "j"]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nNote that if we let the ratio ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{"c", " ", 
+     FractionBox[
+      RowBox[{"\[CapitalDelta]", " ", "t"}], 
+      RowBox[{"\[CapitalDelta]", " ", "x"}]]}], ")"}], TraditionalForm]]],
+ " equal unity, we get some simplification:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["u", "i", 
+      RowBox[{"j", "+", "1"}]], "=", 
+     RowBox[{
+      SubsuperscriptBox["u", 
+       RowBox[{"i", "+", "1"}], "j"], "+", 
+      SubsuperscriptBox["u", 
+       RowBox[{"i", "-", "1"}], "j"], "-", 
+      SubsuperscriptBox["u", "i", 
+       RowBox[{"j", "-", "1"}]]}]}], ",", "     ", 
+    RowBox[{
+     RowBox[{"\[CapitalDelta]", " ", "t"}], "=", 
+     FractionBox[
+      RowBox[{"\[CapitalDelta]", " ", "x"}], "c"]}]}], TraditionalForm]]],
+ "\n\t\nThis is the most common numerical method for solving the wave \
+equation.  We will now investigate our choice of letting ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{" ", 
+    RowBox[{
+     FormBox[
+      RowBox[{"(", 
+       RowBox[{"c", " ", 
+        FractionBox[
+         RowBox[{"\[CapitalDelta]", " ", "t"}], 
+         RowBox[{"\[CapitalDelta]", " ", "x"}]]}], ")"}],
+      TraditionalForm], "=", "1"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.5000782397739058`*^9, 3.500078307872437*^9}, {
+   3.5000784808451557`*^9, 3.500078774993684*^9}, {3.500078882561563*^9, 
+   3.500079255080537*^9}, {3.500079573450431*^9, 3.500079705259054*^9}, {
+   3.500080345871849*^9, 3.500080370017405*^9}, {3.500080407154368*^9, 
+   3.500080412302514*^9}, 3.5000804513598337`*^9, {3.5000863894557343`*^9, 
+   3.500086394741735*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Comparison to the d\[CloseCurlyQuote]Alembert Solution\
+\>", "Section",
+ CellChangeTimes->{{3.500079153356914*^9, 3.500079155360923*^9}, {
+  3.50008045500535*^9, 3.5000804845149593`*^9}}],
+
+Cell[TextData[{
+ "The method of d\[CloseCurlyQuote]Alembert lets us find the analytical \
+solution to the wave equation in one dimension.  By direct substitution, it \
+is readily seen that, for any arbitrary function ",
+ Cell[BoxData[
+  FormBox["f", TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox["g", TraditionalForm]]],
+ " the wave equation is solved by:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"u", "[", 
+     RowBox[{"x", ",", "t"}], "]"}], "=", 
+    RowBox[{
+     RowBox[{"f", "(", 
+      RowBox[{"x", "+", 
+       RowBox[{"c", " ", "t"}]}], ")"}], "+", 
+     RowBox[{"g", "(", 
+      RowBox[{"x", "-", 
+       RowBox[{"c", " ", "t"}]}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\nThis is demonstrated easily:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{"\[PartialD]", "u"}], 
+     RowBox[{"\[PartialD]", "t"}]], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"f", "'"}], 
+       FractionBox[
+        RowBox[{"\[PartialD]", 
+         RowBox[{"(", 
+          RowBox[{"x", "+", 
+           RowBox[{"c", " ", "t"}]}], ")"}]}], 
+        RowBox[{"\[PartialD]", "t"}]]}], "+", 
+      RowBox[{
+       RowBox[{"g", "'"}], 
+       FractionBox[
+        RowBox[{"\[PartialD]", 
+         RowBox[{"(", 
+          RowBox[{"x", "-", 
+           RowBox[{"c", " ", "t"}]}], ")"}]}], 
+        RowBox[{"\[PartialD]", "t"}]]}]}], "=", 
+     RowBox[{
+      RowBox[{"c", " ", 
+       RowBox[{"f", "'"}]}], "-", 
+      RowBox[{"c", " ", 
+       RowBox[{"g", "'"}]}]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[PartialD]", "2"], "u"}], 
+     RowBox[{"\[PartialD]", 
+      SuperscriptBox["t", "2"]}]], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       SuperscriptBox["c", "2"], 
+       RowBox[{"f", "''"}]}], "-", 
+      RowBox[{
+       RowBox[{"c", "(", 
+        RowBox[{"-", "c"}], ")"}], 
+       RowBox[{"g", "''"}]}]}], "=", 
+     RowBox[{
+      RowBox[{
+       SuperscriptBox["c", "2"], 
+       RowBox[{"f", "''"}]}], "+", 
+      RowBox[{
+       SuperscriptBox["c", "2"], 
+       RowBox[{"g", "''"}]}]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{"\[PartialD]", "u"}], 
+     RowBox[{"\[PartialD]", "x"}]], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"f", "'"}], 
+       FractionBox[
+        RowBox[{"\[PartialD]", 
+         RowBox[{"(", 
+          RowBox[{"x", "+", 
+           RowBox[{"c", " ", "t"}]}], ")"}]}], 
+        RowBox[{"\[PartialD]", "x"}]]}], "+", 
+      RowBox[{
+       RowBox[{"g", "'"}], 
+       FractionBox[
+        RowBox[{"\[PartialD]", 
+         RowBox[{"(", 
+          RowBox[{"x", "-", 
+           RowBox[{"c", " ", "t"}]}], ")"}]}], 
+        RowBox[{"\[PartialD]", "x"}]]}]}], "=", 
+     RowBox[{
+      RowBox[{"f", "'"}], "+", 
+      RowBox[{"g", "'"}]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[PartialD]", "2"], "u"}], 
+     RowBox[{"\[PartialD]", 
+      SuperscriptBox["x", "2"]}]], "=", 
+    RowBox[{
+     RowBox[{"f", "''"}], "+", 
+     RowBox[{"g", "''"}]}]}], TraditionalForm]]],
+ "\n\t\nSubstituting these into the wave equation we have:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[PartialD]", "2"], "u"}], 
+      RowBox[{"\[PartialD]", 
+       SuperscriptBox["t", "2"]}]], "-", 
+     RowBox[{
+      SuperscriptBox["c", "2"], 
+      FractionBox[
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["u", "2"]}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["x", "2"]}]]}]}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       SuperscriptBox["c", "2"], "(", 
+       RowBox[{
+        RowBox[{"f", "''"}], "+", 
+        RowBox[{"g", "''"}]}], ")"}], "-", 
+      RowBox[{
+       SuperscriptBox["c", "2"], "(", 
+       RowBox[{
+        RowBox[{"f", "''"}], "+", 
+        RowBox[{"g", "''"}]}], ")"}]}], "=", "0"}]}], TraditionalForm]]],
+ "\n\t\nThe solution to the problem is found, then, if we can find a pair of \
+functions of the form whose sum matches the initial conditions and the \
+boundary conditions for the problem.  If the initial conditions are:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"y", "(", 
+      RowBox[{"x", ",", "0"}], ")"}], "=", 
+     RowBox[{"f", "(", "x", ")"}]}], "\[IndentingNewLine]"}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"\[PartialD]", "u"}], 
+      RowBox[{"\[PartialD]", "t"}]], 
+     RowBox[{"(", 
+      RowBox[{"x", ",", "0"}], ")"}]}], "=", 
+    RowBox[{"g", "(", "x", ")"}]}], TraditionalForm]}]],
+ "\n\t\nthen ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"u", "[", 
+    RowBox[{"x", ",", "t"}], "]"}], TraditionalForm]]],
+ " is given by\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"u", "(", 
+     RowBox[{"x", ",", "t"}], ")"}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", "2"], "[", 
+      RowBox[{
+       RowBox[{"f", "(", 
+        RowBox[{"x", "+", 
+         RowBox[{"c", " ", "t"}]}], ")"}], "+", 
+       RowBox[{"f", "(", 
+        RowBox[{"x", "-", 
+         RowBox[{"c", " ", "t"}]}], ")"}]}], "]"}], "+", 
+     RowBox[{
+      FractionBox["1", 
+       RowBox[{"2", "c"}]], 
+      RowBox[{
+       SubsuperscriptBox["\[Integral]", 
+        RowBox[{"x", "-", 
+         RowBox[{"c", " ", "t"}]}], 
+        RowBox[{"x", "+", 
+         RowBox[{"c", " ", "t"}]}]], 
+       RowBox[{
+        RowBox[{"g", "(", "v", ")"}], 
+        RowBox[{"\[DifferentialD]", "v"}]}]}]}]}]}], TraditionalForm]]],
+ "\n\t\nWe are now in a position to verify that our numerical procedure gives \
+the ",
+ StyleBox["exact ",
+  FontSlant->"Italic"],
+ "solution (except for roundoff), provided that two lines of correct ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]]],
+ "-values are known.  We show that the solution to the difference equation is \
+a solution to the differential equation.  Consider the function\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", "i", "j"], "=", 
+    RowBox[{
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", "i"], "+", 
+       RowBox[{"c", " ", 
+        SubscriptBox["t", "j"]}]}], ")"}], "+", 
+     RowBox[{"g", "(", 
+      RowBox[{
+       SubscriptBox["x", "i"], "-", 
+       RowBox[{"c", " ", 
+        SubscriptBox["t", "j"]}]}], ")"}]}]}], TraditionalForm]]],
+ "          (*)\n\t\nBecause we chose ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FormBox[
+     RowBox[{"(", 
+      RowBox[{"c", " ", 
+       FractionBox[
+        RowBox[{"\[CapitalDelta]", " ", "t"}], 
+        RowBox[{"\[CapitalDelta]", " ", "x"}]]}], ")"}],
+     TraditionalForm], "=", "1"}], TraditionalForm]]],
+ ", then ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"\[CapitalDelta]", " ", "x"}], "=", 
+    RowBox[{"c", " ", "\[CapitalDelta]", " ", "t"}]}], TraditionalForm]]],
+ ".  If we write ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "i"], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["t", "j"], TraditionalForm]]],
+ " in terms of starting values ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["x", "0"], TraditionalForm]]],
+ ", and ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["t", "0"], TraditionalForm]]],
+ ":\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["x", "i"], "=", 
+     RowBox[{
+      SubscriptBox["x", "0"], "+", 
+      RowBox[{"i", " ", "\[CapitalDelta]", " ", "x"}]}]}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{"c", " ", 
+     SubscriptBox["t", "j"]}], "=", 
+    RowBox[{
+     RowBox[{"c", "(", 
+      RowBox[{
+       SubscriptBox["t", "0"], "+", 
+       RowBox[{"j", " ", "\[CapitalDelta]", " ", "t"}]}], ")"}], "=", 
+     RowBox[{
+      RowBox[{"c", " ", "j", " ", "\[CapitalDelta]", " ", "t"}], " ", "=", 
+      " ", 
+      RowBox[{"j", " ", "\[CapitalDelta]", " ", "x"}]}]}]}], 
+   TraditionalForm]}]],
+ "\n\t\nsubstituting back into (*) gives\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", "i", "j"], "=", 
+    RowBox[{
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{"i", " ", "\[CapitalDelta]", " ", "x"}], "+", 
+       RowBox[{"j", " ", "\[CapitalDelta]", " ", "x"}]}], ")"}], "+", 
+     RowBox[{"g", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{"i", " ", "\[CapitalDelta]", " ", "x"}], "-", 
+       RowBox[{"j", " ", "\[CapitalDelta]", " ", "x"}]}], ")"}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"     ", 
+    RowBox[{"=", 
+     RowBox[{
+      RowBox[{"f", "(", 
+       RowBox[{
+        SubscriptBox["x", "0"], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"i", "+", "j"}], ")"}], "\[CapitalDelta]", " ", "x"}]}], 
+       ")"}], "+", 
+      RowBox[{"g", "(", 
+       RowBox[{
+        SubscriptBox["x", "0"], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"i", "-", "j"}], ")"}], " ", "\[CapitalDelta]", " ", 
+         "x"}]}], ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t\nnow substitute back into the difference equation that defines our \
+numerical procedure we have:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", "i", 
+     RowBox[{"j", "+", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      SubsuperscriptBox["u", 
+       RowBox[{"i", "-", "1"}], "j"], "+", 
+      SubsuperscriptBox["u", 
+       RowBox[{"i", "+", "1"}], "j"], "-", 
+      SubsuperscriptBox["u", "i", 
+       RowBox[{"j", "-", "1"}]]}], "=", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"i", "-", "1", "+", "j"}], ")"}], "\[CapitalDelta]", " ", 
+        "x"}]}], ")"}]}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                        ", 
+    RowBox[{"+", 
+     RowBox[{"g", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"i", "-", "1", "-", "j"}], ")"}], "\[CapitalDelta]", " ", 
+        "x"}]}], ")"}]}], " "}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                        ", 
+    RowBox[{"+", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"i", "+", "1", "+", "j"}], ")"}], "\[CapitalDelta]", " ", 
+        "x"}]}], ")"}]}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                        ", 
+    RowBox[{"+", 
+     RowBox[{"g", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"i", "+", "1", "-", "j"}], ")"}], "\[CapitalDelta]", " ", 
+        "x"}]}], ")"}]}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                        ", 
+    RowBox[{"-", 
+     RowBox[{"f", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"i", "+", "j", "-", "1"}], ")"}], "\[CapitalDelta]", " ", 
+        "x"}]}], ")"}]}]}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                        ", 
+    RowBox[{"-", 
+     RowBox[{"g", "(", 
+      RowBox[{
+       SubscriptBox["x", "0"], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"i", "-", "j", "+", "1"}], ")"}], "\[CapitalDelta]", " ", 
+        "x"}]}], ")"}]}], "\[IndentingNewLine]", 
+    "                                                   "}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                                                        ", 
+    RowBox[{"=", 
+     RowBox[{
+      RowBox[{"f", "(", 
+       RowBox[{
+        SubscriptBox["x", "0"], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"i", "+", "j", "+", "1"}], ")"}], "\[CapitalDelta]", " ", 
+         "x"}]}], ")"}], "+", 
+      RowBox[{"g", "(", 
+       RowBox[{
+        SubscriptBox["x", "0"], "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"i", "-", "j", "-", "1"}], ")"}], "\[CapitalDelta]x"}]}], 
+       ")"}]}]}]}], TraditionalForm]}]],
+ "\n\t\nWhat this result illustrates is that if two previous lines of the \
+numerical solution are of the form of (*), and hence exact solutions of the \
+wave equation), it follows that the values on the next line are exact \
+solutions also.  Seems like our choice of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FormBox[
+     RowBox[{"(", 
+      RowBox[{"c", " ", 
+       FractionBox[
+        RowBox[{"\[CapitalDelta]", " ", "t"}], 
+        RowBox[{"\[CapitalDelta]", " ", "x"}]]}], ")"}],
+     TraditionalForm], "=", "1"}], TraditionalForm]]],
+ " was pretty good."
+}], "Text",
+ CellChangeTimes->{{3.500080488114423*^9, 3.5000808723380127`*^9}, {
+  3.500081204483036*^9, 3.500081500624806*^9}, {3.5000816930344057`*^9, 
+  3.50008180922044*^9}, {3.500081850591832*^9, 3.500082269426663*^9}, {
+  3.500082308201262*^9, 3.500082712978632*^9}, {3.5000828223147573`*^9, 
+  3.500082916026244*^9}, {3.500082954209609*^9, 3.500082997515181*^9}, {
+  3.500086400957798*^9, 3.500086402110774*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Comparison to the d\[CloseCurlyQuote]Alembert Solution \
+(cont\[CloseCurlyQuote]d.)\
+\>", "Section",
+ CellChangeTimes->{{3.500082735949997*^9, 3.50008274287538*^9}}],
+
+Cell[TextData[{
+ "We have seen that if two lines in the numerical solution are exact, then \
+all subsequent lines can be exact as well (neglecting roundoff, of course).  \
+The first line will always be exact because it is the initially given values. \
+ From what we learned previously we know a very good way to get the second \
+line of ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " values.  Using the solution that was found with the given velocity \
+boundary condition and employing it at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    RowBox[{"\[CapitalDelta]", " ", "t"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", we have\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{"u", "[", 
+     RowBox[{
+      SubscriptBox["x", "i"], ",", 
+      SubscriptBox["t", "i"]}], "]"}], "=", 
+    RowBox[{
+     SubsuperscriptBox["y", "i", "1"], "=", 
+     RowBox[{
+      RowBox[{
+       FractionBox["1", "2"], "[", 
+       RowBox[{
+        RowBox[{"f", "(", 
+         RowBox[{
+          SubscriptBox["x", "i"], "+", 
+          RowBox[{"\[CapitalDelta]", " ", "x"}]}], ")"}], "+", 
+        RowBox[{"f", "(", 
+         RowBox[{
+          SubscriptBox["x", "i"], "-", 
+          RowBox[{"\[CapitalDelta]", " ", "x"}]}], ")"}]}], "]"}], "+", 
+      RowBox[{
+       FractionBox["1", 
+        RowBox[{"2", "c"}]], 
+       RowBox[{
+        SubsuperscriptBox["\[Integral]", 
+         RowBox[{
+          SubscriptBox["x", "i"], "-", 
+          RowBox[{"\[CapitalDelta]", " ", "x"}]}], 
+         RowBox[{
+          SubscriptBox["x", "i"], "+", 
+          RowBox[{"\[CapitalDelta]", " ", "x"}]}]], 
+        RowBox[{
+         RowBox[{"g", "(", "v", ")"}], 
+         RowBox[{"\[DifferentialD]", "v"}]}]}]}]}]}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{"                               ", 
+    RowBox[{"=", 
+     RowBox[{
+      RowBox[{
+       FractionBox["1", "2"], "[", 
+       RowBox[{
+        SubsuperscriptBox["y", 
+         RowBox[{"i", "+", "1"}], "0"], "+", 
+        SubsuperscriptBox["y", 
+         RowBox[{"i", "-", "1"}], "0"]}], "]"}], "+", 
+      RowBox[{
+       FractionBox["1", 
+        RowBox[{"2", "c"}]], 
+       RowBox[{
+        SubsuperscriptBox["\[Integral]", 
+         RowBox[{
+          SubscriptBox["x", "i"], "-", "1"}], 
+         RowBox[{
+          SubscriptBox["x", "i"], "+", "1"}]], 
+        RowBox[{
+         RowBox[{"g", "(", "v", ")"}], 
+         RowBox[{"\[DifferentialD]", "v"}]}]}]}]}]}]}], TraditionalForm]}],
+  FormatType->"TraditionalForm"],
+ "\n\t\nIf the initial velocity is zero, then ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"g", "(", "x", ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is zero everywhere and the second term above becomes irrelevant.  We will \
+always get exact answers using our numerical procedure in these cases."
+}], "Text",
+ CellChangeTimes->{{3.500083002322908*^9, 3.500083090173707*^9}, {
+   3.500083132753901*^9, 3.5000833231926947`*^9}, {3.5000833913460503`*^9, 
+   3.500083466271225*^9}, {3.500083501132146*^9, 3.5000835610353603`*^9}, 
+   3.500086408950605*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Pseudocode for Wave-Equation Finite Difference\
+\>", "Section",
+ CellChangeTimes->{{3.500083757908659*^9, 3.50008377329036*^9}}],
+
+Cell[TextData[{
+ "To approximate the solution to the wave equation\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["\[PartialD]", "2"], "u"}], 
+        RowBox[{"\[PartialD]", 
+         SuperscriptBox["t", "2"]}]], 
+       RowBox[{"(", 
+        RowBox[{"x", ",", "t"}], ")"}]}], "-", 
+      RowBox[{
+       SuperscriptBox["c", "2"], 
+       FractionBox[
+        RowBox[{
+         SuperscriptBox["\[PartialD]", "2"], "u"}], 
+        RowBox[{"\[PartialD]", 
+         SuperscriptBox["x", "2"]}]], 
+       RowBox[{"(", 
+        RowBox[{"x", ",", "t"}], ")"}]}]}], "=", "0"}], ",", "    ", 
+    RowBox[{"0", "<", " ", "x", " ", "<", " ", "l"}], ",", "    ", 
+    RowBox[{"0", "<", " ", "t", "<", "T"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nsubject to the boundary conditions:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"u", "(", 
+      RowBox[{"0", ",", "t"}], ")"}], "=", 
+     RowBox[{
+      RowBox[{"u", "(", 
+       RowBox[{"l", ",", "t"}], ")"}], "=", "0"}]}], ",", "  ", 
+    RowBox[{"0", "<", "t", "<", "T"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nand the initial conditions:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"u", "(", 
+      RowBox[{"x", ",", "t"}], ")"}], "=", 
+     RowBox[{"f", "(", "x", ")"}]}], ",", "    ", 
+    RowBox[{"0", "\[LessEqual]", " ", "x", " ", "\[LessEqual]", " ", "l"}]}], 
+   TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"\[PartialD]", "u"}], 
+       RowBox[{"\[PartialD]", "t"}]], 
+      RowBox[{"(", 
+       RowBox[{"x", ",", "0"}], ")"}]}], "=", 
+     RowBox[{"g", "(", "x", ")"}]}], ",", "   ", 
+    RowBox[{"0", "\[LessEqual]", "x", "\[LessEqual]", " ", "l"}]}], 
+   TraditionalForm]}],
+  FormatType->"TraditionalForm"],
+ "\n\t\nTo get approximations ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["w", 
+    RowBox[{"i", ",", "j"}]], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"u", "(", 
+    RowBox[{
+     SubscriptBox["x", "i"], ",", 
+     SubscriptBox["t", "j"]}], ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " for each ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "0"}], ",", "\[Ellipsis]", ",", "m"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "0"}], ",", "\[Ellipsis]", ",", "N"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nStep 1.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    RowBox[{"l", "/", "m"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nStep 2.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", "=", 
+    RowBox[{"T", "/", "N"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nStep 3.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Lambda]", "=", 
+    RowBox[{"k", " ", 
+     RowBox[{"c", "/", "h"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\nStep 4.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "1"}], ",", "\[Ellipsis]", ",", " ", "N"}], 
+   TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "  do Steps 5-6\n\t\tStep 5.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"0", ",", " ", "j"}]], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\tStep 6.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"m", ",", " ", "j"}]], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\t\nStep 7.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"0", ",", " ", "0"}]], "=", 
+    RowBox[{"f", "(", "0", ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nStep 8.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"m", ",", " ", "0"}]], "=", 
+    RowBox[{"f", "(", "l", ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\nStep 9.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ",", " ", "\[Ellipsis]", ",", 
+    RowBox[{"m", "-", "1"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " do Steps 11-12\n\t\t\n\t\tStep 10.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"i", ",", " ", "0"}]], "=", 
+    RowBox[{"f", "(", 
+     RowBox[{"i", " ", "h"}], ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\tStep 11.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"i", ",", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        SuperscriptBox["\[Lambda]", "2"]}], ")"}], 
+      RowBox[{"f", "(", 
+       RowBox[{"i", " ", "h"}], ")"}]}], "+", 
+     RowBox[{
+      FractionBox[
+       SuperscriptBox["\[Lambda]", "2"], "2"], "[", 
+      RowBox[{
+       RowBox[{"f", "(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"i", "+", "1"}], ")"}], "h"}], ")"}], "+", 
+       RowBox[{"f", "(", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"i", "-", "1"}], ")"}], "h"}], ")"}]}], "]"}], "+", 
+     RowBox[{"k", " ", 
+      RowBox[{"g", "(", 
+       RowBox[{"i", " ", "h"}], ")"}]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\t\nStep 12.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "1"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"N", "-", "1"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " do Steps 13-14\n\n\t\tStep 13.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "1"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"m", "-", "1"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " do Step 14\n\t\t\n\t\t\t\tStep 14.  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", 
+     RowBox[{"i", ",", 
+      RowBox[{"j", "+", "1"}]}]], "=", 
+    RowBox[{
+     RowBox[{"2", 
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        SuperscriptBox["\[Lambda]", "2"]}], ")"}], 
+      SubscriptBox["w", 
+       RowBox[{"i", ",", " ", "j"}]]}], "+", 
+     RowBox[{
+      SuperscriptBox["\[Lambda]", "2"], "(", 
+      RowBox[{
+       SubscriptBox["w", 
+        RowBox[{
+         RowBox[{"i", "+", "1"}], ",", " ", "j"}]], "+", 
+       SubscriptBox["w", 
+        RowBox[{
+         RowBox[{"i", "-", "1"}], ",", " ", "j"}]]}], ")"}], "+", 
+     SubscriptBox["w", 
+      RowBox[{"i", ",", 
+       RowBox[{"j", "-", "1"}]}]]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\t\t\t\nStep 15.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "0"}], ",", "\[Ellipsis]", ",", "N"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " do Steps 16-18\n\n\t\tStep 16.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"t", "=", 
+    RowBox[{"j", " ", "k"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\t\n\t\tStep 17.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"i", "=", "0"}], ",", "\[Ellipsis]", ",", "m"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " do Step 18\n\t\t\n\t\t\tStep 18.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"x", "=", 
+    RowBox[{"i", " ", "h"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n"
+}], "Text",
+ CellChangeTimes->{{3.5000837778908377`*^9, 3.500083970966711*^9}, {
+  3.500084029147758*^9, 3.5000841611930943`*^9}, {3.500084239382637*^9, 
+  3.500084245641323*^9}, {3.5000843385821953`*^9, 3.500084869335952*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+The Wave Equation in Two Dimensions\
+\>", "Section",
+ CellChangeTimes->{{3.500085006535849*^9, 3.500085016493712*^9}}],
+
+Cell[TextData[{
+ "The finite-difference method can be applied to hyperbolic \
+partial-differential equations in tow or more space dimensions.  A typical \
+problem is the vibrating membrane.  Consider a thin flexible membrane \
+stretched over a rectangular frame and set to vibrating.  A development \
+analogous to that for one dimension gives:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[PartialD]", "2"], "u"}], 
+     RowBox[{"\[PartialD]", 
+      SuperscriptBox["t", "2"]}]], "=", 
+    RowBox[{
+     SuperscriptBox["c", "2"], "(", 
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[PartialD]", "2"], "u"}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["x", "2"]}]], "+", 
+      FractionBox[
+       RowBox[{
+        SuperscriptBox["\[PartialD]", "2"], "u"}], 
+       RowBox[{"\[PartialD]", 
+        SuperscriptBox["x", "2"]}]]}], ")"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nReplacing each derivative by its central difference approximation, \
+and using ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"h", "=", 
+    RowBox[{
+     RowBox[{"\[CapitalDelta]", " ", "x"}], "=", 
+     RowBox[{"\[CapitalDelta]", " ", "y"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", gives\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SubsuperscriptBox["u", 
+       RowBox[{"i", ",", "j"}], 
+       RowBox[{"k", "+", "1"}]], "-", 
+      RowBox[{"2", 
+       SubsuperscriptBox["u", 
+        RowBox[{"i", ",", "j"}], "k"]}], "+", 
+      SubsuperscriptBox["u", 
+       RowBox[{"i", ",", "j"}], 
+       RowBox[{"k", "-", "1"}]]}], 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[CapitalDelta]", " ", "t"}], ")"}], "2"]], "=", 
+    RowBox[{
+     SuperscriptBox["c", "2"], 
+     FractionBox[
+      RowBox[{
+       SubsuperscriptBox["u", 
+        RowBox[{
+         RowBox[{"i", "+", "1"}], ",", "j"}], "k"], "+", 
+       SubsuperscriptBox["u", 
+        RowBox[{
+         RowBox[{"i", "-", "1"}], ",", "j"}], "k"], "+", 
+       SubsuperscriptBox["u", 
+        RowBox[{"i", ",", 
+         RowBox[{"j", "+", "1"}]}], "k"], "+", 
+       SubsuperscriptBox["u", 
+        RowBox[{"i", ",", 
+         RowBox[{"j", "-", "1"}]}], "k"], "-", 
+       RowBox[{"4", " ", 
+        SubsuperscriptBox["u", 
+         RowBox[{"i", ",", "j"}], "k"]}]}], 
+      SuperscriptBox["h", "2"]]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nSolving for displacement at time ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["t", 
+     RowBox[{"k", "+", "1"}]], ","}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " we get\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", 
+     RowBox[{"i", ",", "j"}], 
+     RowBox[{"k", "+", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"c", " ", 
+         FractionBox[
+          RowBox[{"\[CapitalDelta]", " ", "t"}], "h"]}], ")"}], "2"], 
+      RowBox[{"{", GridBox[{
+         {" ", "1", " "},
+         {"1", "0", "1"},
+         {" ", "1", " "}
+        }], "}"}], 
+      SubsuperscriptBox["u", 
+       RowBox[{"i", ",", "j"}], "k"]}], "-", 
+     SubsuperscriptBox["u", 
+      RowBox[{"i", ",", "j"}], 
+      RowBox[{"k", "-", "1"}]], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"2", "-", 
+        RowBox[{"4", " ", 
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{"c", " ", 
+            FractionBox[
+             RowBox[{"\[CapitalDelta]", " ", "t"}], "h"]}], ")"}], "2"]}]}], 
+       ")"}], 
+      SubsuperscriptBox["u", 
+       RowBox[{"i", ",", "j"}], "k"]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nThis time we let ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"c", " ", 
+      FractionBox[
+       RowBox[{"\[CapitalDelta]", " ", "t"}], "h"]}], ")"}], "=", 
+    FractionBox["1", "2"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", the last term vanishes and we have:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", 
+     RowBox[{"i", ",", "j"}], 
+     RowBox[{"k", "+", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", "2"], 
+      RowBox[{"{", GridBox[{
+         {" ", "1", " "},
+         {"1", "0", "1"},
+         {" ", "1", " "}
+        }], "}"}], 
+      SubsuperscriptBox["u", 
+       RowBox[{"i", ",", "j"}], "k"]}], "-", 
+     SubsuperscriptBox["u", 
+      RowBox[{"i", ",", "j"}], 
+      RowBox[{"k", "-", "1"}]]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nHere the ratio ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"c", " ", 
+      FractionBox[
+       RowBox[{"\[CapitalDelta]", " ", "t"}], "h"]}], ")"}], "=", 
+    FractionBox["1", "2"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the maximum value for stability, however, in contrast to the \
+one-dimensional wave equation we do not get exact answers from the numerical \
+procedure.  The pseudocode is not constructed here, but is straightforward to \
+implement."
+}], "Text",
+ CellChangeTimes->{{3.500085021406313*^9, 3.5000855126355143`*^9}, {
+  3.500085636326676*^9, 3.5000856625817413`*^9}, {3.500086026012827*^9, 
+  3.500086315255207*^9}, {3.500086412727709*^9, 3.500086431194632*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Elliptic Partial Differential Equations\
+\>", "Section",
+ CellChangeTimes->{{3.500250572489024*^9, 3.500250581633717*^9}}],
+
+Cell[TextData[{
+ "Steady-state potential distribution problems fall into the class of \
+elliptic equations.  Heat flow problems are a common example of elliptic \
+equations, in two dimensions this equation looks as follows:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[PartialD]", "2"], "u"}], 
+      RowBox[{"\[PartialD]", 
+       SuperscriptBox["x", "2"]}]], "+", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[PartialD]", "2"], "u"}], 
+      RowBox[{"\[PartialD]", 
+       SuperscriptBox["y", "2"]}]]}], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["\[Del]", "2"], "u"}], "=", "0"}]}], TraditionalForm]]],
+ "  (*)\n\t\nwhere the operator\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Del]", "2"], 
+    RowBox[{"=", 
+     RowBox[{"(", 
+      RowBox[{
+       FractionBox[
+        SuperscriptBox["\[PartialD]", "2"], 
+        RowBox[{"\[PartialD]", 
+         SuperscriptBox["x", "2"]}]], 
+       RowBox[{"+", 
+        FractionBox[
+         SuperscriptBox["\[PartialD]", "2"], 
+         RowBox[{"\[PartialD]", 
+          SuperscriptBox["y", "2"]}]]}]}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\nis called the ",
+ StyleBox["Laplacian",
+  FontSlant->"Italic"],
+ " and the equation (*) is known as ",
+ StyleBox["Laplace",
+  FontSlant->"Italic"],
+ "\[CloseCurlyQuote]",
+ StyleBox["s equation",
+  FontSlant->"Italic"],
+ ".  With Laplace\[CloseCurlyQuote]s equation, we assume that no heat is \
+being generated at points in the domain, as by electric heaters embedded in \
+it, nor does any heat removal take place.  In the presence of such \
+\[OpenCurlyDoubleQuote]sources\[CloseCurlyDoubleQuote] or \
+\[OpenCurlyDoubleQuote]sinks\[CloseCurlyDoubleQuote], we would not equate the \
+net flow into the domain to zero, but the net flow into the domain would \
+equal the net rate of heat removal.  Assuming this removal rate to be a \
+function of the location we would have:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["\[Del]", "2"], "u"}], "=", 
+    RowBox[{"f", "(", 
+     RowBox[{"x", ",", "y"}], ")"}]}], TraditionalForm]]],
+ "\n\t\nThis equation is called ",
+ StyleBox["Poisson\[CloseCurlyQuote]s equation.",
+  FontSlant->"Italic"],
+ "  These two equations include most of the physical applications of elliptic \
+partial-differential equations.  Our scheme for solving these will be similar \
+to that of solving hyperbolic equations through the use of the \
+finite-difference method.\n\nReplacing the derivatives by difference \
+quotients that approximate the derivatives at the point ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["x", "i"], ",", 
+     SubscriptBox["y", "i"]}], ")"}], TraditionalForm]]],
+ ", we get\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["\[Del]", "2"], 
+     RowBox[{"u", "(", 
+      RowBox[{
+       SubscriptBox["x", "i"], ",", 
+       SubscriptBox["y", "i"]}], ")"}]}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        RowBox[{"u", "(", 
+         RowBox[{
+          SubscriptBox["x", 
+           RowBox[{"i", "+", "1"}]], ",", 
+          SubscriptBox["y", "j"]}], ")"}], "-", 
+        RowBox[{"2", " ", 
+         RowBox[{"u", "(", 
+          RowBox[{
+           SubscriptBox["x", "i"], ",", 
+           SubscriptBox["y", "i"]}], ")"}]}], "+", 
+        RowBox[{"u", "(", 
+         RowBox[{
+          SubscriptBox["x", 
+           RowBox[{"i", "-", "1"}]], ",", 
+          SubscriptBox["y", "j"]}], ")"}]}], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]], "+", 
+      FractionBox[
+       RowBox[{
+        RowBox[{"u", "(", 
+         RowBox[{
+          SubscriptBox["x", "i"], ",", 
+          SubscriptBox["y", 
+           RowBox[{"j", "+", "1"}]]}], ")"}], "-", 
+        RowBox[{"2", " ", 
+         RowBox[{"u", "(", 
+          RowBox[{
+           SubscriptBox["x", "i"], ",", 
+           SubscriptBox["y", "i"]}], ")"}]}], "+", 
+        RowBox[{"u", "(", 
+         RowBox[{
+          SubscriptBox["x", "i"], ",", 
+          SubscriptBox["y", 
+           RowBox[{"j", "-", "1"}]]}], ")"}]}], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[CapitalDelta]", " ", "y"}], ")"}], "2"]]}], "=", "0"}]}], 
+   TraditionalForm]]],
+ "\n\t\nAs a convenience we will use double subscripts on ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]]],
+ " indicate the ",
+ Cell[BoxData[
+  FormBox["x", TraditionalForm]]],
+ "- and ",
+ Cell[BoxData[
+  FormBox["y", TraditionalForm]]],
+ "-values:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["\[Del]", "2"], 
+     SubscriptBox["u", 
+      RowBox[{"i", ",", "j"}]]}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SubscriptBox["u", 
+         RowBox[{
+          RowBox[{"i", "+", "1"}], ",", "j"}]], "-", 
+        RowBox[{"2", 
+         SubscriptBox["u", 
+          RowBox[{"i", ",", "j"}]]}], "+", 
+        SubscriptBox["u", 
+         RowBox[{
+          RowBox[{"i", "-", "1"}], ",", "j"}]]}], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]], "+", 
+      FractionBox[
+       RowBox[{
+        SubscriptBox["u", 
+         RowBox[{"i", ",", 
+          RowBox[{"j", "+", "1"}]}]], "-", 
+        RowBox[{"2", 
+         SubscriptBox["u", 
+          RowBox[{"i", ",", "j"}]]}], "+", 
+        SubscriptBox["u", 
+         RowBox[{"i", ",", 
+          RowBox[{"j", "-", "1"}]}]]}], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{"\[CapitalDelta]", " ", "y"}], ")"}], "2"]]}], "=", "0"}]}], 
+   TraditionalForm]]],
+ "\n\t\nIt is common to take ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"\[CapitalDelta]", " ", "x"}], "=", 
+    RowBox[{
+     RowBox[{"\[CapitalDelta]", " ", "y"}], "=", "h"}]}], TraditionalForm]]],
+ ", resulting in considerable simplification, so that\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["\[Del]", "2"], 
+     SubscriptBox["u", 
+      RowBox[{"i", ",", "j"}]]}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", 
+       SuperscriptBox["h", "2"]], "[", 
+      RowBox[{
+       SubscriptBox["u", 
+        RowBox[{
+         RowBox[{"i", "+", "1"}], ",", "j"}]], "+", 
+       SubscriptBox["u", 
+        RowBox[{
+         RowBox[{"i", "-", "1"}], ",", "j"}]], "+", 
+       SubscriptBox["u", 
+        RowBox[{"i", ",", 
+         RowBox[{"j", "-", "1"}]}]], "+", 
+       SubscriptBox["u", 
+        RowBox[{"i", ",", 
+         RowBox[{"j", "+", "1"}]}]], "-", 
+       RowBox[{"4", 
+        SubscriptBox["u", 
+         RowBox[{"i", ",", "j"}]]}]}], "]"}], "=", "0"}]}], TraditionalForm]]],
+ "\n\nNote that five points are involved in the relationship above.  Points \
+to the right, left, above, and below the central point ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["x", "i"], ",", 
+     SubscriptBox["y", "i"]}], ")"}], TraditionalForm]]],
+ ".  It is convenient to represent the relationship pictorially, where the \
+linear combination of ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]]],
+ "\[CloseCurlyQuote]s is represented symbolically:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["\[Del]", "2"], 
+     SubscriptBox["u", 
+      RowBox[{"i", ",", "j"}]]}], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", 
+       SuperscriptBox["h", "2"]], 
+      RowBox[{"{", GridBox[{
+         {" ", "1", " "},
+         {"1", 
+          RowBox[{"-", "4"}], "1"},
+         {" ", "1", " "}
+        }], "}"}], 
+      SubscriptBox["u", 
+       RowBox[{"i", ",", "j"}]]}], "=", "0"}]}], TraditionalForm]]],
+ "\n\t\nThe representation of the Laplacian operator by the pictorial \
+operator that represents the linear combination of ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]]],
+ "-values is fundamental to the finite-difference method for elliptic \
+partial-differential equations.  The approximation has ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["h", "2"], ")"}], TraditionalForm]]],
+ " error, provided that ",
+ Cell[BoxData[
+  FormBox["u", TraditionalForm]]],
+ " is sufficiently smooth.  This formula is referred to as the five-point or \
+five-point star formula."
+}], "Text",
+ CellChangeTimes->{{3.500250988404016*^9, 3.500251131900016*^9}, {
+  3.500251215384297*^9, 3.5002513409039183`*^9}, {3.500251376152862*^9, 
+  3.5002514227475233`*^9}, {3.500251625026932*^9, 3.500251899272492*^9}, {
+  3.500251931390512*^9, 3.500251973427579*^9}, {3.5002524764288177`*^9, 
+  3.5002529934602623`*^9}, {3.5002530334002447`*^9, 3.500253188048658*^9}, {
+  3.500253280480604*^9, 3.5002534385615473`*^9}, {3.500261632665564*^9, 
+  3.5002616381307583`*^9}, {3.500318852542399*^9, 3.500318857698312*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["More on Laplace\[CloseCurlyQuote]s Equation", "Section",
+ CellChangeTimes->{{3.500254981314945*^9, 3.500254987079335*^9}}],
+
+Cell[TextData[{
+ "Using the finite-difference method on Laplace\[CloseCurlyQuote]s equation \
+we will always have a ",
+ StyleBox["diagonally dominated ",
+  FontSlant->"Italic"],
+ "coefficient matrix like the one below.  The 1\[CloseCurlyQuote]s that \
+appear far from the diagonal represent the boundary conditions (the diagonal \
+will always look the same, but the position of the 1\[CloseCurlyQuote]s far \
+from the diagonal may be in a different location from the one shown)."
+}], "Text",
+ CellChangeTimes->{{3.500257537682394*^9, 3.500257671434668*^9}, {
+  3.500258126926077*^9, 3.500258187815283*^9}, {3.500313848627088*^9, 
+  3.500313848959181*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"n", "=", "20"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mat", "=", 
+   RowBox[{"ConstantArray", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", "n"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"mat", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"mat", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"i", "+", "1"}], ",", "i"}], "}"}], "\[Rule]", "1"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"mat", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"mat", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"i", "-", "1"}], ",", "i"}], "}"}], "\[Rule]", "1"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"mat", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"mat", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"i", ",", "i"}], "}"}], "\[Rule]", 
+         RowBox[{"-", "4"}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"mat", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"mat", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"i", "+", "5"}], ",", "i"}], "}"}], "\[Rule]", "1"}]}], 
+       "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"mat", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"mat", ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"i", "-", "5"}], ",", "i"}], "}"}], "\[Rule]", "1"}]}], 
+       "]"}]}], ";"}], "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", "1", ",", "n"}], "}"}]}], "\[IndentingNewLine]", "]"}],
+   ";", 
+  RowBox[{"MatrixForm", "[", "mat", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.5002550196690483`*^9, 3.500255095395122*^9}, {
+   3.500255339341015*^9, 3.500255347594161*^9}, {3.500255457625642*^9, 
+   3.500255532913898*^9}, {3.5002555872365437`*^9, 3.500255705224531*^9}, {
+   3.500255772782057*^9, 3.5002558366396847`*^9}, {3.500255908910817*^9, 
+   3.500255997168457*^9}, {3.500256059922949*^9, 3.5002561434087963`*^9}, {
+   3.500256243754559*^9, 3.500256351351698*^9}, {3.500256395157815*^9, 
+   3.5002564391002617`*^9}, {3.500256479793394*^9, 3.500256493217332*^9}, {
+   3.5002565810346203`*^9, 3.50025663857071*^9}, {3.5002567295311737`*^9, 
+   3.5002567504095573`*^9}, {3.5002567873399363`*^9, 3.50025688042931*^9}, {
+   3.5002569732474546`*^9, 3.50025699635065*^9}, {3.500257032984735*^9, 
+   3.5002571107975607`*^9}, {3.500257145470405*^9, 3.500257263899467*^9}, {
+   3.5002574081106052`*^9, 3.500257528736253*^9}, 3.5003189123745213`*^9}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0", "0", "0", "0", "0", "0", "0"},
+     {"1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0", "0", "0", "0", "0", "0"},
+     {"0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0", "0", "0", "0", "0"},
+     {"0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0", "0", "0", "0"},
+     {"0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0", "0", "0"},
+     {"1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0", "0"},
+     {"0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0", "0"},
+     {"0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0", "0"},
+     {"0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
+      "0"},
+     {"0", "0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0", "0"},
+     {"0", "0", "0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0", "0"},
+     {"0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0", "0"},
+     {"0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0", "0"},
+     {"0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1", "0"},
+     {"0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0", "1"},
+     {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
+      "1", 
+      RowBox[{"-", "4"}], "1", "0", "0", "0"},
+     {"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
+      "0", "1", 
+      RowBox[{"-", "4"}], "1", "0", "0"},
+     {"0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", 
+      "0", "0", "1", 
+      RowBox[{"-", "4"}], "1", "0"},
+     {"0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", 
+      "0", "0", "0", "1", 
+      RowBox[{"-", "4"}], "1"},
+     {"0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
+      "1", "0", "0", "0", "1", 
+      RowBox[{"-", "4"}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.5002570604472647`*^9, 3.5002571111801357`*^9}, {
+   3.5002571883493433`*^9, 3.500257264685137*^9}, {3.500257453324745*^9, 
+   3.500257459515483*^9}, {3.5002575103028107`*^9, 3.500257529519129*^9}, 
+   3.5003189137850246`*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Iterative methods for Laplace\[CloseCurlyQuote]s Equation\
+\>", "Section",
+ CellChangeTimes->{{3.5002576907423277`*^9, 3.500257696587291*^9}, {
+   3.5002577347879257`*^9, 3.500257741203878*^9}, 3.500261641706071*^9}],
+
+Cell["\<\
+As shown on the previous slide, by proper ordering of the equations we get a \
+diagonally dominant matrix.  Unfortunately, it is not tridiagonal, otherwise \
+we could easily use a Crout factorization to solve the problem, while only \
+storing the diagonal, diagonal+1, and diagonal-1 entries in memory.  This is \
+not possible for this banded matrix, however the matrix is sparse.  As we \
+learned earlier in the course, the preferred method for solving sparse \
+matrices are iterative methods, such as Jacobi or Gauss-Siedel.
+
+We will illustrate this in an example in the next slide as we take a look at \
+Poisson\[CloseCurlyQuote]s equation\
+\>", "Text",
+ CellChangeTimes->{{3.5002577498684998`*^9, 3.500257926029114*^9}, {
+   3.500258071069971*^9, 3.5002580961005087`*^9}, 3.5002616557268963`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Poisson equation", "Section",
+ CellChangeTimes->{{3.5002581026711683`*^9, 3.5002581092207327`*^9}}],
+
+Cell[TextData[{
+ "The methods previously discussed are readily applied to Poisson\
+\[CloseCurlyQuote]s equation.  We will illustrate with an analysis of torsion \
+in a rectangular bar subject to twisting.  The torsion function ",
+ Cell[BoxData[
+  FormBox["\[Phi]", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " satisfies the Poisson equation:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       SuperscriptBox["\[Del]", "2"], "\[Phi]"}], "+", "2"}], "=", "0"}], ",",
+     "       ", 
+    RowBox[{"\[Phi]", "=", 
+     RowBox[{"0", " ", "on", " ", "boundary"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nThe tangential stresses are proportional to the partial derivatives \
+of ",
+ Cell[BoxData[
+  FormBox["\[Phi]", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " over the cross section of a rectangular bar ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"6", " ", "\[Times]", "8"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " in. in size.  If we subdivide the cross section into 2-in. squares, so \
+that there are six interior points, in terms of difference quotients we have:\
+\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      FractionBox["1", 
+       SuperscriptBox["h", "2"]], 
+      RowBox[{"{", GridBox[{
+         {" ", "1", " "},
+         {"1", 
+          RowBox[{"-", "4"}], "1"},
+         {" ", "1", " "}
+        }], "}"}], 
+      SubscriptBox["\[Phi]", 
+       RowBox[{"i", ",", "j"}]]}], "+", "2"}], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nor\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      FractionBox["1", "4"], 
+      RowBox[{"{", GridBox[{
+         {" ", "1", " "},
+         {"1", 
+          RowBox[{"-", "4"}], "1"},
+         {" ", "1", " "}
+        }], "}"}], 
+      SubscriptBox["\[Phi]", 
+       RowBox[{"i", ",", "j"}]]}], "+", "2"}], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nthe set of equations applied at each interior point, is:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"0", "+", "0", "+", 
+      SubscriptBox["\[Phi]", "12"], "+", 
+      SubscriptBox["\[Phi]", "21"], "-", 
+      RowBox[{"4", 
+       SubscriptBox["\[Phi]", "11"]}], "+", "8"}], "=", "0"}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[Phi]", "11"], "+", "0", "+", "0", "+", 
+      SubscriptBox["\[Phi]", "22"], "-", 
+      RowBox[{"4", 
+       SubscriptBox["\[Phi]", "12"]}], "+", "8"}], "=", "0"}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"0", "+", 
+      SubscriptBox["\[Phi]", "11"], "+", 
+      SubscriptBox["\[Phi]", "22"], "+", 
+      SubscriptBox["\[Phi]", "31"], "-", 
+      RowBox[{"4", 
+       SubscriptBox["\[Phi]", "21"]}], "+", "8"}], "=", "0"}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[Phi]", "21"], "+", 
+      SubscriptBox["\[Phi]", "12"], "+", "0", "+", 
+      SubscriptBox["\[Phi]", "32"], "-", 
+      RowBox[{"4", 
+       SubscriptBox["\[Phi]", "22"]}], "+", "8"}], "=", "0"}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"0", "+", 
+      SubscriptBox["\[Phi]", "21"], "+", 
+      SubscriptBox["\[Phi]", "32"], "+", "0", "-", 
+      RowBox[{"4", 
+       SubscriptBox["\[Phi]", "31"]}], "+", "8"}], "=", "0"}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["\[Phi]", "31"], "+", 
+     SubscriptBox["\[Phi]", "22"], "+", "0", "+", "0", "-", 
+     RowBox[{"4", 
+      SubscriptBox["\[Phi]", "32"]}], "+", "8"}], "=", "0"}], 
+   TraditionalForm]}],
+  FormatType->"TraditionalForm"],
+ "\n\t\nSymmetry consideration show that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Phi]", "11"], "=", 
+    RowBox[{
+     SubscriptBox["\[Phi]", "12"], "=", 
+     RowBox[{
+      SubscriptBox["\[Phi]", "31"], "=", 
+      RowBox[{
+       SubscriptBox["\[Phi]", "32"], "=", 
+       RowBox[{
+        SubscriptBox["\[Phi]", "21"], "=", 
+        SubscriptBox["\[Phi]", "22"]}]}]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", so only two unknowns are left, after substitutions we have:\n\n\t",
+ Cell[BoxData[{
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[Phi]", "21"], "-", 
+      RowBox[{"3", 
+       SubscriptBox["\[Phi]", "11"]}], "+", "8"}], "=", "0"}], 
+    "\[IndentingNewLine]"}], TraditionalForm], "\[IndentingNewLine]", 
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"2", 
+      SubscriptBox["\[Phi]", "11"]}], "-", 
+     RowBox[{"3", 
+      SubscriptBox["\[Phi]", "21"]}], "+", "8"}], "=", "0"}], 
+   TraditionalForm]}],
+  FormatType->"TraditionalForm"],
+ "\n\t\nwhich can be easily solved to yield, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Phi]", "11"], "=", 
+    RowBox[{
+     RowBox[{"4.56", " ", 
+      SuperscriptBox["in", "2"], " ", "and", " ", 
+      SubscriptBox["\[Phi]", "21"]}], "=", 
+     RowBox[{"5.72", " ", 
+      SuperscriptBox["in", "2"]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".  \n\nThis shows that Poisson\[CloseCurlyQuote]s equation is solved by \
+essentially the exact same procedure at the Laplace equation.  Again, these \
+procedures are generally applicable to all PDE\[CloseCurlyQuote]s of elliptic \
+type."
+}], "Text",
+ CellChangeTimes->{{3.500258198052226*^9, 3.500258851574121*^9}, {
+  3.500258905705288*^9, 3.500259033367607*^9}, {3.500259218683352*^9, 
+  3.5002593625543613`*^9}, {3.5002616659655533`*^9, 3.500261671566966*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Parabolic PDE\[CloseCurlyQuote]s", "Section",
+ CellChangeTimes->{{3.500260620946712*^9, 3.500260625529159*^9}}],
+
+Cell[TextData[{
+ "Once again we will use finite-difference techniques to solve parabolic \
+partial-differential equations.  One dimensional heat flow (with time \
+dependence) is represented by the following equation:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{
+      SuperscriptBox["\[PartialD]", "2"], "u"}], 
+     RowBox[{"\[PartialD]", 
+      SuperscriptBox["x", "2"]}]], "=", 
+    RowBox[{
+     FractionBox["c\[Rho]", "k"], 
+     FractionBox[
+      RowBox[{"\[PartialD]", "u"}], 
+      RowBox[{"\[PartialD]", "t"}]]}]}], TraditionalForm]]],
+ " (*)\n\t\nwhere, ",
+ Cell[BoxData[
+  FormBox["c", TraditionalForm]]],
+ " is the heat capacity, ",
+ Cell[BoxData[
+  FormBox["\[Rho]", TraditionalForm]]],
+ " is density, and ",
+ Cell[BoxData[
+  FormBox["k", TraditionalForm]]],
+ " is the thermal conductivity.  We can use the finite difference quotient \
+relations:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["\[PartialD]", "2"], "u"}], 
+      RowBox[{"\[PartialD]", 
+       SuperscriptBox["x", "2"]}]], 
+     SubsuperscriptBox["|", 
+      RowBox[{"t", "=", 
+       SubscriptBox["t", "j"]}], 
+      RowBox[{"x", "=", 
+       SubscriptBox["x", "i"]}]]}], "=", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SubsuperscriptBox["u", 
+        RowBox[{"i", "+", "1"}], "j"], "-", 
+       RowBox[{"2", 
+        SubsuperscriptBox["u", "i", "j"]}], "+", 
+       SubsuperscriptBox["u", 
+        RowBox[{"i", "-", "1"}], "j"]}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]], "+", 
+     SuperscriptBox[
+      RowBox[{"O", "(", 
+       RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]}]}], 
+   TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     FractionBox[
+      RowBox[{"\[PartialD]", "u"}], 
+      RowBox[{"\[PartialD]", "t"}]], 
+     SubsuperscriptBox["|", 
+      RowBox[{"t", "=", 
+       SubscriptBox["t", "j"]}], 
+      RowBox[{"x", "=", 
+       SubscriptBox["x", "i"]}]]}], "=", 
+    RowBox[{
+     FractionBox[
+      RowBox[{
+       SubsuperscriptBox["u", "i", 
+        RowBox[{"j", "+", "1"}]], "-", 
+       SubsuperscriptBox["u", "i", "j"]}], 
+      RowBox[{"\[CapitalDelta]", " ", "t"}]], "+", 
+     RowBox[{"O", "(", 
+      RowBox[{"\[CapitalDelta]", " ", "t"}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\nWe use subscripts to denote position and superscripts for time.  Note \
+that the errors terms are of different orders.  If we substitute the \
+difference quotients back into (*) we and solve for ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["u", "i", 
+    RowBox[{"j", "+", "1"}]], TraditionalForm]]],
+ "\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", "i", 
+     RowBox[{"j", "+", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"k", " ", "\[CapitalDelta]", " ", "t"}], 
+       RowBox[{"c", " ", "\[Rho]", " ", 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]}]], 
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["u", 
+         RowBox[{"i", "+", "1"}], "j"], "+", 
+        SubsuperscriptBox["u", 
+         RowBox[{"i", "-", "1"}], "j"]}], ")"}]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        FractionBox[
+         RowBox[{"2", " ", "k"}], 
+         RowBox[{"c", " ", "\[Rho]", " ", 
+          SuperscriptBox[
+           RowBox[{"(", 
+            RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]}]]}], ")"}], 
+      SubsuperscriptBox["u", "i", "j"]}]}]}], TraditionalForm]]],
+ "\n\t\nThe relative size of the time and distance steps, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[CapitalDelta]", " ", "t"}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[CapitalDelta]", " ", "x"}], TraditionalForm]]],
+ ", affects the equation above.  If the ratio of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[CapitalDelta]", " ", 
+    RowBox[{"t", "/", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]}]}], 
+   TraditionalForm]]],
+ " is chosen so that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"k", " ", "\[CapitalDelta]", " ", 
+      RowBox[{"t", "/", "c"}], " ", 
+      SuperscriptBox[
+       RowBox[{"\[Rho]", "(", 
+        RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]}], "=", 
+     FractionBox["1", "2"]}], ","}], TraditionalForm]]],
+ " the equation is simplified:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["u", "i", 
+     RowBox[{"j", "+", "1"}]], "=", 
+    RowBox[{
+     FractionBox["1", "2"], 
+     RowBox[{"(", 
+      RowBox[{
+       SubsuperscriptBox["u", 
+        RowBox[{"i", "+", "1"}], "j"], "+", 
+       SubscriptBox["u", 
+        RowBox[{"i", "-", "1"}]]}], ")"}]}]}], TraditionalForm]]],
+ "\n\t\nIf the value of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", " ", "\[CapitalDelta]", " ", 
+    RowBox[{"t", "/", "c"}], " ", 
+    SuperscriptBox[
+     RowBox[{"\[Rho]", "(", 
+      RowBox[{"\[CapitalDelta]", " ", "x"}], ")"}], "2"]}], TraditionalForm]]],
+ " is chosen as less than one-half, there will be improved accuracy."
+}], "Text",
+ CellChangeTimes->{{3.500260635393775*^9, 3.500261337713172*^9}, {
+  3.500261370979838*^9, 3.5002615866795483`*^9}, {3.5002616875973577`*^9, 
+  3.500261705253497*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+ScreenStyleEnvironment->"SlideShow",
+WindowSize->{748, 556},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+Magnification:>FEPrivate`If[
+  FEPrivate`Equal[FEPrivate`$VersionNumber, 6.], 0.5, 0.5 Inherited],
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (November 6, \
+2010)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[579, 22, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[4707, 142, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[12438, 381, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[26186, 826, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[29631, 931, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[37510, 1205, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[43110, 1389, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[52228, 1671, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[59411, 1844, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[60588, 1874, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[66676, 2063, 64, 1, 1, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 72811, 2262}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[668, 27, 117, 1, 33, "Section"],
+Cell[788, 30, 3870, 106, 178, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4707, 142, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[4796, 147, 102, 1, 33, "Section"],
+Cell[4901, 150, 727, 24, 51, "Text"],
+Cell[CellGroupData[{
+Cell[5653, 178, 1224, 34, 24, "Input"],
+Cell[6880, 214, 472, 15, 20, "Output"]
+}, Open  ]],
+Cell[7367, 232, 5022, 143, 191, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12438, 381, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[12527, 386, 197, 4, 33, "Section"],
+Cell[12727, 392, 13410, 428, 517, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26186, 826, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[26275, 831, 175, 4, 33, "Section"],
+Cell[26453, 837, 3129, 88, 85, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29631, 931, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[29720, 936, 138, 3, 33, "Section"],
+Cell[29861, 941, 7600, 258, 716, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[37510, 1205, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[37599, 1210, 128, 3, 56, "Section"],
+Cell[37730, 1215, 5331, 168, 411, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[43110, 1389, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[43199, 1394, 132, 3, 56, "Section"],
+Cell[43334, 1399, 8845, 266, 686, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[52228, 1671, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[52317, 1676, 128, 1, 56, "Section"],
+Cell[52448, 1679, 655, 12, 51, "Text"],
+Cell[CellGroupData[{
+Cell[53128, 1695, 2742, 67, 174, "Input"],
+Cell[55873, 1764, 3477, 73, 340, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59411, 1844, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[59500, 1849, 226, 4, 56, "Section"],
+Cell[59729, 1855, 810, 13, 95, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60588, 1874, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[60677, 1879, 105, 1, 56, "Section"],
+Cell[60785, 1882, 5842, 175, 624, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[66676, 2063, 64, 1, 1, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[66765, 2068, 117, 1, 56, "Section"],
+Cell[66885, 2071, 5397, 171, 424, "Text"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

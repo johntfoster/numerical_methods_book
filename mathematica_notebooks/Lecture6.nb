@@ -1,0 +1,3057 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     90828,       3048]
+NotebookOptionsPosition[     86382,       2905]
+NotebookOutlinePosition[     87640,       2944]
+CellTagsIndexPosition[     87561,       2939]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Householder's Method", "Section",
+ CellChangeTimes->{{3.491784380611787*^9, 3.491784386609597*^9}}],
+
+Cell[TextData[{
+ "Householder's Method is a similarity transform.  We will use it to find the \
+eigenvalues of a matrix, but it has other uses outside this process.  The \
+method is used to find a symmetric tridiagonal matrix ",
+ StyleBox["B",
+  FontSlant->"Italic"],
+ " which is similar to a given symmetric matrix ",
+ StyleBox["A.  ",
+  FontSlant->"Italic"],
+ "We'll start by defining the ",
+ StyleBox["Householder Transformation:",
+  FontSlant->"Italic"],
+ "\n\nLet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["w", "_"], "\[Element]", " ", 
+    SuperscriptBox["\[DoubleStruckCapitalR]", "n"]}], TraditionalForm]]],
+ " with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     OverscriptBox["w", "_"], " ", 
+     SuperscriptBox[
+      OverscriptBox["w", "_"], "T"]}], "=", "1"}], TraditionalForm]]],
+ ".  The ",
+ StyleBox["n ",
+  FontSlant->"Italic"],
+ "x ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ " matrix,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"P", "=", 
+    RowBox[{"I", "-", 
+     RowBox[{"2", " ", 
+      OverscriptBox["w", "_"], " ", 
+      SuperscriptBox[
+       OverscriptBox["w", "_"], "T"]}]}]}], TraditionalForm]]],
+ "\n\t\nThis transformation is symmetric and orthogonal, therefore ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["P", 
+     RowBox[{"-", "1"}]], "=", "P"}], TraditionalForm]]],
+ ".\n\nHouseholder's method begins by determining a transform ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["P", 
+    RowBox[{"(", "1", ")"}]], TraditionalForm]]],
+ " with the property, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", "2", ")"}]], "=", 
+    RowBox[{
+     SuperscriptBox["P", 
+      RowBox[{"(", "1", ")"}]], "A", " ", 
+     SuperscriptBox["P", 
+      RowBox[{"(", "1", ")"}]]}]}], TraditionalForm]]],
+ " that has\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["a", 
+      RowBox[{
+       StyleBox["j",
+        FontSlant->"Italic"], 
+       StyleBox[" ",
+        FontSlant->"Italic"], 
+       StyleBox["1",
+        FontSlant->"Plain"]}], 
+      RowBox[{"(", "2", ")"}]], "=", "0"}], ","}], TraditionalForm]]],
+ " for all ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "3"}], ",", "4", ",", "...", ",", "n", ","}], 
+   TraditionalForm]]],
+ "\n\t\nand by symmetry, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["a", 
+     StyleBox[
+      RowBox[{"1", "j"}],
+      FontSlant->"Italic"], 
+     RowBox[{"(", "2", ")"}]], "=", "0"}], TraditionalForm]]],
+ ".  The desired outcome of this transformation along with the fact that ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     OverscriptBox["w", "_"], " ", 
+     SuperscriptBox[
+      OverscriptBox["w", "_"], "T"]}], "=", "1"}], TraditionalForm]]],
+ " by definition, imposes ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ " constraints on the ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ " unknown components of ",
+ Cell[BoxData[
+  FormBox[
+   OverscriptBox["w", "_"], TraditionalForm]]],
+ ".  If we set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["w", "1"], "=", "0"}], ","}], TraditionalForm]]],
+ " then ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["a", "11", 
+     RowBox[{"(", "2", ")"}]], "=", 
+    SubscriptBox["a", "11"]}], TraditionalForm]]],
+ ".  Now, we want\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["P", 
+     RowBox[{"(", "1", ")"}]], "=", 
+    RowBox[{"I", " ", "-", 
+     RowBox[{"2", " ", 
+      OverscriptBox["w", "_"], 
+      SuperscriptBox[
+       OverscriptBox["w", "_"], "T"]}]}]}], TraditionalForm]]],
+ "\n\t\nto satisfy\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{
+       SuperscriptBox["P", 
+        RowBox[{"(", "1", ")"}]], "(", 
+       RowBox[{
+        SubscriptBox["a", "11"], ",", 
+        SubscriptBox["a", "21"], ",", 
+        SubscriptBox["a", "31"], ",", "...", ",", 
+        SubscriptBox["a", "n1"]}], ")"}], "T"], "=", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["a", "11"], ",", "\[Alpha]", ",", "0", ",", "...", ",", 
+        "0"}], ")"}], "T"]}], ","}], TraditionalForm]]],
+ "    (*)\n\t\nwhere \[Alpha] will be chosen later.  Defining some notation:\n\
+\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     OverscriptBox["w", 
+      OverscriptBox["_", "^"]], "=", 
+     RowBox[{
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["w", "2"], ",", 
+         SubscriptBox["w", "3"], ",", "...", ",", 
+         SubscriptBox["w", "n"]}], ")"}], "T"], "\[Element]", " ", 
+      SuperscriptBox["\[DoubleStruckCapitalR]", 
+       RowBox[{"n", "-", "1"}]]}]}], ","}], TraditionalForm]]],
+ "\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     OverscriptBox["y", 
+      OverscriptBox["_", "^"]], "=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["a", "21"], ",", 
+         SubscriptBox["a", "31"], ",", "...", ",", 
+         SubscriptBox["a", 
+          RowBox[{"n", " ", "1"}]]}], ")"}], "\[Transpose]"}], " ", 
+      "\[Element]", " ", 
+      SuperscriptBox["\[DoubleStruckCapitalR]", 
+       RowBox[{"n", "-", "1"}]]}]}], ","}], TraditionalForm]]],
+ "\n\t\nand ",
+ Cell[BoxData[
+  FormBox[
+   OverscriptBox["P", "^"], TraditionalForm]]],
+ " is the ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"n", "-", "1"}], ")"}], " ", "\[Times]", 
+    RowBox[{"(", 
+     RowBox[{"n", "-", "1"}], ")"}]}], TraditionalForm]]],
+ " Housholder transformation\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["P", "^"], "=", 
+    RowBox[{
+     SubscriptBox["I", 
+      RowBox[{"n", "-", "1"}]], "-", 
+     RowBox[{"2", " ", 
+      OverscriptBox["w", 
+       OverscriptBox["_", "^"]], " ", 
+      RowBox[{
+       SuperscriptBox[
+        OverscriptBox["w", 
+         OverscriptBox["_", "^"]], "T"], "."}]}]}]}], TraditionalForm]]],
+ "\n\t\nwith these definitions, (*) becomes.\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["P", 
+      RowBox[{"(", "1", ")"}]], "(", GridBox[{
+       {
+        SubscriptBox["a", "11"]},
+       {
+        SubscriptBox["a", "21"]},
+       {"\[VerticalEllipsis]"},
+       {
+        SubscriptBox["a", 
+         RowBox[{"n", " ", "1"}]]}
+      }], ")"}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", GridBox[{
+         {"1", 
+          StyleBox["0",
+           FontWeight->"Bold"]},
+         {
+          StyleBox["0",
+           FontWeight->"Bold"], 
+          RowBox[{"(", 
+           OverscriptBox["P", "^"], ")"}]}
+        }], ")"}], "\[CenterDot]", 
+      RowBox[{"(", GridBox[{
+         {
+          SubscriptBox["a", "11"]},
+         {
+          OverscriptBox["y", 
+           OverscriptBox["_", "^"]]}
+        }], ")"}]}], "=", 
+     RowBox[{
+      RowBox[{"(", GridBox[{
+         {
+          SubscriptBox["a", "11"]},
+         {
+          RowBox[{
+           OverscriptBox["P", "^"], 
+           OverscriptBox["y", 
+            OverscriptBox["_", "^"]]}]}
+        }], ")"}], "=", 
+      RowBox[{"(", GridBox[{
+         {
+          SubscriptBox["a", "11"]},
+         {"\[Alpha]"},
+         {
+          StyleBox["0",
+           FontWeight->"Bold"]}
+        }], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\nwith\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     OverscriptBox["P", "^"], 
+     OverscriptBox["y", 
+      OverscriptBox["_", "^"]]}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["I", 
+         RowBox[{"n", "-", "1"}]], "-", 
+        RowBox[{"2", 
+         OverscriptBox["w", "_"], " ", 
+         SuperscriptBox[
+          OverscriptBox["w", "_"], "T"]}]}], ")"}], 
+      OverscriptBox["y", 
+       OverscriptBox["_", "^"]]}], "=", 
+     RowBox[{
+      RowBox[{
+       OverscriptBox["y", 
+        OverscriptBox["_", "^"]], "-", 
+       RowBox[{"2", 
+        RowBox[{"(", 
+         RowBox[{
+          SuperscriptBox[
+           OverscriptBox["w", 
+            OverscriptBox["_", "^"]], "T"], 
+          OverscriptBox["y", 
+           OverscriptBox["_", "^"]]}], ")"}], 
+        OverscriptBox["w", 
+         OverscriptBox["_", "^"]]}]}], "=", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"\[Alpha]", ",", "0", ",", "...", ",", "0"}], ")"}], 
+       "T"]}]}]}], TraditionalForm]]],
+ ".  (**)"
+}], "Text",
+ CellChangeTimes->{{3.491784409248541*^9, 3.491784513236147*^9}, {
+  3.491784723430085*^9, 3.491784793626253*^9}, {3.491784825400134*^9, 
+  3.4917849464471292`*^9}, {3.491784999909477*^9, 3.4917850270231113`*^9}, {
+  3.491785059236683*^9, 3.4917853615999527`*^9}, {3.4917855854687643`*^9, 
+  3.491785702628015*^9}, {3.4917857591170807`*^9, 3.491785980261801*^9}, {
+  3.491786042150626*^9, 3.4917860727565403`*^9}, {3.4917861047162533`*^9, 
+  3.49178646242807*^9}, {3.491786520579253*^9, 3.4917865247674522`*^9}, {
+  3.49178656771688*^9, 3.4917866889915533`*^9}, {3.4917868272117853`*^9, 
+  3.4917869248430767`*^9}, {3.491786963405818*^9, 3.4917872454711647`*^9}, {
+  3.49178729322852*^9, 3.491787630424843*^9}, {3.491787669055908*^9, 
+  3.491787673461555*^9}, {3.492213830231641*^9, 3.492213833239506*^9}, {
+  3.492996361304998*^9, 3.492996362630836*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{{3.491785314975663*^9, 3.491785323927389*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Householder's Method (cont.)", "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}}],
+
+Cell[TextData[{
+ "Let ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", " ", "=", 
+    RowBox[{
+     SuperscriptBox[
+      OverscriptBox["w", 
+       OverscriptBox["_", "^"]], "T"], 
+     OverscriptBox["y", 
+      OverscriptBox["_", "^"]]}]}], TraditionalForm]]],
+ ".  Then,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{"\[Alpha]", ",", "0", ",", "...", ",", "0"}], ")"}], "T"], "=", 
+    
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["a", "21"], "-", 
+        RowBox[{"2", " ", "r", " ", 
+         SubscriptBox["w", "2"]}]}], ",", 
+       RowBox[{
+        SubscriptBox["a", "31"], "-", 
+        RowBox[{"2", " ", "r", " ", 
+         SubscriptBox["w", "3"]}]}], ",", "...", " ", ",", " ", 
+       RowBox[{
+        SubscriptBox["a", 
+         RowBox[{"n", " ", "1"}]], "-", " ", 
+        RowBox[{"2", " ", "r", " ", 
+         SubscriptBox["w", "n"]}]}]}], ")"}], "T"]}], TraditionalForm]]],
+ "\n\t\nwe can determine all of the ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["w", "i"], TraditionalForm]]],
+ " once we know \[Alpha] and ",
+ StyleBox["r",
+  FontSlant->"Italic"],
+ ".  Equating components:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Alpha]", "=", 
+    RowBox[{
+     SubscriptBox["a", "21"], "-", 
+     RowBox[{"2", " ", "r", " ", 
+      SubscriptBox["w", "2"]}]}]}], TraditionalForm]]],
+ "\n\t\nand\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"0", "=", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{"j", " ", "1"}]], "-", 
+     RowBox[{"2", "r", " ", 
+      SubscriptBox["w", "j"]}]}]}], TraditionalForm]]],
+ " for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "3"}], ",", "4", ",", "...", " ", ",", "n"}], 
+   TraditionalForm]]],
+ "\n\t\nRearranging slightly,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"2", " ", "r", " ", 
+     SubscriptBox["w", "2"]}], "=", 
+    RowBox[{
+     SubscriptBox["a", "21"], "-", "\[Alpha]"}]}], TraditionalForm]]],
+ "  (\[Dagger])\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"2", "r", " ", 
+     SubscriptBox["w", "j"]}], "=", 
+    SubscriptBox["a", 
+     RowBox[{"j", " ", "1"}]]}], TraditionalForm]]],
+ "  for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "3"}], ",", "4", ",", "...", " ", ",", "n"}], 
+   TraditionalForm]]],
+ "    (\[Dagger]\[Dagger])\n\t\nNow we square both sides of each equation and \
+add the equations together,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"4", " ", 
+     SuperscriptBox["r", "2"], 
+     RowBox[{
+      SubsuperscriptBox["\[Sum]", 
+       RowBox[{"j", "=", "2"}], "n"], 
+      SubsuperscriptBox["w", "j", "2"]}]}], "=", 
+    RowBox[{
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["a", "21"], "-", "\[Alpha]"}], ")"}], "2"], "+", 
+     RowBox[{
+      SubsuperscriptBox["\[Sum]", 
+       RowBox[{"j", "=", "3"}], "n"], 
+      SubsuperscriptBox["a", 
+       RowBox[{"j", " ", "1"}], "2"]}]}]}], TraditionalForm]]],
+ ".\n\t\nSince ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox[
+      OverscriptBox["w", 
+       OverscriptBox["_", "^"]], "T"], 
+     OverscriptBox["w", 
+      OverscriptBox["_", "^"]]}], "=", "1"}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "1"], "=", "0"}], TraditionalForm]]],
+ ", we have ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubsuperscriptBox["\[Sum]", 
+      RowBox[{"j", "=", "2"}], "n"], 
+     SubsuperscriptBox["w", "j", "2"]}], "=", "1"}], TraditionalForm]]],
+ ", and\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"4", " ", 
+     SuperscriptBox["r", "2"]}], "=", 
+    RowBox[{
+     RowBox[{
+      SubsuperscriptBox["\[Sum]", 
+       RowBox[{"j", "=", "2"}], "n"], 
+      SubsuperscriptBox["a", 
+       RowBox[{"j", " ", "1"}], "2"]}], "-", 
+     RowBox[{"2", " ", "\[Alpha]", " ", 
+      SubscriptBox["a", "21"]}], "+", 
+     SuperscriptBox["\[Alpha]", "2"]}]}], TraditionalForm]]],
+ ".   (***)\n\t\nEquation (**) and the fact that ",
+ StyleBox["P ",
+  FontSlant->"Italic"],
+ "is orthogonal imply that \n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Alpha]", "2"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"\[Alpha]", ",", "0", ",", "...", ",", "0"}], ")"}], 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{"\[Alpha]", ",", "0", ",", "...", ",", "0"}], ")"}], "T"]}], 
+     "=", 
+     RowBox[{
+      RowBox[{
+       SuperscriptBox[
+        RowBox[{"(", 
+         RowBox[{
+          OverscriptBox["P", "^"], 
+          OverscriptBox[
+           OverscriptBox["y", "_"], "^"]}], ")"}], "T"], 
+       OverscriptBox["P", "^"], 
+       OverscriptBox[
+        OverscriptBox["y", "_"], "^"]}], "=", 
+      RowBox[{
+       RowBox[{
+        OverscriptBox["y", 
+         OverscriptBox["_", "^"]], 
+        SuperscriptBox[
+         OverscriptBox["P", "^"], "T"], 
+        OverscriptBox["P", "^"], 
+        OverscriptBox[
+         OverscriptBox["y", "_"], "^"]}], "=", 
+       RowBox[{
+        SuperscriptBox[
+         OverscriptBox["y", 
+          OverscriptBox["_", "^"]], "T"], 
+        OverscriptBox["y", 
+         OverscriptBox["_", "^"]]}]}]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".\n\t\nThus,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[Alpha]", "2"], "=", 
+    RowBox[{
+     SubsuperscriptBox["\[Sum]", 
+      RowBox[{"j", "=", "2"}], "n"], 
+     SubsuperscriptBox["a", 
+      RowBox[{"j", " ", "1"}], "2"]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ",\n\nSubstituting into (***)\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"2", 
+     SuperscriptBox["r", "2"]}], "=", 
+    RowBox[{
+     RowBox[{
+      SubsuperscriptBox["\[Sum]", 
+       RowBox[{"j", "=", "2"}], "n"], 
+      SuperscriptBox[
+       SubscriptBox["a", 
+        RowBox[{"j", " ", "1"}]], "2"]}], "-", 
+     RowBox[{"\[Alpha]", " ", 
+      SubscriptBox["a", "21"]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nTo ensure ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"2", 
+     SuperscriptBox["r", "2"]}], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " only when ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "21"], "=", 
+    RowBox[{
+     SubscriptBox["a", "31"], "=", " ", 
+     RowBox[{"...", " ", "=", 
+      RowBox[{
+       SubscriptBox["a", 
+        RowBox[{"n", " ", "1"}]], "=", "0"}]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", we chose\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Alpha]", "=", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"sgn", "(", 
+       SubscriptBox["a", "21"], ")"}]}], 
+     SqrtBox[
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "2"}], "n"], 
+       SubsuperscriptBox["a", 
+        RowBox[{"j", " ", "1"}], "2"]}]]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\ntherefore,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"2", 
+     SuperscriptBox["r", "2"]}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "2"}], "n"], 
+       SuperscriptBox[
+        SubscriptBox["a", 
+         RowBox[{"j", " ", "1"}]], "2"]}], "+"}], "|", 
+     SubscriptBox["a", "21"], "|", 
+     SqrtBox[
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "2"}], "n"], 
+       SubsuperscriptBox["a", 
+        RowBox[{"j", " ", "1"}], "2"]}]]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.491787686559875*^9, 3.49178788139187*^9}, {
+  3.4917879479345417`*^9, 3.491788266630085*^9}, {3.4917883386725082`*^9, 
+  3.491788472372004*^9}, {3.492213850341737*^9, 3.4922140285016003`*^9}, {
+  3.4922141505050497`*^9, 3.4922143598813753`*^9}, {3.492214398547596*^9, 
+  3.492214541032283*^9}, {3.492214579014216*^9, 3.492214613021512*^9}, {
+  3.492214678069787*^9, 3.492214678715629*^9}, {3.4922147151778593`*^9, 
+  3.492214731453771*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Householder's Method (cont.)", "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9}],
+
+Cell[TextData[{
+ "With this choice of \[Alpha] and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"2", 
+    SuperscriptBox["r", "2"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " we can solve (\[Dagger]) and (\[Dagger]\[Dagger])  to obtain,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "2"], "=", 
+    FractionBox[
+     RowBox[{
+      SubscriptBox["a", "21"], "-", "\[Alpha]"}], 
+     RowBox[{"2", "r"}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "   and  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "j"], "=", 
+    FractionBox[
+     SubscriptBox["a", 
+      RowBox[{"j", " ", "1"}]], 
+     RowBox[{"2", " ", "r"}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", for each ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "3"}], ",", "...", ",", " ", "n"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nTo summarize:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Alpha]", "=", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"sgn", "(", 
+       SubscriptBox["a", "21"], ")"}]}], 
+     SqrtBox[
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "2"}], "n"], 
+       SubsuperscriptBox["a", 
+        RowBox[{"j", " ", "1"}], "2"]}]]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", "=", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{
+       FractionBox["1", "2"], 
+       SuperscriptBox["\[Alpha]", "2"]}], "-", 
+      RowBox[{
+       FractionBox["1", "2"], 
+       SubscriptBox["a", "21"], "\[Alpha]"}]}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "1"], "=", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "2"], "=", 
+    FractionBox[
+     RowBox[{
+      SubscriptBox["a", "21"], "-", "\[Alpha]"}], 
+     RowBox[{"2", "r"}]]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["w", "j"], "=", 
+    FractionBox[
+     SubscriptBox["a", 
+      RowBox[{"j", " ", "1"}]], 
+     RowBox[{"2", " ", "r"}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", for each ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "3"}], ",", "...", ",", " ", "n"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\t\nFor these choices we have:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", "2", ")"}]], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["P", 
+       RowBox[{"(", "1", ")"}]], "A", " ", 
+      SuperscriptBox["P", 
+       RowBox[{"(", "1", ")"}]]}], "=", 
+     RowBox[{
+      RowBox[{"(", GridBox[{
+         {
+          SubsuperscriptBox["a", "11", 
+           RowBox[{"(", "2", ")"}]], 
+          SubsuperscriptBox["a", "12", 
+           RowBox[{"(", "2", ")"}]], "0", "\[CenterEllipsis]", "0"},
+         {
+          SubsuperscriptBox["a", "21", 
+           RowBox[{"(", "2", ")"}]], 
+          SubsuperscriptBox["a", "22", 
+           RowBox[{"(", "2", ")"}]], 
+          SubsuperscriptBox["a", "23", 
+           RowBox[{"(", "2", ")"}]], "\[CenterEllipsis]", 
+          SubsuperscriptBox["a", 
+           RowBox[{"2", "n"}], 
+           RowBox[{"(", "2", ")"}]]},
+         {"0", 
+          SubsuperscriptBox["a", "32", 
+           RowBox[{"(", "2", ")"}]], 
+          SubsuperscriptBox["a", "33", 
+           RowBox[{"(", "2", ")"}]], "\[CenterEllipsis]", 
+          SubsuperscriptBox["a", 
+           RowBox[{"3", "n"}], 
+           RowBox[{"(", "2", ")"}]]},
+         {"\[VerticalEllipsis]", "\[VerticalEllipsis]", "\[VerticalEllipsis]",
+           "\[DescendingEllipsis]", "\[VerticalEllipsis]"},
+         {"0", 
+          SubsuperscriptBox["a", 
+           RowBox[{"n", " ", "2"}], 
+           RowBox[{"(", "2", ")"}]], 
+          SubsuperscriptBox["a", 
+           RowBox[{"n", " ", "3"}], 
+           RowBox[{"(", "2", ")"}]], "\[CenterEllipsis]", 
+          SubsuperscriptBox["a", 
+           StyleBox["nn",
+            FontSlant->"Italic"], 
+           RowBox[{"(", "2", ")"}]]}
+        }], ")"}], Cell[""]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Text",
+ CellChangeTimes->{{3.492214639050131*^9, 3.492214659946774*^9}, {
+   3.492214736854566*^9, 3.492214864908935*^9}, {3.492214905426547*^9, 
+   3.492215012590461*^9}, {3.492215079427555*^9, 3.492215416982378*^9}, 
+   3.492215454745504*^9}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.492215454745693*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Householder's Method (cont.)", "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9}],
+
+Cell[TextData[{
+ "Having found ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["P", 
+    RowBox[{"(", "1", ")"}]], TraditionalForm]]],
+ " and computed ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "2", ")"}]], TraditionalForm]]],
+ ", the process is repeated for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"k", "=", "2"}], ",", "3", ",", "\[Ellipsis]", ",", 
+    RowBox[{"n", "-", "2"}]}], TraditionalForm]]],
+ ":\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Alpha]", "=", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"sgn", "(", 
+       SubsuperscriptBox["a", 
+        RowBox[{
+         RowBox[{"k", "+", "1"}], ",", "k"}], 
+        RowBox[{"(", "k", ")"}]], ")"}]}], 
+     SqrtBox[
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", "2"}], "n"], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         SubsuperscriptBox["a", 
+          StyleBox["jk",
+           FontSlant->"Italic"], 
+          RowBox[{"(", "k", ")"}]], ")"}], "2"]}]]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", "=", 
+    SqrtBox[
+     RowBox[{
+      RowBox[{
+       FractionBox["1", "2"], 
+       SuperscriptBox["\[Alpha]", "2"]}], "-", 
+      RowBox[{
+       FractionBox["1", "2"], "\[Alpha]", " ", 
+       SubsuperscriptBox["\[Alpha]", 
+        RowBox[{
+         RowBox[{"k", "+", "1"}], ",", "k"}], 
+        RowBox[{"(", "k", ")"}]]}]}]]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["w", "1", 
+     RowBox[{"(", "k", ")"}]], "=", 
+    RowBox[{
+     SubsuperscriptBox["w", "2", 
+      RowBox[{"(", "k", ")"}]], "=", 
+     RowBox[{"\[Ellipsis]", "=", 
+      RowBox[{
+       SubsuperscriptBox["w", "k", 
+        RowBox[{"(", "k", ")"}]], "=", "0"}]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["w", 
+     RowBox[{"k", "+", "1"}], 
+     RowBox[{"(", "k", ")"}]], "=", 
+    FractionBox[
+     RowBox[{
+      SubsuperscriptBox["a", 
+       RowBox[{
+        RowBox[{"k", "+", "1"}], ",", "k"}], 
+       RowBox[{"(", "k", ")"}]], "-", "\[Alpha]"}], 
+     RowBox[{"2", "r"}]]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["w", "j", 
+     RowBox[{"(", "k", ")"}]], "=", 
+    FractionBox[
+     SubscriptBox["a", 
+      StyleBox["jk",
+       FontSlant->"Italic"]], 
+     RowBox[{"2", " ", "r"}]]}], TraditionalForm]]],
+ ", for each ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", 
+     RowBox[{"k", "+", "2"}]}], ",", 
+    RowBox[{"k", "+", "3"}], ",", "...", ",", " ", "n"}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["P", 
+     RowBox[{"(", "k", ")"}]], "=", 
+    RowBox[{"I", "-", 
+     RowBox[{"2", " ", 
+      RowBox[{
+       SuperscriptBox[
+        OverscriptBox["w", "_"], 
+        RowBox[{"(", "k", ")"}]], "\[CenterDot]", 
+       SuperscriptBox[
+        OverscriptBox["w", "_"], 
+        RowBox[{
+         RowBox[{"(", "k", ")"}], "T"}]]}]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", 
+      RowBox[{"k", "+", "1"}], ")"}]], "=", 
+    RowBox[{
+     SuperscriptBox["P", 
+      RowBox[{"(", "k", ")"}]], 
+     SuperscriptBox["A", 
+      RowBox[{"(", "k", ")"}]], 
+     SuperscriptBox["P", 
+      RowBox[{"(", "k", ")"}]], Cell[""], Cell[""], Cell[""]}]}], 
+   TraditionalForm]]],
+ "\n\t\nContinuing in this manner, the tridiagonal and symmetric matrix ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", 
+     RowBox[{"n", "-", "1"}], ")"}]], TraditionalForm]]],
+ " is formed\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", 
+      RowBox[{"n", "-", "1"}], ")"}]], "=", 
+    RowBox[{
+     SuperscriptBox["P", 
+      RowBox[{"(", 
+       RowBox[{"n", "-", "2"}], ")"}]], 
+     SuperscriptBox["P", 
+      RowBox[{"(", 
+       RowBox[{"n", "-", "3"}], ")"}]], "\[Ellipsis]", " ", 
+     SuperscriptBox["P", 
+      RowBox[{"(", "1", ")"}]], " ", "A", " ", 
+     SuperscriptBox["P", 
+      RowBox[{"(", "1", ")"}]], "\[Ellipsis]", " ", 
+     SuperscriptBox["P", 
+      RowBox[{"(", 
+       RowBox[{"n", "-", "3"}], ")"}]], 
+     SuperscriptBox["P", 
+      RowBox[{"(", 
+       RowBox[{"n", "-", "2"}], ")"}]], Cell["."]}]}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.492215474266921*^9, 3.492215663500984*^9}, {
+  3.4922157075207033`*^9, 3.492215869810831*^9}, {3.492215908437492*^9, 
+  3.4922159620809917`*^9}, {3.492216024743878*^9, 3.4922161634872227`*^9}, {
+  3.492996384490246*^9, 3.4929963872420683`*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.492215454745693*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Psuedocode for Householder's Method.", "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9, {3.492219937152328*^9, 3.492219949860148*^9}, {
+   3.492221657476593*^9, 3.492221659836812*^9}}],
+
+Cell[TextData[{
+ "Given a matrix symmetric matrix ",
+ StyleBox["A ",
+  FontSlant->"Italic"],
+ "with number of rows ",
+ StyleBox["n.",
+  FontSlant->"Italic"],
+ "\n\nStep 1.\t\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"k", "=", "1"}], ",", "2", ",", "\[Ellipsis]", ",", 
+    RowBox[{"n", "-", "2"}]}], TraditionalForm]]],
+ " do Steps 2-23\n\tStep 2.\t\tIf ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{
+      RowBox[{"k", "+", "1"}], ",", "k"}]], "=", "0"}], TraditionalForm]]],
+ " do Step 3., if \n\t\t\t\tStep 3. \t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Alpha]", "=", 
+    RowBox[{"-", 
+     SqrtBox[
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", 
+         RowBox[{"k", "+", "1"}]}], "n"], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         SubscriptBox["a", 
+          StyleBox["jk",
+           FontSlant->"Italic"]], ")"}], "2"]}]]}]}], TraditionalForm]]],
+ "\n\t\t\tElse, do Step 4.\n\t\t\t\tStep 4.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\[Alpha]", "=", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"sgn", "(", 
+       SubscriptBox["a", 
+        RowBox[{
+         RowBox[{"k", "+", "1"}], ",", "k"}]], ")"}]}], 
+     SqrtBox[
+      RowBox[{
+       SubsuperscriptBox["\[Sum]", 
+        RowBox[{"j", "=", 
+         RowBox[{"k", "+", "1"}]}], "n"], 
+       SuperscriptBox[
+        RowBox[{"(", 
+         SubscriptBox["a", 
+          StyleBox["jk",
+           FontSlant->"Italic"]], ")"}], "2"]}]]}]}], TraditionalForm]]],
+ "\n\tStep 5. \t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"twoRSqrd", "=", 
+    RowBox[{
+     SuperscriptBox["\[Alpha]", "2"], "-", 
+     RowBox[{"\[Alpha]", " ", 
+      SubscriptBox["a", 
+       RowBox[{
+        RowBox[{"k", "+", "1"}], ",", "k"}]]}]}]}], TraditionalForm]]],
+ "\n\tStep 6.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", "k"], "=", "0"}], TraditionalForm]]],
+ "\n\tStep 7.\t\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", 
+     RowBox[{"k", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{
+       RowBox[{"k", "+", "1"}], ",", "k"}]], "-", "\[Alpha]"}]}], 
+   TraditionalForm]]],
+ "\n\tStep 8.\t\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", 
+     RowBox[{"k", "+", "2"}]}], ",", " ", "\[Ellipsis]", ",", "n"}], 
+   TraditionalForm]]],
+ " do Step 9\n\t\t\t\tStep 9.\t\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", "j"], "=", 
+    SubscriptBox["a", 
+     RowBox[{"j", " ", "k"}]]}], TraditionalForm]]],
+ "\t\t\t\t(note ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["w", "_"], "=", 
+    RowBox[{
+     FractionBox["1", 
+      RowBox[{"2", "r"}]], 
+     OverscriptBox["v", "_"]}]}], TraditionalForm]]],
+ ")\n\tStep 10.\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "k"}], ",", 
+    RowBox[{"k", "+", "1"}], ",", "\[Ellipsis]", ",", "n"}], 
+   TraditionalForm]]],
+ " do Step 11\n\t\t\t\tStep 11.\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["u", "j"], "=", 
+    RowBox[{
+     FractionBox["1", "twoRSqrd"], 
+     RowBox[{
+      SubsuperscriptBox["\[Sum]", 
+       RowBox[{"i", "=", 
+        RowBox[{"k", "+", "1"}]}], "n"], 
+      RowBox[{
+       SubscriptBox["a", 
+        RowBox[{"j", " ", "i"}]], 
+       SubscriptBox["v", "i"]}]}]}]}], TraditionalForm]]],
+ "\t\t(note ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["u", "_"], "=", 
+    RowBox[{
+     FractionBox["1", "r"], "A", " ", 
+     OverscriptBox["w", "_"]}]}], TraditionalForm]]],
+ ")\n\tStep 12.\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "k"}], ",", 
+    RowBox[{"k", "+", "1"}], ",", "\[Ellipsis]", ",", "n"}], 
+   TraditionalForm]]],
+ " do Step 13\n\t\t\t\tStep 13.\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "j"], "=", 
+    RowBox[{
+     SubscriptBox["u", "j"], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       FractionBox[
+        RowBox[{
+         OverscriptBox["u", "_"], "\[CenterDot]", 
+         OverscriptBox["v", "_"]}], 
+        RowBox[{"2", " ", "twoRSqrd"}]], ")"}], 
+      SubscriptBox["v", "j"]}]}]}], TraditionalForm]]],
+ "\t\t(note ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["z", "_"], "=", 
+    RowBox[{
+     RowBox[{
+      FractionBox["1", "r"], "A", " ", 
+      OverscriptBox["w", "_"]}], "-", 
+     RowBox[{
+      OverscriptBox["w", "_"], 
+      SuperscriptBox[
+       OverscriptBox["w", "_"], "T"], 
+      FractionBox["1", "r"], "A", " ", 
+      OverscriptBox["w", "_"]}]}]}], TraditionalForm]]],
+ ")\n\tStep 14.\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"l", "=", 
+     RowBox[{"k", "+", "1"}]}], ",", 
+    RowBox[{"k", "+", "2"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"n", "-", "1"}]}], TraditionalForm]]],
+ " do Steps 15-18\n\t\t\t\tStep 15.\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", 
+     RowBox[{"l", "+", "1"}]}], ",", "\[Ellipsis]", ",", "n"}], 
+   TraditionalForm]]],
+ " do Step 16 and 17.\n\t\t\t\t\tStep 16.\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{"j", " ", "l"}]], "=", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{"j", " ", "l"}]], "-", 
+     RowBox[{
+      SubscriptBox["v", "l"], 
+      SubscriptBox["z", "j"]}], "-", 
+     RowBox[{
+      SubscriptBox["v", "j"], 
+      SubscriptBox["z", "l"]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\t\tStep 17.\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{"l", " ", "j"}]], "=", 
+    SubscriptBox["a", 
+     RowBox[{"j", " ", "l"}]]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 18.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{"l", " ", "l"}]], " ", "=", " ", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{"l", " ", "l"}]], "-", 
+     RowBox[{"2", " ", 
+      SubscriptBox["v", "l"], " ", 
+      SubscriptBox["z", "l"]}]}]}], TraditionalForm]]],
+ "\n\tStep 19.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{"n", " ", "n", " "}]], "=", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{"n", " ", "n"}]], "-", 
+     RowBox[{"2", " ", 
+      SubscriptBox["v", "n"], 
+      SubscriptBox["z", "n"]}]}]}], TraditionalForm]]],
+ "\n\tStep 20.\tFor ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", 
+     RowBox[{"k", "+", "2"}]}], ",", "\[Ellipsis]", ",", "n"}], 
+   TraditionalForm]]],
+ " do Step 21.\n\t\t\t\tStep 21.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{"k", " ", "j"}]], "=", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{"j", " ", "k"}]], "=", "0"}]}], TraditionalForm]]],
+ "\n\tStep 22.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{
+      RowBox[{"k", "+", "1"}], ",", "k"}]], "=", 
+    RowBox[{
+     SubscriptBox["a", 
+      RowBox[{
+       RowBox[{"k", "+", "1"}], ",", "k"}]], "-", 
+     RowBox[{
+      SubscriptBox["v", 
+       RowBox[{"k", "+", "1"}]], 
+      SubscriptBox["z", "k"]}]}]}], TraditionalForm]]],
+ "\n\tStep 23.\tSet ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", 
+     RowBox[{"k", ",", 
+      RowBox[{"k", "+", "1"}]}]], "=", 
+    SubscriptBox["a", 
+     RowBox[{
+      RowBox[{"k", "+", "1"}], ",", "k"}]]}], TraditionalForm]]],
+ "\n\t\nThe pseudocode above assumes that the programming language used only \
+stores arrays and matrix calculations cannot be conducted directly.  If using \
+an engineering tool such as MATLAB one might wish to perform the matrix \
+calculations directly, eliminating some of the loops and speeding up the run \
+time of the algorithm.\n"
+}], "Text",
+ CellChangeTimes->{{3.491617415462665*^9, 3.491617428290317*^9}, {
+   3.491617485442478*^9, 3.491617701350841*^9}, {3.491617785864338*^9, 
+   3.491617842082849*^9}, {3.491618339702094*^9, 3.491618574194127*^9}, {
+   3.4916186656971073`*^9, 3.491618779969878*^9}, {3.491618818474964*^9, 
+   3.491618859813426*^9}, {3.491618969403146*^9, 3.491619022788464*^9}, {
+   3.491697109036674*^9, 3.491697241680167*^9}, 3.492219800715927*^9, {
+   3.492219989796659*^9, 3.492220496198185*^9}, {3.4922205303817997`*^9, 
+   3.4922212486195602`*^9}, {3.492221293477556*^9, 3.492221354957944*^9}, {
+   3.492221388859281*^9, 3.492221636747912*^9}, {3.4923847129337263`*^9, 
+   3.492384715218948*^9}, {3.4929964019535627`*^9, 3.492996409001568*^9}, {
+   3.494726857790213*^9, 3.4947268598950033`*^9}, {3.4947274284988823`*^9, 
+   3.494727451070014*^9}, {3.494731138432323*^9, 3.494731154480592*^9}, {
+   3.494731628974475*^9, 3.494731632430084*^9}, {3.494731913738751*^9, 
+   3.4947319137387857`*^9}, {3.494733061904359*^9, 3.494733062921949*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.492215454745693*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Gram-Schmidt Process.", "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9, {3.492219937152328*^9, 3.492219949860148*^9}, {
+   3.492221657476593*^9, 3.492221659836812*^9}, {3.492387797410741*^9, 
+   3.492387809232232*^9}, 3.4923883215839663`*^9}],
+
+Cell[TextData[{
+ "In an ",
+ StyleBox["orthogonal basis",
+  FontSlant->"Italic"],
+ " of a vector space (matrix), every vector is perpendicular to every other \
+vector.  If we divide each vector by its length we have unit vectors that \
+span the vector space which we will call a ",
+ StyleBox["orthonormal basis",
+  FontSlant->"Italic"],
+ ".  A common orthonormal basis is the ",
+ StyleBox["standard basis ",
+  FontSlant->"Italic"],
+ "represented as the identity matrix.  This is not the only orthonormal \
+basis, we can rotate the axes without changing the right angles at which the \
+vectors meet.  These rotation matrices, we will call ",
+ StyleBox["Q",
+  FontSlant->"Italic"],
+ ".  Every basis has an orthonormal basis which can be constructed by a \
+simple process known as ",
+ StyleBox["Gram-Schmidt orthonormalization.",
+  FontSlant->"Italic"],
+ "  This process takes a skewed set of axes and makes them perpendicular.\n\n\
+In numerical linear algebra orthonormal matrices are important because they \
+introduce no numerical instability.  When lengths stay the same, roundoff \
+error in under control.  Suppose we are given a ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"3", " ", "\[Times]", " ", "3"}], TraditionalForm]]],
+ " matrix ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"A", " ", "=", " ", 
+    RowBox[{"[", " ", 
+     RowBox[{"a", " ", "|", " ", "b", " ", "|", " ", "c"}], " ", "]"}]}], 
+   TraditionalForm]]],
+ ", where ",
+ StyleBox["a b c",
+  FontSlant->"Italic"],
+ " are the column vectors of ",
+ StyleBox["A.  ",
+  FontSlant->"Italic"],
+ "We want to produce three column vectors, ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "1"], ",", 
+    SubscriptBox["q", "2"], ",", " ", 
+    RowBox[{"and", " ", 
+     SubscriptBox["q", "3"]}]}], TraditionalForm]]],
+ " which form an orthonormal basis of ",
+ StyleBox["A.  ",
+  FontSlant->"Italic"],
+ "To start we can choose ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "1"], TraditionalForm]]],
+ " to be in the same direction of ",
+ StyleBox["A ",
+  FontSlant->"Italic"],
+ "for convenience, all we have to do is make it a unit vector.\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "1"], "=", 
+    RowBox[{
+     RowBox[{"a", "/"}], "||", "a", "||"}]}], TraditionalForm]]],
+ "\n\t\nFor ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "2"], TraditionalForm]]],
+ " we must subtract any component of ",
+ StyleBox["b",
+  FontSlant->"Italic"],
+ " that is in the direction of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "1"], "."}], TraditionalForm]]],
+ "  We calculate the projection of ",
+ StyleBox["b ",
+  FontSlant->"Italic"],
+ "onto ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "1"], TraditionalForm]]],
+ " by ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      SubsuperscriptBox["q", "1", "T"], "b"}], ")"}], 
+    SubscriptBox["q", "1"]}], TraditionalForm]]],
+ ",  subtracting for this projection from ",
+ StyleBox["b, ",
+  FontSlant->"Italic"],
+ "gives us an intermediate orthogonal vector ",
+ StyleBox["B, ",
+  FontSlant->"Italic"],
+ "that we make orthonormal by dividing by its length:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"B", "=", 
+    RowBox[{"b", "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "1", "T"], "b"}], ")"}], 
+      SubscriptBox["q", "1"]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "2"], "=", 
+    RowBox[{
+     RowBox[{"B", "/"}], "||", "B", "||"}]}], TraditionalForm]]],
+ "\n\t\nTo get ",
+ StyleBox["c",
+  FontSlant->"Italic"],
+ " to ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "3"], TraditionalForm]]],
+ "we need to subtract any components of ",
+ StyleBox["c, ",
+  FontSlant->"Italic"],
+ "that might lie in the ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "1"], ",", 
+    SubscriptBox["q", "2"]}], TraditionalForm]]],
+ " plane.  What is left over is an vector orthogonal to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "1"], " ", "and", " ", 
+    SubscriptBox["q", "2"]}], TraditionalForm]]],
+ ", ",
+ StyleBox["C, ",
+  FontSlant->"Italic"],
+ "that we make orthonormal by dividing by its length:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"C", "=", 
+    RowBox[{"c", "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "1", "T"], "c"}], ")"}], 
+      SubscriptBox["q", "1"]}], "-", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "2", "T"], "c"}], ")"}], 
+      SubscriptBox["q", "2"]}]}]}], TraditionalForm]]],
+ "\n\t\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", "3"], "=", 
+    RowBox[{
+     RowBox[{"C", "/"}], "||", "C", "||"}]}], TraditionalForm]]],
+ "\n\t\nThe matrix ",
+ StyleBox["Q,",
+  FontSlant->"Italic"],
+ " then forms an orthonormal basis of ",
+ StyleBox["A.\n\n\t",
+  FontSlant->"Italic"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Q", "=", 
+    RowBox[{"[", " ", 
+     RowBox[{
+      SubscriptBox["q", "1"], "|", " ", 
+      SubscriptBox["q", "2"], "|", " ", 
+      SubscriptBox["q", "3"]}], "]"}]}], TraditionalForm]]],
+ "\n\t\n"
+}], "Text",
+ CellChangeTimes->{{3.492387916913127*^9, 3.492388094130227*^9}, {
+   3.492388129876977*^9, 3.492388141146948*^9}, {3.492388181797518*^9, 
+   3.492388379579257*^9}, {3.4923884228687677`*^9, 3.49238849158692*^9}, {
+   3.492388560717901*^9, 3.4923886941275177`*^9}, {3.49238872502678*^9, 
+   3.49238878611758*^9}, {3.492388819052801*^9, 3.4923890617181387`*^9}, {
+   3.492389091813815*^9, 3.4923891836366568`*^9}, {3.492389217115*^9, 
+   3.492389423599111*^9}, {3.49238950597649*^9, 3.492389545081316*^9}, 
+   3.492389652697379*^9, {3.492996411844616*^9, 3.492996443312799*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.492215454745693*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["QR",
+  FontSlant->"Italic"],
+ " Factorization"
+}], "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9, {3.492219937152328*^9, 3.492219949860148*^9}, {
+   3.492221657476593*^9, 3.492221659836812*^9}, {3.492387797410741*^9, 
+   3.492387809232232*^9}, 3.4923883215839663`*^9, {3.492389682657198*^9, 
+   3.492389689697068*^9}}],
+
+Cell[TextData[{
+ StyleBox["What is the relationship between the matrices ",
+  FontSlant->"Plain"],
+ "A",
+ StyleBox[" and ",
+  FontSlant->"Plain"],
+ "Q",
+ StyleBox["?  The relationship between ",
+  FontSlant->"Plain"],
+ "a",
+ StyleBox[" and ",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "1"], TraditionalForm]]],
+ " ",
+ StyleBox["is trivial since we set them equal to one another.  The vector ",
+  FontSlant->"Plain"],
+ "b",
+ StyleBox[" is a combination of the orthonormal ",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "1"], TraditionalForm]]],
+ " ",
+ StyleBox["and ",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "2"], TraditionalForm]]],
+ ", ",
+ StyleBox["and we know what that relationship is:\n\n\t",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"b", "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "1", "T"], "b"}], ")"}], 
+      SubscriptBox["q", "1"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "2", "T"], "b"}], ")"}], 
+      SubscriptBox["q", "2"]}]}]}], TraditionalForm]]],
+ "\n\t\n",
+ StyleBox["Similarly ",
+  FontSlant->"Plain"],
+ "c",
+ StyleBox[" is the sum of its ",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "i"], TraditionalForm]]],
+ "'",
+ StyleBox["s:\n\n\t",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"c", "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "1", "T"], "c"}], ")"}], 
+      SubscriptBox["q", "1"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "2", "T"], "c"}], ")"}], 
+      SubscriptBox["q", "2"]}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        SubsuperscriptBox["q", "3", "T"], "c"}], ")"}], 
+      SubscriptBox["q", "3"]}]}]}], TraditionalForm]]],
+ "\n\t\n",
+ StyleBox["If we write these relationships in matrix form, we have:\n\n\t",
+  FontSlant->"Plain"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"A", "=", 
+    RowBox[{
+     RowBox[{"[", " ", 
+      RowBox[{"a", " ", "|", " ", "b", " ", "|", " ", "c"}], " ", "]"}], " ", 
+     "=", " ", 
+     RowBox[{"[", " ", 
+      RowBox[{
+       SubscriptBox["q", "1"], " ", "|", " ", 
+       SubscriptBox["q", "2"], " ", "|", " ", 
+       SubscriptBox["q", "3"]}], "]"}]}]}], TraditionalForm]]],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"(", GridBox[{
+       {
+        RowBox[{"(", 
+         RowBox[{
+          SubsuperscriptBox["q", "1", "T"], "a"}], ")"}], 
+        RowBox[{"(", 
+         RowBox[{
+          SubsuperscriptBox["q", "1", "T"], "b"}], ")"}], 
+        RowBox[{"(", 
+         RowBox[{
+          SubsuperscriptBox["q", "1", "T"], "c"}], ")"}]},
+       {"0", 
+        RowBox[{"(", 
+         RowBox[{
+          SubsuperscriptBox["q", "2", "T"], "b"}], ")"}], 
+        RowBox[{"(", 
+         RowBox[{
+          SubsuperscriptBox["q", "2", "T"], "c"}], ")"}]},
+       {"0", "0", 
+        RowBox[{"(", 
+         RowBox[{
+          SubsuperscriptBox["q", "3", "T"], "c"}], ")"}]}
+      }], ")"}], "=", "QR"}], TraditionalForm]]],
+ " \n\t\n",
+ StyleBox["An example:",
+  FontSlant->"Plain"]
+}], "Text",
+ CellChangeTimes->{{3.4923897571344023`*^9, 3.492390291194131*^9}, {
+   3.4923903347646227`*^9, 3.492390336131494*^9}, {3.492390447781909*^9, 
+   3.492390456041296*^9}, 3.492996449206716*^9, {3.4954784254678926`*^9, 
+   3.495478428197467*^9}, {3.495811323346181*^9, 3.495811324241804*^9}},
+ FontSlant->"Italic"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", "1", ",", "2"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0", ",", "0"}], "}"}]}], "}"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "A", "]"}]}]], "Input",
+ CellChangeTimes->{{3.492390460825161*^9, 3.4923904891888103`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"1", "1", "2"},
+     {"0", "0", "1"},
+     {"1", "0", "0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.492390490137816*^9, 3.4923908658692837`*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ "First we perform Gram-Schmidt to get ",
+ StyleBox["Q.",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.49239057506651*^9, 3.4923905997465773`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"a", "=", 
+   RowBox[{
+    RowBox[{"A", "\[Transpose]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";", 
+  RowBox[{"b", "=", 
+   RowBox[{
+    RowBox[{"A", "\[Transpose]"}], "[", 
+    RowBox[{"[", "2", "]"}], "]"}]}], ";", 
+  RowBox[{"c", "=", 
+   RowBox[{
+    RowBox[{"A", "\[Transpose]"}], "[", 
+    RowBox[{"[", "3", "]"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.492390496977537*^9, 3.4923905683006*^9}, {
+  3.492390604933003*^9, 3.492390616789217*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"q1", "=", 
+   RowBox[{"a", "/", 
+    RowBox[{"Norm", "[", "a", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"B", "=", 
+   RowBox[{"b", "-", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"q1", ".", "b"}], ")"}], "q1"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"q2", "=", 
+   RowBox[{"B", "/", 
+    RowBox[{"Norm", "[", "B", "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Cc", "=", 
+   RowBox[{"c", "-", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"q1", ".", "c"}], ")"}], "q1"}], "-", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"q2", ".", "c"}], ")"}], "q2"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"q3", "=", 
+    RowBox[{"Cc", "/", 
+     RowBox[{"Norm", "[", "Cc", "]"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Q", "=", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"q1", ",", "q2", ",", "q3"}], "}"}], "\[Transpose]"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "Q", "]"}]}]}], "Input",
+ CellChangeTimes->{{3.4923905287561502`*^9, 3.4923905300033503`*^9}, {
+  3.4923906197648563`*^9, 3.492390630388839*^9}, {3.492391002363492*^9, 
+  3.492391029004621*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      FractionBox["1", 
+       SqrtBox["2"]], "0"},
+     {"0", "0", "1"},
+     {
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      RowBox[{"-", 
+       FractionBox["1", 
+        SqrtBox["2"]]}], "0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.492390630986002*^9, 3.492390866028425*^9, {3.492391024338675*^9, 
+   3.4923910294162617`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"R", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"q1", ".", "a"}], ",", 
+       RowBox[{"q1", ".", "b"}], ",", 
+       RowBox[{"q1", ".", "c"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", 
+       RowBox[{"q2", ".", "b"}], ",", 
+       RowBox[{"q2", ".", "c"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", 
+       RowBox[{"q3", ".", "c"}]}], "}"}]}], "}"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "R", "]"}]}]], "Input",
+ CellChangeTimes->{{3.49239089405523*^9, 3.492390949049326*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      SqrtBox["2"], 
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      SqrtBox["2"]},
+     {"0", 
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      SqrtBox["2"]},
+     {"0", "0", "1"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.4923909494260178`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"Q", ".", "R"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "A", "]"}]}]], "Input",
+ CellChangeTimes->{{3.492390951130445*^9, 3.492390977312971*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"1", "1", "2"},
+     {"0", "0", "1"},
+     {"1", "0", "0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.492390953483272*^9, 3.492390977713622*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"Q", ",", "R"}], "}"}], "=", 
+   RowBox[{"QRDecomposition", "[", "A", "]"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "Q", "]"}]}]], "Input",
+ CellChangeTimes->{{3.492391081888101*^9, 3.492391144738805*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["1", 
+       SqrtBox["2"]], "0", 
+      FractionBox["1", 
+       SqrtBox["2"]]},
+     {
+      FractionBox["1", 
+       SqrtBox["2"]], "0", 
+      RowBox[{"-", 
+       FractionBox["1", 
+        SqrtBox["2"]]}]},
+     {"0", "1", "0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.492391092171771*^9, 3.492391147078933*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"MatrixForm", "[", "R", "]"}]], "Input",
+ CellChangeTimes->{{3.492391149419676*^9, 3.492391154450211*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      SqrtBox["2"], 
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      SqrtBox["2"]},
+     {"0", 
+      FractionBox["1", 
+       SqrtBox["2"]], 
+      SqrtBox["2"]},
+     {"0", "0", "1"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.492391154944035*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.492215454745693*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["QR ",
+  FontSlant->"Italic"],
+ "Algorithm for computing eigenvalues."
+}], "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9, {3.492219937152328*^9, 3.492219949860148*^9}, {
+   3.492221657476593*^9, 3.492221659836812*^9}, {3.492387797410741*^9, 
+   3.492387809232232*^9}, 3.4923883215839663`*^9, {3.492389682657198*^9, 
+   3.492389689697068*^9}, {3.492391229743503*^9, 3.492391255253845*^9}}],
+
+Cell[TextData[{
+ "This algorithm is so simple it's scary.  We start with a matrix ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ " and perform of ",
+ StyleBox["QR ",
+  FontSlant->"Italic"],
+ "factorization,\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", "0", ")"}]], "=", 
+    RowBox[{
+     SuperscriptBox["Q", 
+      RowBox[{"(", "0", ")"}]], 
+     SuperscriptBox["R", 
+      RowBox[{"(", "0", ")"}]]}]}], TraditionalForm]]],
+ "\n\t\nThen we reverse the factors to form the matrix ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", "1", ")"}]], ","}], TraditionalForm]]],
+ "\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", "1", ")"}]], "=", 
+    RowBox[{
+     SuperscriptBox["R", 
+      RowBox[{"(", "0", ")"}]], 
+     SuperscriptBox["Q", 
+      RowBox[{"(", "0", ")"}]]}]}], TraditionalForm]]],
+ " (\[DoubleDagger])\n\t\nWe can do this because ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "1", ")"}]], TraditionalForm]]],
+ " is similar to ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ ", we can verify\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["Q", 
+      SuperscriptBox[
+       RowBox[{"(", "0", ")"}], 
+       RowBox[{"-", "1"}]]], 
+     SuperscriptBox["A", 
+      RowBox[{"(", "0", ")"}]], 
+     SuperscriptBox["Q", 
+      RowBox[{"(", "0", ")"}]]}], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       SuperscriptBox["Q", 
+        SuperscriptBox[
+         RowBox[{"(", "0", ")"}], 
+         RowBox[{"-", "1"}]]], "(", 
+       RowBox[{
+        SuperscriptBox["Q", 
+         RowBox[{"(", "0", ")"}]], 
+        SuperscriptBox["R", 
+         RowBox[{"(", "0", ")"}]]}], ")"}], 
+      SuperscriptBox["Q", 
+       RowBox[{"(", "0", ")"}]]}], "=", 
+     SuperscriptBox["A", 
+      RowBox[{"(", "1", ")"}]]}]}], TraditionalForm]]],
+ "\n\t\nAnd we continue this process without changing the eigenvalues.  The \
+above process is called the ",
+ StyleBox["unshifted QR algorithm",
+  FontSlant->"Italic"],
+ ", and almost always ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "k", ")"}]], TraditionalForm]]],
+ " approaches a triangular form, its diagonal entries approach its \
+eigenvalues, which are also the eigenvalues of ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ ".  This algorithm is okay, but we can make it even better by using two \
+refinements:\n\n1.  We allow shifts, in a similar fashion to the inverse \
+power method.  If the number ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["\[Alpha]", 
+    RowBox[{"(", "k", ")"}]], TraditionalForm]]],
+ " is close to an eigenvalue, the step in (\[DoubleDagger]) should be shifted \
+as follows\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["A", 
+      RowBox[{"(", "k", ")"}]], "-", 
+     RowBox[{
+      SuperscriptBox["\[Alpha]", 
+       RowBox[{"(", "k", ")"}]], "I"}]}], "=", 
+    RowBox[{
+     SuperscriptBox["Q", 
+      RowBox[{"(", "k", ")"}]], 
+     SuperscriptBox["R", 
+      RowBox[{"(", "k", ")"}]]}]}], TraditionalForm]]],
+ "  and then ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", 
+      RowBox[{"k", "+", "1"}], ")"}]], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["R", 
+       RowBox[{"(", "k", ")"}]], 
+      SuperscriptBox["Q", 
+       RowBox[{"(", "k", ")"}]]}], "+", 
+     RowBox[{
+      SuperscriptBox["\[Alpha]", 
+       RowBox[{"(", "k", ")"}]], "I"}]}]}], TraditionalForm]]],
+ "\n\t\nOne popular method of choosing the shifting constant, ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["\[Alpha]", 
+    RowBox[{"(", "k", ")"}]], TraditionalForm]]],
+ " is to simply use the ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["a", 
+    RowBox[{"n", " ", "n"}], 
+    RowBox[{"(", "k", ")"}]], TraditionalForm]]],
+ " entry of the matrix.  Another method uses a shifting constant that is the \
+eigenvalue of the matrix\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", GridBox[{
+      {
+       SubsuperscriptBox["a", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"n", "-", "1"}], ")"}], ",", 
+         RowBox[{"(", 
+          RowBox[{"n", "-", "1"}], ")"}]}], 
+        RowBox[{"(", "k", ")"}]], 
+       SubsuperscriptBox["a", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"n", "-", "1"}], ")"}], ",", "n"}], 
+        RowBox[{"(", "k", ")"}]]},
+      {
+       SubsuperscriptBox["a", 
+        RowBox[{"n", ",", 
+         RowBox[{"(", 
+          RowBox[{"n", "-", "1"}], ")"}]}], 
+        RowBox[{"(", "k", ")"}]], 
+       SubsuperscriptBox["a", 
+        RowBox[{"n", " ", "n"}], 
+        RowBox[{"(", "k", ")"}]]}
+     }], ")"}], TraditionalForm]]],
+ "\n\nthat is closest to ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["a", 
+     RowBox[{"n", " ", "n", " "}], 
+     RowBox[{"(", "k", ")"}]], "."}], TraditionalForm]]],
+ "\n\nAfter a few iterations the matrix ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "k", ")"}]], TraditionalForm]]],
+ " will come to look as follows:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["A", 
+     RowBox[{"(", "k", ")"}]], "=", 
+    RowBox[{"(", GridBox[{
+       {"*", "*", "*", "*"},
+       {"*", "*", "*", "*"},
+       {"0", "*", "*", "*"},
+       {"0", "0", "\[Epsilon]", 
+        SubscriptBox["\[Mu]", "1"]}
+      }], ")"}]}], TraditionalForm]]],
+ ",  where \[Epsilon] << 1.\n\t\n",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Mu]", "1"], TraditionalForm]]],
+ " will be accepted as ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "1"], "."}], TraditionalForm]]],
+ "  We find the next eigenvalue by eliminating the last row and column and \
+performing the same procedure with the smaller submatrix.  And continue until \
+all eigenvalues have been found.  At this point the ",
+ StyleBox["QR",
+  FontSlant->"Italic"],
+ " algorithm is completely described.  If the eigenvectors are desired they \
+are one step away with an inverse power method using the eigenvalues found \
+here.\n\n2.  The last thing we can do to greatly improve the ",
+ StyleBox["QR",
+  FontSlant->"Italic"],
+ " algorithm is to make the ",
+ StyleBox["QR ",
+  FontSlant->"Italic"],
+ "factorization very fast at each step.  This is where our old friend the \
+Householder transformation comes in.  It turns out that the ",
+ StyleBox["QR ",
+  FontSlant->"Italic"],
+ "factorization generally takes ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", 
+    SuperscriptBox["n", "3"], ")"}], TraditionalForm]]],
+ " operation, however for a matrix that is already in tridiagonal form this \
+becomes ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"O", "(", "n", ")"}], TraditionalForm]]],
+ " and once the matrix ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "0", ")"}]], TraditionalForm]]],
+ " is in tridiagonal form, each ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["A", 
+    RowBox[{"(", "k", ")"}]], TraditionalForm]]],
+ " will stay that way at each step."
+}], "Text",
+ CellChangeTimes->{{3.492391283702051*^9, 3.492391318598096*^9}, {
+   3.492391370122922*^9, 3.4923914123229647`*^9}, {3.49239148443461*^9, 
+   3.492391556114555*^9}, {3.492391591619504*^9, 3.492391796270946*^9}, {
+   3.49239188322405*^9, 3.49239191528299*^9}, {3.492392658051598*^9, 
+   3.4923928820255136`*^9}, {3.4923929514690742`*^9, 3.492393081699667*^9}, {
+   3.492393126387363*^9, 3.492393196658609*^9}, {3.492393460162037*^9, 
+   3.4923936090321007`*^9}, {3.492393659180304*^9, 3.4923937159258757`*^9}, {
+   3.492393980044195*^9, 3.492394111198111*^9}, {3.492394376124854*^9, 
+   3.492394384132599*^9}, {3.4923944195383883`*^9, 3.4923944471853848`*^9}, {
+   3.492394541961619*^9, 3.492394560289507*^9}, {3.492394596837476*^9, 
+   3.4923949940135736`*^9}, {3.492395035405051*^9, 3.4923951786485853`*^9}, 
+   3.492815721938867*^9, {3.492996455898922*^9, 3.4929964974225693`*^9}, 
+   3.4954784696214237`*^9}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{3.492215454745693*^9, 3.49239126723341*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellChangeTimes->{3.492215454744562*^9},
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Psuedocode for ",
+ StyleBox["QR ",
+  FontSlant->"Italic"],
+ "Algorithm ",
+ "for computing eigenvalues",
+ StyleBox[".",
+  FontSlant->"Italic"]
+}], "Section",
+ CellChangeTimes->{{3.491787898227662*^9, 3.4917879014666033`*^9}, 
+   3.492215454744787*^9, {3.492219937152328*^9, 3.492219949860148*^9}, {
+   3.492221657476593*^9, 3.492221659836812*^9}, {3.492387797410741*^9, 
+   3.492387809232232*^9}, 3.4923883215839663`*^9, {3.492389682657198*^9, 
+   3.492389689697068*^9}, {3.492391229743503*^9, 3.492391255253845*^9}, {
+   3.492395437306464*^9, 3.492395444160322*^9}}],
+
+Cell[TextData[{
+ "Starting with a symmetric tridiagonal matrix, we will relabel some of the \
+terms for simplicity:\n\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"A", " ", "=", " ", 
+    RowBox[{"(", GridBox[{
+       {
+        SubscriptBox["a", "1"], 
+        SubscriptBox["b", "2"], "0", "\[CenterEllipsis]", "0"},
+       {
+        SubscriptBox["b", "2"], 
+        SubscriptBox["a", "2"], 
+        SubscriptBox["b", "3"], "\[DescendingEllipsis]", 
+        "\[VerticalEllipsis]"},
+       {"0", 
+        SubscriptBox["b", "3"], "\[DescendingEllipsis]", 
+        "\[DescendingEllipsis]", "0"},
+       {"\[VerticalEllipsis]", "\[DescendingEllipsis]", 
+        "\[DescendingEllipsis]", "\[DescendingEllipsis]", 
+        SubscriptBox["b", "n"]},
+       {"0", "\[CenterEllipsis]", "0", 
+        SubscriptBox["b", "n"], 
+        SubscriptBox["a", "n"]}
+      }], ")"}]}], TraditionalForm]]],
+ "\n\t\n\tStep 1. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", " ", "=", "1"}], TraditionalForm]]],
+ "\n\t\tSet SHIFT = 0\n\tStep 2. While ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", " ", "\[LessEqual]", " ", "M"}], TraditionalForm]]],
+ " do Steps 3-53\n\t\n\t\t(the next few steps check for success, if success \
+is met, we break out of the while loop)\n\t\n\t\tStep 3.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["b", "n"], "|", 
+    RowBox[{"\[LessEqual]", " ", 
+     StyleBox["TOL",
+      FontSlant->"Italic"], 
+     StyleBox[" ",
+      FontSlant->"Plain"]}]}], TraditionalForm]]],
+ "then\n\t\t\tStep 4. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "n"], "=", 
+    RowBox[{
+     SubscriptBox["a", "n"], "+", "SHIFT"}]}], TraditionalForm]]],
+ "\n\t\t\tStep 5. Set n = n -1\n\t\t\n\t\tStep 6.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["b", "2"], "|", " ", 
+    RowBox[{"\[LessEqual]", " ", 
+     StyleBox["TOL",
+      FontSlant->"Italic"]}]}], TraditionalForm]]],
+ " then\n\t\t\tStep 7. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "2"], "=", 
+    RowBox[{
+     SubscriptBox["a", "1"], "+", "SHIFT"}]}], TraditionalForm]]],
+ "\n\t\t\tStep 8. Set n = n -1\n\t\t\tStep 9. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "1"], "=", 
+    SubscriptBox["a", "2"]}], TraditionalForm]]],
+ "\n\t\t\tStep 10. for ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", " ", "=", " ", "2"}], ",", " ", "\[Ellipsis]", ",", " ", 
+    "n"}], TraditionalForm]]],
+ "\n\t\t\t\tStep 11. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "j"], "=", 
+    SubscriptBox["a", 
+     RowBox[{"j", "+", "1"}]]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 12. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "j"], " ", "=", " ", 
+    SubscriptBox["b", 
+     RowBox[{"j", "+", "1"}]]}], TraditionalForm]]],
+ "\n\t\t\t\n\t\tStep 13.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"n", "=", "0"}], TraditionalForm]]],
+ " then\n\t\t\t\tStep 14. Break out of loop.\n\t\t\t\n\t\tStep 15.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"n", "=", "1"}], TraditionalForm]]],
+ " then\n\t\t\t\tStep 16.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "1"], "=", 
+    RowBox[{
+     SubscriptBox["a", "1"], "+", "SHIFT"}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 17.  Break out of loop.\n\t\t\t\n\t\tStep 18.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "3"}], ",", "\[Ellipsis]", ",", 
+    RowBox[{"n", "-", "1"}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 19.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"|", 
+    SubscriptBox["b", "j"], "|", 
+    RowBox[{"\[LessEqual]", " ", 
+     StyleBox["TOL",
+      FontSlant->"Italic"]}]}], TraditionalForm]]],
+ " then\n\t\t\t\t\tStep 20.  Print \"Split into, ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["a", "1"], TraditionalForm]]],
+ ", \[Ellipsis], ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["a", 
+    RowBox[{"j", "-", "1"}]], TraditionalForm]]],
+ ", ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "2"], ",", " ", "\[Ellipsis]", ",", " ", 
+    SubscriptBox["b", 
+     RowBox[{"j", "-", "1"}]]}], TraditionalForm]]],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "j"], ",", " ", "\[Ellipsis]", ",", 
+    SubscriptBox["a", "n"], ",", " ", 
+    SubscriptBox["b", 
+     RowBox[{"j", "+", "1"}]], ",", "\[Ellipsis]", ",", 
+    SubscriptBox["b", "n"]}], TraditionalForm]]],
+ "\"\n\t\t\t\t\tStep 21. Break out of loop.\n\t\t\t\t\n\t\t(compute shift)\n\t\
+\t\t\t\n\t\tStep 22.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"B", "=", 
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["a", 
+         RowBox[{"n", "-", "1"}]], "+", 
+        SubscriptBox["a", "n"]}], ")"}]}]}], ",", " ", 
+    RowBox[{"C", " ", "=", " ", 
+     RowBox[{
+      RowBox[{
+       SubscriptBox["a", "n"], 
+       SubscriptBox["a", 
+        RowBox[{"n", "-", "1"}]]}], "-", 
+      SubsuperscriptBox["b", "n", "2"]}]}], ",", " ", 
+    RowBox[{"D", "=", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       RowBox[{
+        SuperscriptBox["B", "2"], "-", 
+        RowBox[{"4", "C"}]}], ")"}], 
+      RowBox[{"1", "/", "2"}]]}]}], TraditionalForm]]],
+ "\n\t\tStep 23.  If B > 0 then\n\t\t\t\tStep 24.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Mu]", "1"], "=", 
+    RowBox[{
+     RowBox[{"-", "2"}], 
+     RowBox[{"C", "/", 
+      RowBox[{"(", 
+       RowBox[{"B", "+", "D"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 25.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Mu]", "2"], "=", 
+    RowBox[{
+     RowBox[{"-", 
+      RowBox[{"(", 
+       RowBox[{"B", "+", "D"}], ")"}]}], "/", "2"}]}], TraditionalForm]]],
+ "\n\t\t\t   Else\n\t\t\t   \tStep 26.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Mu]", "1"], "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"D", "-", "B"}], ")"}], "/", "2"}]}], TraditionalForm]]],
+ "\n\t\t\t   \tStep 27.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Mu]", "2"], "=", 
+    RowBox[{"2", 
+     RowBox[{"C", "/", 
+      RowBox[{"(", 
+       RowBox[{"D", "-", "B"}], ")"}]}]}]}], TraditionalForm]]],
+ "\n\t\t\t   \t\n\t\tStep 28.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"n", "=", "2"}], TraditionalForm]]],
+ " then\n\t\t\t\tStep 29.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Lambda]", "1"], "=", 
+    RowBox[{
+     SubscriptBox["\[Mu]", "1"], "+", "SHIFT"}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 30.  Set ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[Lambda]", "2"], TraditionalForm]]],
+ " = ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Mu]", "2"], "+", "SHIFT"}], TraditionalForm]]],
+ "\n\t\t\t\tStep 31.  Break out of loop.\n\t\t\t\t\n\t\tStep 32.  Choose ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"S", 
+    RowBox[{Cell[TextData[{
+      "so that | ",
+      StyleBox["S - ",
+       FontSlant->"Italic"],
+      Cell[BoxData[
+       FormBox[
+        SubscriptBox["a", "n"], TraditionalForm]]],
+      " | = min{ ",
+      Cell[BoxData[
+       FormBox[
+        RowBox[{
+         RowBox[{"|", 
+          RowBox[{
+           SubscriptBox["\[Mu]", "1"], "-", 
+           SubscriptBox["a", "n"]}], "|"}], ",", 
+         RowBox[{"|", 
+          RowBox[{
+           SubscriptBox["\[Mu]", "2"], "-", 
+           SubscriptBox["a", "n"]}], "|"}]}], TraditionalForm]]],
+      "}"
+     }]], "."}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 33.  Set SHIFT = SHIFT + ",
+ Cell[BoxData[
+  FormBox["S", TraditionalForm]]],
+ "\n\t\t\n\t\t(perform shift)\n\t\t\n\t\tStep 34.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "1"}], ",", "\[Ellipsis]", ",", "n"}], 
+   TraditionalForm]]],
+ "\n\t\t\tStep 35.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["d", "j"], "=", 
+    RowBox[{
+     SubscriptBox["a", "j"], "-", "S"}]}], TraditionalForm]]],
+ "\n\t\t\t\n\t\t(Steps 36 - 44 compute ",
+ StyleBox["R",
+  FontSlant->"Italic"],
+ ")\n\t\t\n\t\tStep 36.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["x", "1"], "=", 
+     SubscriptBox["d", "1"]}], ",", " ", 
+    RowBox[{
+     SubscriptBox["y", "1"], "=", 
+     SubscriptBox["b", "2"]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 37.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "2"}], ",", "\[Ellipsis]", ",", " ", "n"}], 
+   TraditionalForm]]],
+ "\n\t\t\t\tStep 38.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", 
+     RowBox[{"j", "-", "1"}]], "=", 
+    SuperscriptBox[
+     RowBox[{"(", 
+      RowBox[{
+       SubsuperscriptBox["x", 
+        RowBox[{"j", "-", "1"}], "2"], "+", 
+       SubsuperscriptBox["b", "j", "2"]}], ")"}], 
+     RowBox[{"1", "/", "2"}]]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 39.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["c", "j"], "=", 
+    RowBox[{
+     SubscriptBox["x", 
+      RowBox[{"j", "-", "1"}]], "/", 
+     SubscriptBox["z", 
+      RowBox[{"j", "-", "1"}]]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 40.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["s", "j"], "=", 
+    RowBox[{
+     SubscriptBox["b", "j"], "/", 
+     SubscriptBox["z", 
+      RowBox[{"j", "-", "1"}]]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 41.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["q", 
+     RowBox[{"j", "-", "1"}]], "=", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["c", "j"], 
+      SubscriptBox["y", 
+       RowBox[{"j", "-", "1"}]]}], "+", 
+     RowBox[{
+      SubscriptBox["s", "j"], 
+      SubscriptBox["d", "j"]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 42.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["x", "j"], "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", 
+       SubscriptBox["s", "j"]}], 
+      SubscriptBox["y", 
+       RowBox[{"j", "-", "1"}]]}], "+", 
+     RowBox[{
+      SubscriptBox["c", "j"], 
+      SubscriptBox["d", "j"]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 43. If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"j", " ", "\[NotEqual]", " ", "n"}], TraditionalForm]]],
+ " then\n\t\t\t\t\t\tStep 44. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["r", 
+     RowBox[{"j", "-", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["s", "j"], 
+     SubscriptBox["b", 
+      RowBox[{"j", "+", "1"}]]}]}], TraditionalForm]]],
+ "\n\t\t\t\t\t\tStep 45. Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["y", "j"], "=", 
+    RowBox[{
+     SubscriptBox["c", "j"], 
+     SubscriptBox["b", 
+      RowBox[{"j", "+", "1"}]]}]}], TraditionalForm]]],
+ "\n\t\t\t\t\t\t\n\t\t(calculate the new ",
+ StyleBox["A ",
+  FontSlant->"Italic"],
+ "matrix)\n\t\t\t\t\n\t\tStep 46.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["z", "n"], "=", 
+    SubscriptBox["x", "n"]}], TraditionalForm]]],
+ "\n\t\tStep 47.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "1"], "=", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["s", "2"], 
+      SubscriptBox["q", "1"]}], "+", 
+     RowBox[{
+      SubscriptBox["c", "2"], 
+      SubscriptBox["z", "1"]}]}]}], TraditionalForm]]],
+ "\n\t\tStep 48.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", "2"], "=", 
+    RowBox[{
+     SubscriptBox["s", "2"], 
+     SubscriptBox["z", "2"]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 49.  For ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"j", "=", "2"}], ",", "3", ",", " ", "\[Ellipsis]", ",", " ", 
+    RowBox[{"n", "-", "1"}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 50.  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "j"], "=", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["s", 
+       RowBox[{"j", "+", "1"}]], 
+      SubscriptBox["q", "j"]}], "+", 
+     RowBox[{
+      SubscriptBox["c", "j"], 
+      SubscriptBox["c", 
+       RowBox[{"j", "+", "1"}]], 
+      SubscriptBox["z", "j"]}]}]}], TraditionalForm]]],
+ "\n\t\t\t\tStep 51.  ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["b", 
+     RowBox[{"j", "+", "1"}]], "=", 
+    RowBox[{
+     SubscriptBox["s", 
+      RowBox[{"j", "+", "1"}]], 
+     SubscriptBox["z", 
+      RowBox[{"j", "+", "1"}]]}]}], TraditionalForm]]],
+ "\n\t\t\t\t\n\t\tStep 52.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "n"], "=", 
+    RowBox[{
+     SubscriptBox["c", "n"], 
+     SubscriptBox["z", "n"]}]}], TraditionalForm]]],
+ "\n\t\t\n\t\tStep 53.  Set ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"k", "=", 
+    RowBox[{"k", "+", "1"}]}], TraditionalForm]]],
+ "\n\n\tStep 54.  If ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"k", "\[Equal]", "M"}], ",", " ", "then"}], TraditionalForm]]],
+ "\n\t\t\tPrint \"Number of iterations exceeded\"\t\n\t\t\n\t"
+}], "Text",
+ CellChangeTimes->{{3.492815852031376*^9, 3.492816237528513*^9}, {
+  3.492816291736498*^9, 3.492816472363769*^9}, {3.492816509187257*^9, 
+  3.492817209481324*^9}, {3.492817282879847*^9, 3.4928179396871977`*^9}, {
+  3.4928270148518887`*^9, 3.492827089757347*^9}, {3.492827131982531*^9, 
+  3.492827184078884*^9}, {3.492993971216362*^9, 3.492993995592574*^9}, {
+  3.4929949571772337`*^9, 3.492995314084834*^9}, {3.492996512639632*^9, 
+  3.492996513817082*^9}, {3.494449473051197*^9, 3.4944495500127287`*^9}, {
+  3.494733875940383*^9, 3.4947338767420683`*^9}, {3.494734053127056*^9, 
+  3.494734053692766*^9}, {3.494734104744076*^9, 3.49473410474413*^9}, {
+  3.494877218799179*^9, 3.494877218799242*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext",
+ CellChangeTimes->{
+  3.492215454745693*^9, 3.49239126723341*^9, {3.49281679070413*^9, 
+   3.492816798131468*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1034, 901},
+WindowMargins->{{122, Automatic}, {Automatic, 197}},
+PrintingCopies->1,
+PrintingPageRange->{1, Automatic},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[567, 22, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[10893, 376, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[19941, 688, 106, 2, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[25559, 872, 106, 2, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[31344, 1072, 106, 2, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[41238, 1403, 106, 2, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[48283, 1628, 106, 2, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[61760, 2097, 106, 2, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[71382, 2395, 106, 2, 4, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 86736, 2917}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[656, 27, 105, 1, 67, "Section"],
+Cell[764, 30, 9230, 319, 725, "Text"],
+Cell[9997, 351, 847, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10893, 376, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[10982, 381, 115, 1, 67, "Section"],
+Cell[11100, 384, 8008, 278, 799, "Text"],
+Cell[19111, 664, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19941, 688, 106, 2, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[20072, 694, 141, 2, 67, "Section"],
+Cell[20216, 698, 4468, 147, 475, "Text"],
+Cell[24687, 847, 823, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25559, 872, 106, 2, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[25690, 878, 141, 2, 67, "Section"],
+Cell[25834, 882, 4635, 163, 408, "Text"],
+Cell[30472, 1047, 823, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[31344, 1072, 106, 2, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[31475, 1078, 245, 3, 67, "Section"],
+Cell[31723, 1083, 8640, 293, 585, "Text"],
+Cell[40366, 1378, 823, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41238, 1403, 106, 2, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[41369, 1409, 304, 4, 67, "Section"],
+Cell[41676, 1415, 5732, 186, 491, "Text"],
+Cell[47411, 1603, 823, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[48283, 1628, 106, 2, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[48414, 1634, 402, 9, 67, "Section"],
+Cell[48819, 1645, 3552, 127, 283, "Text"],
+Cell[CellGroupData[{
+Cell[52396, 1776, 425, 12, 27, "Input"],
+Cell[52824, 1790, 683, 19, 61, "Output"]
+}, Open  ]],
+Cell[53522, 1812, 175, 5, 26, "Text"],
+Cell[53700, 1819, 501, 15, 27, "Input"],
+Cell[CellGroupData[{
+Cell[54226, 1838, 1223, 40, 133, "Input"],
+Cell[55452, 1880, 928, 30, 83, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[56417, 1915, 596, 18, 27, "Input"],
+Cell[57016, 1935, 793, 26, 85, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[57846, 1966, 199, 5, 27, "Input"],
+Cell[58048, 1973, 683, 19, 61, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[58768, 1997, 267, 7, 27, "Input"],
+Cell[59038, 2006, 875, 28, 83, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59950, 2039, 129, 2, 27, "Input"],
+Cell[60082, 2043, 791, 26, 85, "Output"]
+}, Open  ]],
+Cell[60888, 2072, 823, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[61760, 2097, 106, 2, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[61891, 2103, 471, 9, 67, "Section"],
+Cell[62365, 2114, 8121, 254, 703, "Text"],
+Cell[70489, 2370, 844, 19, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[71382, 2395, 106, 2, 4, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[71513, 2401, 584, 14, 67, "Section"],
+Cell[72100, 2417, 13355, 461, 1520, "Text"],
+Cell[85458, 2880, 896, 21, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

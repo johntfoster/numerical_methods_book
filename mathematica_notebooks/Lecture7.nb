@@ -1,0 +1,841 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     27101,        832]
+NotebookOptionsPosition[     24619,        746]
+NotebookOutlinePosition[     25370,        773]
+CellTagsIndexPosition[     25292,        768]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Singular Value Decomposition", "Section",
+ CellChangeTimes->{{3.492998546041068*^9, 3.492998551230351*^9}}],
+
+Cell[TextData[{
+ "The singular value decomposition is closely associated with the \
+eigenvalue-eigenvector factorization ",
+ StyleBox["Q \[CapitalLambda] Q\[Transpose] ",
+  FontSlant->"Italic"],
+ "of a positive definate matrix.  However, we encounter many matrices that \
+are not positive definite and the decomposition is not true.  Consider a \
+rectangular matrix (non-square) matrix, the eigenvalues are not defined in \
+this scenario.  If we allow the ",
+ StyleBox["Q ",
+  FontSlant->"Italic"],
+ "on the left and the ",
+ StyleBox["Q",
+  FontSlant->"Italic"],
+ " on the right to be any two orthogonal matrices ",
+ StyleBox["U",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["V\[Transpose], ",
+  FontSlant->"Italic"],
+ " then any matrix will have a decomposition ",
+ StyleBox["A=U\[CapitalSigma]V\[Transpose].\n\n\[CapitalSigma]  ",
+  FontSlant->"Italic"],
+ "has eigenvalues from ",
+ StyleBox["A\[Transpose]A",
+  FontSlant->"Italic"],
+ ", not from ",
+ StyleBox["A.",
+  FontSlant->"Italic"],
+ "  These positive entries will be ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Sigma]", "1"], ",", "\[Ellipsis]", ",", 
+    SubscriptBox["\[Sigma]", "r"]}], TraditionalForm]]],
+ ".  They are the singular values of ",
+ StyleBox["A.  ",
+  FontSlant->"Italic"],
+ "They fill the first ",
+ StyleBox["r",
+  FontSlant->"Italic"],
+ " places on the main diagonal of ",
+ StyleBox["\[CapitalSigma]",
+  FontSlant->"Italic"],
+ "  when ",
+ StyleBox["A ",
+  FontSlant->"Italic"],
+ "has rank ",
+ StyleBox["r.",
+  FontSlant->"Italic"],
+ "  The rest of ",
+ StyleBox["\[CapitalSigma]",
+  FontSlant->"Italic"],
+ " is zero.  The columns of ",
+ StyleBox["U",
+  FontSlant->"Italic"],
+ " are the eigenvectos of ",
+ StyleBox["AA\[Transpose]",
+  FontSlant->"Italic"],
+ ", and the columns of ",
+ StyleBox["V",
+  FontSlant->"Italic"],
+ " are the eigenvectors of ",
+ StyleBox["A\[Transpose]A",
+  FontSlant->"Italic"],
+ ".  The ",
+ StyleBox["r",
+  FontSlant->"Italic"],
+ " singular values on the diagonal of ",
+ StyleBox["\[CapitalSigma]",
+  FontSlant->"Italic"],
+ "  are the square roots of the nonzero eigenvalues of both ",
+ StyleBox["AA\[Transpose] ",
+  FontSlant->"Italic"],
+ "and ",
+ StyleBox["A\[Transpose]A.\n\n",
+  FontSlant->"Italic"],
+ "The ",
+ StyleBox["SVD",
+  FontSlant->"Italic"],
+ " is really good for numerically stable computations, because ",
+ StyleBox["U",
+  FontSlant->"Italic"],
+ " and ",
+ StyleBox["V",
+  FontSlant->"Italic"],
+ " are orthogonal matrices.  They never change the length of a vector.  ",
+ StyleBox["\[CapitalSigma]  ",
+  FontSlant->"Italic"],
+ "could multiply or divide a vector by a large \[Sigma], but at least now we \
+have an idea of exactly what is large and what is small.  The ratio ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["\[Sigma]", "max"], "/", 
+    SubscriptBox["\[Sigma]", "min"]}], TraditionalForm]]],
+ " is the ",
+ StyleBox["condition number ",
+  FontSlant->"Italic"],
+ "of a nonsingular matrix",
+ StyleBox[".  ",
+  FontSlant->"Italic"],
+ "For us as numerical analysts, this might be the most important use of the \
+",
+ StyleBox["SVD.",
+  FontSlant->"Italic"],
+ "  Other common uses of the ",
+ StyleBox["SVD ",
+  FontSlant->"Italic"],
+ "are listed below:\n\n\t1.  Image processing\n\t2.  Effective rank\n\t3.  \
+Polar decomposition\n\t4.  Least squares\n\t5.  Pseudoinverse\n\t\nand \
+even... the algorithm that computes eHarmony.com's 29 Dimensions\
+\[RegisteredTrademark] of compatibility!"
+}], "Text",
+ CellChangeTimes->{{3.493420465987063*^9, 3.493420536135529*^9}, {
+  3.493420569100662*^9, 3.493420673199032*^9}, {3.493420766299327*^9, 
+  3.49342083237924*^9}, {3.4934219609776993`*^9, 3.4934220621984587`*^9}, {
+  3.493422112139679*^9, 3.4934221973060627`*^9}, {3.493422266032989*^9, 
+  3.493422415683707*^9}, {3.4934225433826237`*^9, 3.493422629233449*^9}, {
+  3.493422695329314*^9, 3.493422859205349*^9}, {3.493422889273409*^9, 
+  3.493422891176454*^9}, {3.493422927299724*^9, 3.493423003987906*^9}, {
+  3.4934231928128242`*^9, 3.4934232113627462`*^9}, {3.4934232815176764`*^9, 
+  3.493423298030591*^9}, {3.493423384443967*^9, 3.493423518574551*^9}, {
+  3.49342356403617*^9, 3.4934235743485518`*^9}, {3.493423622929159*^9, 
+  3.493423623073001*^9}, {3.493426356655553*^9, 3.493426359677271*^9}, {
+  3.493429326745929*^9, 3.493429359537858*^9}, {3.4936546817328167`*^9, 
+  3.493654684910939*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["SVD",
+  FontSlant->"Italic"],
+ " algorithm"
+}], "Section",
+ CellChangeTimes->{{3.493423655091367*^9, 3.4934236634736547`*^9}}],
+
+Cell[TextData[{
+ StyleBox["We already have elementary forms of all the tools required to \
+calculate a symmetric matrix's  ",
+  FontSlant->"Plain"],
+ "SVD.",
+ StyleBox["  We can use the ",
+  FontSlant->"Plain"],
+ "QR",
+ StyleBox[" algorithm to find the eigenvalues of the ",
+  FontSlant->"Plain"],
+ "AA\[Transpose]",
+ StyleBox[" matrix.  Then use the inverse Power Method to find the \
+eigenvectors that correspond to the singular values for both the ",
+  FontSlant->"Plain"],
+ "AA\[Transpose]",
+ StyleBox[" and ",
+  FontSlant->"Plain"],
+ "A\[Transpose]A.  ",
+ StyleBox["Finally we can use the Gram-Schmidt method to find an orthogonal \
+basis of these eigenvectors to define the ",
+  FontSlant->"Plain"],
+ "U",
+ StyleBox[" and ",
+  FontSlant->"Plain"],
+ "V ",
+ StyleBox["matrices.  Consider the following ",
+  FontSlant->"Plain"],
+ "A",
+ StyleBox[" matrix transformed into an ",
+  FontSlant->"Plain"],
+ "SVD, ",
+ StyleBox["using ",
+  FontSlant->"Plain"],
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ "'s",
+ StyleBox[" eigenvector, eigenvalue, and ",
+  FontSlant->"Plain"],
+ "QR",
+ StyleBox[" algorithms.  We then compare to the built in ",
+  FontSlant->"Plain"],
+ "SVD ",
+ StyleBox["algorithm",
+  FontSlant->"Plain"],
+ "."
+}], "Text",
+ CellChangeTimes->{
+  3.493423851630508*^9, {3.493423911255652*^9, 3.493424026194214*^9}, {
+   3.49342405731826*^9, 3.493424294897276*^9}, {3.493426519516251*^9, 
+   3.49342652117934*^9}, {3.493429377423115*^9, 3.49342939142148*^9}},
+ FontSlant->"Italic"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", "4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "8"}], "}"}]}], "}"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "A", "]"}]}]], "Input",
+ CellChangeTimes->{{3.492998581801642*^9, 3.492998582884116*^9}, {
+  3.4929986193366947`*^9, 3.492998636993834*^9}, {3.492999040398323*^9, 
+  3.492999046628467*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"1", "4"},
+     {"2", "8"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.492998637698679*^9, 3.4929989173968143`*^9, 3.492998964204907*^9, {
+   3.492999002046701*^9, 3.492999005839758*^9}, 3.492999047078384*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[CapitalSigma]", "=", 
+   RowBox[{
+    RowBox[{"DiagonalMatrix", "[", 
+     RowBox[{"Eigenvalues", "[", 
+      RowBox[{"A", " ", ".", 
+       RowBox[{"A", "\[Transpose]"}]}], "]"}], "]"}], "^", 
+    RowBox[{"(", 
+     RowBox[{"1", "/", "2"}], ")"}]}]}], ";", 
+  RowBox[{"MatrixForm", "[", "\[CapitalSigma]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.492998641436866*^9, 3.492998683011548*^9}, {
+  3.492998910607564*^9, 3.492998916196797*^9}, {3.492998950759725*^9, 
+  3.492998960741857*^9}, {3.492999050974925*^9, 3.4929990564446573`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      SqrtBox["85"], "0"},
+     {"0", "0"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.492998664964384*^9, 3.4929986836366377`*^9}, 
+   3.49299891757869*^9, {3.492998961480686*^9, 3.492998964305333*^9}, {
+   3.492999002146275*^9, 3.4929990059377947`*^9}, 3.492999056821465*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"U", ",", "R"}], "}"}], "=", 
+   RowBox[{"QRDecomposition", "[", 
+    RowBox[{"Eigenvectors", "[", 
+     RowBox[{"A", ".", 
+      RowBox[{"A", "\[Transpose]"}]}], "]"}], "]"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "U", "]"}]}]], "Input",
+ CellChangeTimes->{{3.49299868868071*^9, 3.492998768326373*^9}, {
+  3.492998801159569*^9, 3.492998821365547*^9}, {3.492998999180283*^9, 
+  3.492999004378076*^9}, {3.492999065527329*^9, 3.492999075493025*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["1", 
+       SqrtBox["5"]], 
+      RowBox[{"-", 
+       FractionBox["2", 
+        SqrtBox["5"]]}]},
+     {
+      FractionBox["2", 
+       SqrtBox["5"]], 
+      FractionBox["1", 
+       SqrtBox["5"]]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{3.492999005973782*^9, 3.492999076057662*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"V", ",", "R"}], "}"}], "=", 
+   RowBox[{"QRDecomposition", "[", 
+    RowBox[{"Eigenvectors", "[", 
+     RowBox[{
+      RowBox[{"A", "\[Transpose]"}], ".", "A"}], "]"}], "]"}]}], ";", 
+  RowBox[{"MatrixForm", "[", "V", "]"}]}]], "Input",
+ CellChangeTimes->{{3.49299883742444*^9, 3.492998845798518*^9}, {
+  3.4929990785674667`*^9, 3.492999082733242*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["1", 
+       SqrtBox["17"]], 
+      RowBox[{"-", 
+       FractionBox["4", 
+        SqrtBox["17"]]}]},
+     {
+      FractionBox["4", 
+       SqrtBox["17"]], 
+      FractionBox["1", 
+       SqrtBox["17"]]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.492998847590427*^9, 3.492998917683111*^9, 3.4929989644073143`*^9, {
+   3.492999002269661*^9, 3.492999006036029*^9}, 3.492999083304974*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"MatrixForm", "[", 
+  RowBox[{"U", ".", "\[CapitalSigma]", ".", 
+   RowBox[{"V", "\[Transpose]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.492998869136238*^9, 3.492998886787465*^9}, {
+  3.492999086687114*^9, 3.492999104005664*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"1", "4"},
+     {"2", "8"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.4929988817406673`*^9, 3.492998887301897*^9}, 
+   3.492998917720006*^9, 3.492998964441244*^9, {3.492999002298699*^9, 
+   3.4929990060743628`*^9}, {3.492999095600045*^9, 3.492999104465473*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SingularValueDecomposition", "[", "A", "]"}]], "Input",
+ CellChangeTimes->{{3.49299984600893*^9, 3.4929998858571043`*^9}, {
+  3.493424425722549*^9, 3.49342442848619*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["1", 
+        SqrtBox["5"]], ",", 
+       RowBox[{"-", 
+        FractionBox["2", 
+         SqrtBox["5"]]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["2", 
+        SqrtBox["5"]], ",", 
+       FractionBox["1", 
+        SqrtBox["5"]]}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       SqrtBox["85"], ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["1", 
+        SqrtBox["17"]], ",", 
+       RowBox[{"-", 
+        FractionBox["4", 
+         SqrtBox["17"]]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["4", 
+        SqrtBox["17"]], ",", 
+       FractionBox["1", 
+        SqrtBox["17"]]}], "}"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.492999865461185*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["The elementary functions we have described so far are not robust \
+enough, however, to reliably and efficiently implement within our own ",
+  FontSlant->"Plain"],
+ "SVD",
+ StyleBox[" algorithm.  (The ",
+  FontSlant->"Plain"],
+ "SVD ",
+ StyleBox["can be computationally expensive for large matrices)  Therefore, \
+we will rely on the robust algorithms of the engineering packages we commonly \
+use to calculate the ",
+  FontSlant->"Plain"],
+ "SVD",
+ StyleBox[" for us when needed.",
+  FontSlant->"Plain"]
+}], "Text",
+ CellChangeTimes->{{3.493424753206546*^9, 3.493424925016602*^9}, {
+  3.49342939298738*^9, 3.493429396575265*^9}},
+ FontSlant->"Italic"],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["More on condition number and preconditioning.", "Section",
+ CellChangeTimes->{{3.493424434150412*^9, 3.493424438916297*^9}, {
+  3.493425678299574*^9, 3.493425682465007*^9}}],
+
+Cell[TextData[{
+ "We can use the condition number of a matrix to determine the accuracy of \
+our solution.  For the matrix equation:\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"A", 
+     OverscriptBox["x", "_"]}], "=", 
+    OverscriptBox["b", "_"]}], TraditionalForm]]],
+ "\n\t\nThe relative error is ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    OverscriptBox["x", "_"], "<", " ", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["\[Sigma]", "max"], "/", 
+      SubscriptBox["\[Sigma]", "min"]}], "\[Times]", 
+     SubscriptBox["\[Epsilon]", "m"]}]}], TraditionalForm]]],
+ "\n\nThe goal of matrix ",
+ StyleBox["preconditioner",
+  FontSlant->"Italic"],
+ " (we used them for iterative techniques in solving linear systems) is to \
+reduce the condition number of the preconditioned matrix with respect to the \
+original matrix.  These are most useful in iterative techniques because the \
+rate of convergence of most iterative solvers increases as the condition \
+number of the preconditioned matrix decreases.  Preconditioned iterative \
+solvers usually outperform direct methods, especially for sparse matrices.  \
+This is why we typically use iterative solvers for the Finite Element \
+Methods, where the equations of motion generally result in very sparse \
+matrices. \n\nInstead of solving the original equation above we would solve \
+something like\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["P", 
+      RowBox[{"-", "1"}]], "(", 
+     RowBox[{
+      RowBox[{"A", " ", 
+       OverscriptBox["x", "_"]}], "-", 
+      OverscriptBox["b", "_"]}], ")"}], "=", "0"}], TraditionalForm]]],
+ "\n\nwhere, ",
+ StyleBox["P ",
+  FontSlant->"Italic"],
+ "is the ",
+ StyleBox["preconditioner",
+  FontSlant->"Italic"],
+ ".  Usually there is some trade off for the computational expense of \
+computing ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["P", 
+    RowBox[{"-", "1"}]], TraditionalForm]]],
+ " that guides our selection of ",
+ StyleBox["P.",
+  FontSlant->"Italic"],
+ "  The least computational expensive preconditioner would be ",
+ StyleBox["P=I",
+  FontSlant->"Italic"],
+ ", however this does nothing to the original system.  The best \
+preconditioner would be ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["P", 
+     RowBox[{"-", "1"}]], "=", 
+    SuperscriptBox["A", 
+     RowBox[{"-", "1"}]]}], TraditionalForm]]],
+ ", which has a condition number of 1, but this is as computationally \
+expensive as solving the original system.  Therefore, our choice of a \
+preconditioner is usually somewhere in between.  We strive for a minimal \
+number of iterations for convergence and a minimal expense in computing ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["P", 
+     RowBox[{"-", "1"}]], "."}], TraditionalForm]]]
+}], "Text",
+ CellChangeTimes->{{3.493424443426201*^9, 3.49342468217907*^9}, {
+   3.493425281143384*^9, 3.49342531767682*^9}, {3.493425368376067*^9, 
+   3.493425589447112*^9}, {3.4934258241869717`*^9, 3.493426274770197*^9}, 
+   3.4934264682771263`*^9, {3.493429399756844*^9, 3.4934294218047*^9}, 
+   3.493429474668309*^9, {3.493656294050332*^9, 3.493656294276792*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+
+Cell[CellGroupData[{
+
+Cell["Survey of software for use in linear algebra.", "Section",
+ CellChangeTimes->{{3.493427746453199*^9, 3.493427760298864*^9}}],
+
+Cell[TextData[{
+ "If ever you find the need to write software that uses a lot of matrix \
+manipulations and/or linear systems solving techniques you can use the \
+subroutine library LAPACK and it's accompanying lower-level operations \
+package called BLAS.  These package libraries are written in FORTRAN and can \
+be called from C/C++ or even MATLAB (although they are used internally \
+anyway) programs.  They run well on shared memory and parallel processing \
+machines.   The following table shows equivalent or nearly equivalent \
+commands between LAPACK, MATLAB, and ",
+ StyleBox["Mathematica.  ",
+  FontSlant->"Italic"],
+ "This list is not complete, but shows a few of the operation we covered \
+while studying numerical techniques for linear systems.",
+ StyleBox["\n\n",
+  FontSlant->"Italic"],
+ Cell[BoxData[GridBox[{
+    {
+     StyleBox["LAPACK",
+      FontWeight->"Bold"], 
+     StyleBox["MATLAB",
+      FontWeight->"Bold"], 
+     StyleBox["Mathematica",
+      FontWeight->"Bold",
+      FontSlant->"Italic"]},
+    {"SGETRF", "lu", "LUDecomposition"},
+    {"SGETRS", 
+     RowBox[{"linsolve", ",", " ", "\\"}], "LinearSolve"},
+    {"SPOTRF", "chol", "CholeskyDecomposition"},
+    {"SPOTRI", 
+     RowBox[{"inv", ",", " ", "'"}], 
+     RowBox[{"Inverse", ",", " ", "\[Transpose]"}]},
+    {"SSGEHRD", "hess", "HessenburgDecomposition"},
+    {"SSTEQR", "eig", "Eigenvalues"},
+    {"STREVC", "eig", "Eigenvectors"}
+   },
+   GridBoxDividers->{
+    "Columns" -> {{True}}, "ColumnsIndexed" -> {}, "Rows" -> {{True}}, 
+     "RowsIndexed" -> {}}]]]
+}], "Text",
+ CellChangeTimes->{{3.493427837913302*^9, 3.493427976399787*^9}, {
+   3.493428006786536*^9, 3.493428037161709*^9}, 3.49342819849133*^9, {
+   3.493428261879592*^9, 3.493428334576722*^9}, {3.493428456790124*^9, 
+   3.4934285628698273`*^9}, {3.493428628952407*^9, 3.493428636681254*^9}, {
+   3.49342867893254*^9, 3.493428760386475*^9}, {3.493428885474646*^9, 
+   3.493428916717684*^9}, {3.493428947029723*^9, 3.4934289611962233`*^9}, {
+   3.493428994294963*^9, 3.493429006177877*^9}, {3.493429093986835*^9, 
+   3.493429162961647*^9}, {3.493429194305244*^9, 3.49342920786666*^9}, {
+   3.493429286485907*^9, 3.493429292917082*^9}, {3.4934294238983507`*^9, 
+   3.4934294335794573`*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.493428367766152*^9, 3.493428370879011*^9}}],
+
+Cell[TextData[{
+ ButtonBox["\[FilledLeftTriangle]\[ThickSpace]\[ThickSpace]\[ThickSpace]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPagePrevious"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowPrevSlideText"]],
+ "\[ThickSpace]\[ThickSpace]|\[ThickSpace]\[ThickSpace]",
+ ButtonBox["\[ThickSpace]\[ThickSpace]\[ThickSpace]\[FilledRightTriangle]",
+  BaseStyle->"SlidePreviousNextLink",
+  Appearance->{Automatic, None},
+  ButtonFunction:>FrontEndExecute[{
+     FrontEndToken[
+      FrontEnd`ButtonNotebook[], "ScrollPageNext"]}],
+  ButtonNote->FEPrivate`FrontEndResource[
+   "FEStrings", "SlideshowNextSlideText"]]
+}], "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1536, 1215},
+WindowMargins->{{279, Automatic}, {Automatic, 127}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "SlideShowHeader"->{
+  Cell[567, 22, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[5956, 182, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[16992, 545, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"],
+  Cell[21248, 663, 64, 1, 8, "SlideShowNavigationBar",
+   CellTags->"SlideShowHeader"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"SlideShowHeader", 24920, 756}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[656, 27, 113, 1, 67, "Section"],
+Cell[772, 30, 4351, 126, 257, "Text"],
+Cell[5126, 158, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5956, 182, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[6045, 187, 153, 5, 67, "Section"],
+Cell[6201, 194, 1496, 50, 56, "Text"],
+Cell[CellGroupData[{
+Cell[7722, 248, 430, 12, 27, "Input"],
+Cell[8155, 262, 748, 20, 45, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8940, 287, 574, 13, 27, "Input"],
+Cell[9517, 302, 815, 21, 49, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10369, 328, 510, 12, 27, "Input"],
+Cell[10882, 342, 841, 27, 67, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11760, 374, 417, 11, 27, "Input"],
+Cell[12180, 387, 944, 29, 67, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13161, 421, 255, 5, 27, "Input"],
+Cell[13419, 428, 799, 20, 45, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14255, 453, 194, 3, 27, "Input"],
+Cell[14452, 458, 1014, 40, 50, "Output"]
+}, Open  ]],
+Cell[15481, 501, 678, 18, 41, "Text"],
+Cell[16162, 521, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16992, 545, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[17081, 550, 179, 2, 67, "Section"],
+Cell[17263, 554, 3152, 83, 289, "Text"],
+Cell[20418, 639, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21248, 663, 64, 1, 8, "SlideShowNavigationBar",
+ CellTags->"SlideShowHeader"],
+Cell[CellGroupData[{
+Cell[21337, 668, 130, 1, 67, "Section"],
+Cell[21470, 671, 2242, 48, 219, "Text"],
+Cell[23715, 721, 92, 1, 27, "Input"],
+Cell[23810, 724, 781, 18, 26, "PreviousNext"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
