@@ -8,8 +8,4 @@ To clone:
 git clone git@github.com:johntfoster/numerical_methods_book.git
 ````
 
-Quick View Table of Contents
-
-````
-http://nbviewer.ipython.org/github/johntfoster/numerical_methods_book/blob/master/Table%20of%20Contents.ipynb?create=1
-````
+[Quick View Table of Contents](http://nbviewer.ipython.org/github/johntfoster/numerical_methods_book/blob/master/Table%20of%20Contents.ipynb?create=1)
