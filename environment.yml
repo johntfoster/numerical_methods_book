@@ -9,7 +9,6 @@ dependencies:
   - numpy=1.17.3
   - python=3.7.6
   - sympy=1.5.1
+  - pip=19.3.1
   - pip:
     - nbinteract==0.2.4
-prefix: /Users/john/miniconda3/envs/book
-
