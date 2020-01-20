@@ -1,0 +1,27 @@
+os: linux
+language: python
+install:
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda env create -f environment.yml
+  - source activate book
+before_script:
+  - git config --global user.email ${GH_EMAIL}
+  - git config --global user.name ${GH_NAME}
+  # Get to the Travis build directory, configure git and clone the repo
+  - cd $HOME
+  # Commit and Push the Changes
+  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/johnfoster/numerical_methods_book gh-pages > /dev/null
+  - cd gh-pages
+  - git diff-tree --no-commit-id --name-only -r master | grep -i "ipynb" | xargs cp -t content/
+script: 
+  - jupyter-book build .
+after_success:
+  - git add -A
+  - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
+  - git push -fq origin gh-pages > /dev/null
