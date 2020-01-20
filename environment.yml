@@ -14,4 +14,3 @@ dependencies:
     - nbinteract==0.2.4
     - jupyter-book==0.6.4
 prefix: /Users/john/miniconda3/envs/book
-
