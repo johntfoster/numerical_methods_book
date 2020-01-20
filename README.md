@@ -4,6 +4,6 @@ Place holder for documents containing a book on Numerical Methods in Jupyter Not
 
 Under development...
 
-To clone:
+## Table of Contents
 
-[Quick View Table of Contents](http://nbviewer.ipython.org/github/johntfoster/numerical_methods_book/blob/master/Table%20of%20Contents.ipynb?create=1)
+[Chapter 1 - Introduction](Chapter1.ipynb)
