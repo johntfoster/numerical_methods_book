@@ -21,6 +21,7 @@ before_script:
   - echo `git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT}`
   - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "ipynb" > changed_files.txt
   - xargs -a changed_files.txt -L 1 -I @ find ${HOME} -name @ -type f -exec cp {} content/. 2>/dev/null \;
+  - rm changed_files.txt
 script: 
   - jupyter-book build .
 after_success:
