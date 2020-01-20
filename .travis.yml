@@ -16,7 +16,7 @@ before_script:
   # Get to the Travis build directory, configure git and clone the repo
   - cd $HOME
   # Commit and Push the Changes
-  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/johnfoster/numerical_methods_book gh-pages > /dev/null
+  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/johntfoster/numerical_methods_book gh-pages > /dev/null
   - cd gh-pages
   - git diff-tree --no-commit-id --name-only -r master | grep -i "ipynb" | xargs cp -t content/
 script: 
