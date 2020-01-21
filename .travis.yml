@@ -8,7 +8,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda env create -f environment.yml
+  - conda env create -f binder/environment.yml
   - source activate book
 before_script:
   - git config --global user.email ${GH_EMAIL}
