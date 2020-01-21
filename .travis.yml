@@ -21,9 +21,10 @@ before_script:
   - echo `git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT}`
   - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "ipynb" 1> changed_files.txt || true
   - xargs -a changed_files.txt -L 1 -I @ find ${HOME} -name @ -type f -exec cp {} content/. 2>/dev/null \;
+  - cat changed_files.txt
   - rm changed_files.txt
 script: 
-  - jupyter-book build .
+  - jupyter-book build . --overwrite
 after_success:
   - git add -A
   - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
