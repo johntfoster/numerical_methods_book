@@ -28,5 +28,5 @@ after_success:
   - git add -A
   - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
   - git push -fq origin gh-pages > /dev/null
-  - bash $HOME/build/binder/trigger_binder.sh https://gke.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
-  - bash $HOME/build/binder/trigger_binder.sh https://ovh.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
+  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://gke.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
+  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://ovh.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
