@@ -19,10 +19,12 @@ before_script:
   - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/johntfoster/numerical_methods_book gh-pages > /dev/null
   - cd gh-pages
   - echo `git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT}`
-  - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "ipynb" 1> changed_files.txt || true
+  - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "ipynb" 1> changed_notebooks.txt || true
+  - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "bib" 1> changed_bib.txt || true
   - xargs -a changed_files.txt -L 1 -I @ find ${HOME} -name @ -type f -exec cp {} content/. 2>/dev/null \;
-  - cat changed_files.txt
-  - rm changed_files.txt
+  - xargs -a changed_files.txt -L 1 -I @ find ${HOME} -name @ -type f -exec cp {} bibliography/. 2>/dev/null \;
+  - cat changed_notebooks.txt changed_bib.txt
+  - rm changed_files.txt changed_bib.txt
 script: 
   - jupyter-book build . --overwrite
 after_success:
