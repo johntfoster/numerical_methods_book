@@ -17,6 +17,7 @@ before_script:
   - cd $HOME
   # Commit and Push the Changes
   - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/johntfoster/numerical_methods_book gh-pages > /dev/null
+  - git clone --quiet --branch=master https://${GH_TOKEN}@github.com/johnfoster-pge-utexas/numerical-methods-book.git
   - cd gh-pages
   - echo `git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT}`
   - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "ipynb" 1> changed_notebooks.txt || true
