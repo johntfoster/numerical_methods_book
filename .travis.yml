@@ -23,7 +23,7 @@ before_script:
   - python convert.py --daytum --dir=$HOME/daytum-book/content changed_files.txt
 script: 
   - (cd $HOME/numerical-methods-book && jupyter-book build . --execute --overwrite)
-  - (cd $HOME/book && jupyter-book build . --execute --overwrite)
+  - (cd $HOME/daytum-book && jupyter-book build . --execute --overwrite)
 after_success:
   - cd $HOME/numerical-methods-book
   - git add -A
