@@ -13,24 +13,20 @@ install:
 before_script:
   - git config --global user.email ${GH_EMAIL}
   - git config --global user.name ${GH_NAME}
-  # Get to the Travis build directory, configure git and clone the repo
   - cd $HOME
-  # Commit and Push the Changes
-  - git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/johntfoster/numerical_methods_book gh-pages > /dev/null
-  - git clone --quiet --branch=master https://${GH_TOKEN}@github.com/johnfoster-pge-utexas/numerical-methods-book.git
-  - cd gh-pages
+  - git clone --quiet --branch=master https://${GH_TOKEN}@github.com/johnfoster-pge-utexas/numerical-methods-book.git > /dev/null
+  - cd $TRAVIS_BUILD_DIR
   - echo `git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT}`
-  - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "ipynb" 1> changed_notebooks.txt || true
-  - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i "bib" 1> changed_bib.txt || true
-  - xargs -a changed_notebooks.txt -L 1 -I @ find ${HOME} -name @ -type f -exec cp {} content/. 2>/dev/null \;
-  - xargs -a changed_bib.txt -L 1 -I @ find ${HOME} -name @ -type f -exec cp {} bibliography/. 2>/dev/null \;
-  - cat changed_notebooks.txt changed_bib.txt
-  - rm changed_notebooks.txt changed_bib.txt
+  - git diff-tree --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i -E "ipynb|datasets|images" 1> changed_files.txt || true
+  - python convert.py --dir=$HOME/numerical-methods-book/content changed_files.txt
+  - cat changed_files.txt 
+  - rm changed_files.txt
+  - cd $HOME/numerical-methods-book
 script: 
-  - jupyter-book build . --overwrite
+  - jupyter-book build . --overwrite --execute
 after_success:
   - git add -A
   - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
-  - git push -fq origin gh-pages > /dev/null
-  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://gke.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
-  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://ovh.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
+  - git push -fq origin master > /dev/null
+#  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://gke.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
+# - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://ovh.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
