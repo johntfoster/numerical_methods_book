@@ -23,10 +23,10 @@ before_script:
   - rm changed_files.txt
   - cd $HOME/numerical-methods-book
 script: 
-  - jupyter-book build . --execute
+  - jupyter-book build . --execute --overwrite
 after_success:
   - git add -A
   - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
   - git push -fq origin master > /dev/null
-#  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://gke.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
+    #  - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://gke.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
 # - bash $HOME/build/johntfoster/numerical_methods_book/binder/trigger_binder.sh https://ovh.mybinder.org/build/gh/johntfoster/numerical_methods_book/"${TRAVIS_BRANCH}"
