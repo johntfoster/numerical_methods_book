@@ -4,6 +4,7 @@ Usage:
   convert.py <files_to_convert.txt> 
   convert.py --daytum <files_to_convert.txt> 
   convert.py --dir=<output_file_path> <files_to_convert.txt> 
+  convert.py --daytum --dir=<output_file_path> <files_to_convert.txt> 
 
 Options:
   -h --help                Show this screen.
