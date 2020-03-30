@@ -15,16 +15,21 @@ before_script:
   - git config --global user.name ${GH_NAME}
   - cd $HOME
   - git clone --quiet --branch=master https://${GH_TOKEN}@github.com/johnfoster-pge-utexas/numerical-methods-book.git > /dev/null
+  - git clone --quiet --branch=master https://${GH_TOKEN}@github.com/daytum/book.git daytum-book > /dev/null
   - cd $TRAVIS_BUILD_DIR
   - echo `git diff-tree --diff-filter=AM --no-commit-id --name-only -r ${TRAVIS_COMMIT}`
   - git diff-tree --diff-filter=AM --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i -E "ipynb|datasets|images" 1> changed_files.txt || true
   - python convert.py --dir=$HOME/numerical-methods-book/content changed_files.txt
-  - cat changed_files.txt 
-  - rm changed_files.txt
-  - cd $HOME/numerical-methods-book
+  - python convert.py --daytum --dir=$HOME/book/content changed_files.txt
 script: 
-  - jupyter-book build . --execute --overwrite
+  - (cd $HOME/numerical-methods-book && jupyter-book build . --execute --overwrite)
+  - (cd $HOME/book && jupyter-book build . --execute --overwrite)
 after_success:
+  - cd $HOME/numerical-methods-book
+  - git add -A
+  - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
+  - git push -fq origin master > /dev/null
+  - cd $HOME/daytum-book
   - git add -A
   - git commit -m "Travis CI autocommit from travis build $TRAVIS_BUILD_NUMBER"
   - git push -fq origin master > /dev/null
