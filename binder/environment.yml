@@ -19,5 +19,6 @@ dependencies:
   - matplotlib=3.2.1
   - sympy=1.5.1
   - seaborn=0.10.0
+  - panel==0.5.1
   - pip:
     - jupyter-book==0.6.4
