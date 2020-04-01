@@ -9,6 +9,7 @@ install:
   - conda update -q conda
   - conda info -a
   - conda env create -f binder/environment.yml
+  - source $(conda info --root)/etc/profile.d/conda.sh
   - source activate book
 before_script:
   - git config --global user.email ${GH_EMAIL}
@@ -21,7 +22,7 @@ before_script:
   - git diff-tree --diff-filter=AM --no-commit-id --name-only -r ${TRAVIS_COMMIT} | grep -i -E "ipynb|datasets|images" 1> changed_files.txt || true
   - python convert.py --dir=$HOME/numerical-methods-book/content changed_files.txt
   - python convert.py --daytum --dir=$HOME/daytum-book/content changed_files.txt
-  - python -c "from intake import cat; list(cat)"
+  - ls $CONDA_PREFIX/share/intake
 script: 
   - (cd $HOME/numerical-methods-book && jupyter-book build . --execute --overwrite)
   - (cd $HOME/daytum-book && jupyter-book build . --execute --overwrite)
