@@ -1,4 +1,4 @@
-date,oil,gas
+date,volume_oil_formation_bbls,volume_gas_formation_mcf
 2010-01-01,1779,1022
 2010-02-01,1416,834
 2010-03-01,1604,945
