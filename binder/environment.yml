@@ -5,7 +5,6 @@ channels:
   - defaults
 dependencies:
   - bokeh=2.0.0
-  - data=0.0.37
   - hvplot=0.5.2
   - matplotlib=3.2.1
   - notebook=6.0.3
@@ -21,4 +20,5 @@ dependencies:
   - ipywidgets=7.5.1
   - ipython=7.13.0
   - pip:
+    - daytum-data==0.2.5
     - jupyter-book==0.6.4
